@@ -16,3 +16,10 @@ exports.about = function(req, res){
         text: 'lorem ipsum'
   })
 };
+
+exports.contact = function(req, res){
+     res.render('contact', {
+        title: 'Contact',
+        text: 'lorem ipsum'
+  })
+};
