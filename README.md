@@ -1,4 +1,5 @@
-lab3website
-===========
+LabX website
+============
 
-LAB3 Website
+The Felix-Etienne Tetrault official website.
+2014
