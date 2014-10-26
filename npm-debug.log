@@ -1,0 +1,125 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node',
+1 verbose cli   '/usr/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'grunt-sass',
+1 verbose cli   '--save-dev' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.33
+4 verbose node symlink /usr/bin/node
+5 verbose readDependencies using package.json deps
+6 verbose cache add [ 'grunt-sass', null ]
+7 verbose cache add name=undefined spec="grunt-sass" args=["grunt-sass",null]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: 'grunt-sass',
+8 verbose parsed url   path: 'grunt-sass',
+8 verbose parsed url   href: 'grunt-sass' }
+9 silly lockFile 18154330-grunt-sass grunt-sass
+10 verbose lock grunt-sass /home/felixetienne/.npm/18154330-grunt-sass.lock
+11 silly lockFile 18154330-grunt-sass grunt-sass
+12 silly lockFile 18154330-grunt-sass grunt-sass
+13 verbose addNamed [ 'grunt-sass', '' ]
+14 verbose addNamed [ null, '*' ]
+15 silly lockFile 49751fc6-grunt-sass grunt-sass@
+16 verbose lock grunt-sass@ /home/felixetienne/.npm/49751fc6-grunt-sass.lock
+17 silly addNameRange { name: 'grunt-sass', range: '*', hasData: false }
+18 verbose request where is /grunt-sass
+19 verbose request registry https://registry.npmjs.org/
+20 verbose request id 919c50f41589c2c0
+21 verbose url raw /grunt-sass
+22 verbose url resolving [ 'https://registry.npmjs.org/', './grunt-sass' ]
+23 verbose url resolved https://registry.npmjs.org/grunt-sass
+24 verbose request where is https://registry.npmjs.org/grunt-sass
+25 info trying registry request attempt 1 at 22:58:54
+26 verbose etag "4YJDIBKGGJF4YTPINZSS7148G"
+27 http GET https://registry.npmjs.org/grunt-sass
+28 http 304 https://registry.npmjs.org/grunt-sass
+29 silly registry.get cb [ 304,
+29 silly registry.get   { date: 'Sun, 26 Oct 2014 02:58:54 GMT',
+29 silly registry.get     server: 'Apache',
+29 silly registry.get     via: '1.1 varnish',
+29 silly registry.get     'last-modified': 'Sun, 26 Oct 2014 02:58:54 GMT',
+29 silly registry.get     'cache-control': 'max-age=60',
+29 silly registry.get     etag: '"4YJDIBKGGJF4YTPINZSS7148G"',
+29 silly registry.get     age: '0',
+29 silly registry.get     'x-served-by': 'cache-ord1732-ORD',
+29 silly registry.get     'x-cache': 'MISS',
+29 silly registry.get     'x-cache-hits': '0',
+29 silly registry.get     'x-timer': 'S1414292334.929867,VS0,VE29',
+29 silly registry.get     vary: 'Accept',
+29 silly registry.get     'content-length': '0',
+29 silly registry.get     'keep-alive': 'timeout=10, max=50',
+29 silly registry.get     connection: 'Keep-Alive' } ]
+30 verbose etag https://registry.npmjs.org/grunt-sass from cache
+31 silly addNameRange number 2 { name: 'grunt-sass', range: '*', hasData: true }
+32 silly addNameRange versions [ 'grunt-sass',
+32 silly addNameRange   [ '0.1.0',
+32 silly addNameRange     '0.2.1',
+32 silly addNameRange     '0.2.2',
+32 silly addNameRange     '0.2.3',
+32 silly addNameRange     '0.2.4',
+32 silly addNameRange     '0.2.5',
+32 silly addNameRange     '0.3.0',
+32 silly addNameRange     '0.4.0',
+32 silly addNameRange     '0.4.1',
+32 silly addNameRange     '0.5.0',
+32 silly addNameRange     '0.6.0',
+32 silly addNameRange     '0.6.1',
+32 silly addNameRange     '0.7.0',
+32 silly addNameRange     '0.8.0',
+32 silly addNameRange     '0.8.1',
+32 silly addNameRange     '0.9.0',
+32 silly addNameRange     '0.10.0',
+32 silly addNameRange     '0.11.0',
+32 silly addNameRange     '0.12.0',
+32 silly addNameRange     '0.12.1',
+32 silly addNameRange     '0.13.0',
+32 silly addNameRange     '0.13.1',
+32 silly addNameRange     '0.14.0',
+32 silly addNameRange     '0.14.1',
+32 silly addNameRange     '0.14.2',
+32 silly addNameRange     '0.15.0',
+32 silly addNameRange     '0.16.0' ] ]
+33 verbose addNamed [ 'grunt-sass', '0.16.0' ]
+34 verbose addNamed [ '0.16.0', '0.16.0' ]
+35 silly lockFile cdda827d-grunt-sass-0-16-0 grunt-sass@0.16.0
+36 verbose lock grunt-sass@0.16.0 /home/felixetienne/.npm/cdda827d-grunt-sass-0-16-0.lock
+37 silly lockFile e4466bf4-grunt-sass-grunt-sass-0-16-0-tgz https://registry.npmjs.org/grunt-sass/-/grunt-sass-0.16.0.tgz
+38 verbose lock https://registry.npmjs.org/grunt-sass/-/grunt-sass-0.16.0.tgz /home/felixetienne/.npm/e4466bf4-grunt-sass-grunt-sass-0-16-0-tgz.lock
+39 verbose addRemoteTarball [ 'https://registry.npmjs.org/grunt-sass/-/grunt-sass-0.16.0.tgz',
+39 verbose addRemoteTarball   'f9152ef2980af722be019e0054809dedd91691f8' ]
+40 info retry fetch attempt 1 at 22:58:55
+41 verbose fetch to= /tmp/npm-28940-T7HfRNy0/registry.npmjs.org/grunt-sass/-/grunt-sass-0.16.0.tgz
+42 http GET https://registry.npmjs.org/grunt-sass/-/grunt-sass-0.16.0.tgz
+43 http 200 https://registry.npmjs.org/grunt-sass/-/grunt-sass-0.16.0.tgz
+44 silly lockFile e4466bf4-grunt-sass-grunt-sass-0-16-0-tgz https://registry.npmjs.org/grunt-sass/-/grunt-sass-0.16.0.tgz
+45 silly lockFile e4466bf4-grunt-sass-grunt-sass-0-16-0-tgz https://registry.npmjs.org/grunt-sass/-/grunt-sass-0.16.0.tgz
+46 silly lockFile cdda827d-grunt-sass-0-16-0 grunt-sass@0.16.0
+47 silly lockFile cdda827d-grunt-sass-0-16-0 grunt-sass@0.16.0
+48 silly lockFile 49751fc6-grunt-sass grunt-sass@
+49 silly lockFile 49751fc6-grunt-sass grunt-sass@
+50 error Error: EACCES, mkdir '/home/felixetienne/.npm/grunt-sass/0.16.0'
+50 error  { [Error: EACCES, mkdir '/home/felixetienne/.npm/grunt-sass/0.16.0']
+50 error   errno: 3,
+50 error   code: 'EACCES',
+50 error   path: '/home/felixetienne/.npm/grunt-sass/0.16.0',
+50 error   parent: 'application-name' }
+51 error Please try running this command again as root/Administrator.
+52 error System Linux 3.13.0-32-generic
+53 error command "/usr/bin/node" "/usr/bin/npm" "install" "grunt-sass" "--save-dev"
+54 error cwd /home/felixetienne/www/lab3website
+55 error node -v v0.10.33
+56 error npm -v 1.4.28
+57 error path /home/felixetienne/.npm/grunt-sass/0.16.0
+58 error code EACCES
+59 error errno 3
+60 error stack Error: EACCES, mkdir '/home/felixetienne/.npm/grunt-sass/0.16.0'
+61 verbose exit [ 3, true ]

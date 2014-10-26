@@ -1,9 +1,31 @@
 {
-    "name": "application-name"
-  , "version": "0.0.1"
-  , "private": true
-  , "dependencies": {
-      "express": "2.5.8"
-    , "jade": ">= 0.0.1"
-  }
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "2.5.8",
+    "jade": ">= 0.0.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-sass": "^0.15.0",
+    "load-grunt-tasks": "^1.0.0"
+  },
+  "description": "lab3website ===========",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://felixetienne:0751gitlab%21@github.com/felixetienne/lab3website.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/felixetienne/lab3website/issues"
+  },
+  "homepage": "https://github.com/felixetienne/lab3website"
 }
