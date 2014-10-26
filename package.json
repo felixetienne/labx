@@ -1,8 +1,9 @@
 {
-  "name": "application-name",
+  "name": "LabX",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "pg": "2.x",
     "express": "2.5.8",
     "jade": ">= 0.0.1"
   },
@@ -11,21 +12,22 @@
     "grunt-cli": "^0.1.13",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-sass": "^0.15.0",
-    "load-grunt-tasks": "^1.0.0"
+    "load-grunt-tasks": "^1.0.0",
+    "pg": "^2.11.1"
   },
-  "description": "lab3website ===========",
+  "description": "LabX ===========",
   "main": "Gruntfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://felixetienne:0751gitlab%21@github.com/felixetienne/lab3website.git"
+    "url": "https://felixetienne:0751gitlab%21@github.com/felixetienne/labx.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/felixetienne/lab3website/issues"
+    "url": "https://github.com/felixetienne/labx/issues"
   },
-  "homepage": "https://github.com/felixetienne/lab3website"
+  "homepage": "https://github.com/felixetienne/labx"
 }
