@@ -12,8 +12,8 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				files: {
-					'temp/main.css': 'assets/styles/main.scss'
-                    //'public/styles/main.css': 'assets/styles/main.scss'
+					//'temp/main.css': 'assets/styles/main.scss'
+                    'public/styles/main.css': 'assets/styles/main.scss'
 				}
 			}
 		}
