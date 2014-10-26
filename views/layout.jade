@@ -5,4 +5,8 @@ html
     link(rel='stylesheet', href='styles/main.css')
     script(type='text/javascript', src='scripts/libraries/jquery-min.2.1.1.js')
     script(type='text/javascript', src='scripts/frameworks/bootstrap.js')
-  body!= body
+  body
+    include included/contextBuilder.jade
+
+
+    script(type='text/javascript', src='scripts/main.js')

@@ -1,0 +1,16 @@
+script(type='text/javascript').
+    window.ContextBuilder = (function(){
+
+        var builder = {};
+
+        builder.build = function(){
+
+            var context = {};
+
+            context.pageTitle = '#{title}';
+
+            return context;
+        }
+
+        return builder;
+    })();
