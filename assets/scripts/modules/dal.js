@@ -1,43 +1,16 @@
-module.exports = function Dal (client){
+module.exports = (function (mod, pg){
 
-    if(!client) throw "[ERROR:dal:pages:getAll] the parameter 'client' is null";
+    mod.work = function(callback){
 
-    module.pages = {};
+        pg.connect(process.env.DATABASE_URL + "?ssl=true", function(err, client) {
 
-    module.pages.getAll = function(action, mustClose){
+            if(err) throw "[ERROR:pg:connect] " + err;
+            if(!client) throw "[ERROR:dal:pages:getAll] the parameter 'client' is null";
 
-        if(!action) throw "[ERROR:Dal:getAll] 'action' parameter is null.";
-        if(typeof(action) != "function") throw "[ERROR:Dal:getAll] 'action' parameter is not a function.";
-
-        client
-        .query('SELECT * FROM Pages')
-        .on('row', function(row, res) {
-
-            //console.log(JSON.stringify(r));
-
-            res.addRow(row);
-        })
-        .on('end', function(res){
-
-            var pages = [];
-
-            res.rows.forEach(function(row){
-                var page = {
-                    name: row.name,
-                    title: row.title,
-                    pageTitle: row.pageTitle,
-                    pageOrder: row.pageOrder,
-                    pageCategory: row.pageCategory
-                };
-
-                pages.push(page);
-            });
-
-            action(pages);
-
-            if(mustClose) client.end();
+            callback(client);
         });
     };
 
-    return module;
-};
+    return mod;
+
+})({}, require('pg'));

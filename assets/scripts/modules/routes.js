@@ -3,23 +3,44 @@
  * GET home page.
  */
 
+var repo = require('./repositories');
+
 exports.index = function(req, res){
-  res.render('index', {
-        title: 'Home',
-        text: 'lorem ipsum'
-  })
+    var name = 'index';
+
+    repo.pages.getFromName(name, function(page){
+
+        res.render(name, {
+            title: page.title,
+            text: page.shortDescription
+        });
+    }, function(){
+         res.render('404');
+    });
 };
 
 exports.about = function(req, res){
-     res.render('about', {
-        title: 'About',
-        text: 'lorem ipsum'
-  })
+    var name = 'about';
+
+    repo.pages.getFromName(name, function(page){
+        res.render(name, {
+            title: page.title,
+            text: page.shortDescription
+        });
+    }, function(){
+         res.render('404');
+    });
 };
 
 exports.contact = function(req, res){
-     res.render('contact', {
-        title: 'Contact',
-        text: 'lorem ipsum'
-  })
+    var name = 'contact';
+
+    repo.pages.getFromName(name, function(page){
+        res.render(name, {
+            title: page.title,
+            text: page.shortDescription
+        });
+    }, function(){
+         res.render('404');
+    });
 };
