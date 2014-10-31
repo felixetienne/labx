@@ -11,6 +11,8 @@ exports.index = function(req, res){
     repo.pages.getFromName(name, function(page){
 
         res.render(name, {
+            pageTitle: page.pageTitle,
+            shortTitle: page.shortTitle,
             title: page.title,
             text: page.shortDescription
         });
@@ -24,6 +26,8 @@ exports.about = function(req, res){
 
     repo.pages.getFromName(name, function(page){
         res.render(name, {
+            pageTitle: page.pageTitle,
+            shortTitle: page.shortTitle,
             title: page.title,
             text: page.shortDescription
         });
@@ -37,6 +41,8 @@ exports.contact = function(req, res){
 
     repo.pages.getFromName(name, function(page){
         res.render(name, {
+            pageTitle: page.pageTitle,
+            shortTitle: page.shortTitle,
             title: page.title,
             text: page.shortDescription
         });

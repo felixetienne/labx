@@ -1,4 +1,42 @@
-module.exports = (function (mod, pg){
+module.exports = (function (mod, pg, queryBuilder){
+
+    var getColumnName = function(table, column){ return  table.name + '.' + column; }
+
+    var tables = {};
+    tables.pages = { name: 'pages' };
+    tables.pages.columns = {
+        name: getColumnName(tables.pages, 'name'),
+        title: getColumnName(tables.pages, 'title'),
+        pageTitle: getColumnName(tables.pages, 'pageTitle'),
+        pageOrder: getColumnName(tables.pages, 'pageOrder')
+    };
+    tables.pageCategories = { name: 'pageCategories' };
+    tables.pageCategories.columns = {
+        title: getColumnName(tables.pageCategories, 'title')
+    };
+
+    mod.queries = {
+        pages:{
+            getAllQuery: function(){
+                var q = queryBuilder
+                .select()
+                .from(tables.pages.name)
+                .toString();
+
+                return q;
+            },
+            getFromNameQuery: function(pageName){
+                var q = queryBuilder
+                .select()
+                .from(tables.pages.name)
+                .where(tables.pages.columns.name, pageName)
+                .limit(1)
+                .toString();
+
+                return q;
+            }
+        }
+    };
 
     mod.work = function(callback){
 
@@ -13,4 +51,4 @@ module.exports = (function (mod, pg){
 
     return mod;
 
-})({}, require('pg'));
+})({}, require('pg'), require('sql-bricks-postgres'));

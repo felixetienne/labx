@@ -24,6 +24,7 @@ module.exports = (function(mod, dal){
         var page = {
             name: row.name,
             title: row.title,
+            shortTitle: row.shortTitle,
             pageTitle: row.pageTitle,
             pageOrder: row.pageOrder,
             pageCategory: row.pageCategory
@@ -41,7 +42,8 @@ module.exports = (function(mod, dal){
         dal.work(function(client){
 
             client
-            .query('SELECT * FROM Pages WHERE Pages.Name = $1 LIMIT 1', [name])
+            //.query('SELECT * FROM Pages WHERE Pages.Name = $1 LIMIT 1', [name])
+            .query(dal.queries.pages.getFromNameQuery(name))
             .on('row', function(row, res){ res.addRow(row) })
             .on('end', function(res){
 

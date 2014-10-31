@@ -1,6 +1,8 @@
 
 /**
- * Module dependencies.
+ * LabX
+ * Felix-Etienne Tetrault
+ * 2014
  */
 
 var env = require('node-env-file');
@@ -34,37 +36,3 @@ var routes = require('./assets/scripts/modules/routes');
 app.get('/', routes.index);
 app.get('/about', routes.about);
 app.get('/contact', routes.contact);
-
-
-//var pg = require('pg');
-//
-//pg.connect(process.env.DATABASE_URL + "?ssl=true", function(err, client) {
-//
-//    if(err) throw "[ERROR:pg:connect] " + err;
-//
-//    var Dal = require('./assets/scripts/modules/dal');
-//    var dal = new Dal(client);
-//
-//    dal.pages.getAll(function(data){
-//        console.log(data);
-//    }, function(){
-//        console.log("No pages.");
-//    }, false);
-//
-//    dal.pages.getFromName('home', function(data){
-//
-//        console.log(data);
-//
-//    }, function(){
-//        console.log("No page for name 'home'.");
-//    }, true);
-//
-//    //    var us = require('underscore');
-//    //    var breeze = require('breeze');
-//
-//    var routes = require('./assets/scripts/modules/routes');
-//
-//    app.get('/', routes.index);
-//    app.get('/about', routes.about);
-//    app.get('/contact', routes.contact);
-//});

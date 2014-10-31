@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "pg": "3.x",
-    "express": "2.5.8",
+    "express": "~2.5.x",
     "jade": ">= 0.0.1"
   },
   "devDependencies": {
@@ -19,6 +19,7 @@
     "load-grunt-tasks": "^1.0.0",
     "node-env-file": "^0.1.4",
     "pg": "^3.x",
+    "sql-bricks-postgres": "^0.3.0",
     "underscore": "^1.7.0"
   },
   "description": "LabX ===========",
