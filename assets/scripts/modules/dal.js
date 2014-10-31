@@ -1,35 +1,43 @@
 module.exports = function Dal (client){
 
-   //return (function(module, client){
+    if(!client) throw "[ERROR:dal:pages:getAll] the parameter 'client' is null";
 
-        if(!client) throw "[ERROR:dal:pages:getAll] the parameter 'client' is null";
+    module.pages = {};
 
-        module.pages = {
-            getAll:function(){
+    module.pages.getAll = function(action, mustClose){
 
-                var data = [];
+        if(!action) throw "[ERROR:Dal:getAll] 'action' parameter is null.";
+        if(typeof(action) != "function") throw "[ERROR:Dal:getAll] 'action' parameter is not a function.";
 
-                var q = client.query('SELECT * FROM Pages');
+        client
+        .query('SELECT * FROM Pages')
+        .on('row', function(row, res) {
 
-                q.on('row', function(r) {
+            //console.log(JSON.stringify(r));
 
-                    console.log(JSON.stringify(r));
+            res.addRow(row);
+        })
+        .on('end', function(res){
 
-                    var page = {
-                        "name": r.name,
-                        title: r.title,
-                        pageTitle: r.pageTitle,
-                        pageOrder: r.pageOrder,
-                        pageCategory: r.pageCategory
-                    };
+            var pages = [];
 
-                    data.push(page);
+            res.rows.forEach(function(row){
+                var page = {
+                    name: row.name,
+                    title: row.title,
+                    pageTitle: row.pageTitle,
+                    pageOrder: row.pageOrder,
+                    pageCategory: row.pageCategory
+                };
 
-                });
+                pages.push(page);
+            });
 
-                return data;
-            }
-        };
+            action(pages);
 
-        return module;
+            if(mustClose) client.end();
+        });
+    };
+
+    return module;
 };
