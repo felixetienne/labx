@@ -3,12 +3,24 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , routes = require('./routes/');
+var pg = require('pg');
+var breeze = require('breeze');
+var env = require('node-env-file');
+var us = require('underscore');
+var express = require('express');
+var routes = require('./assets/scripts/modules/routes.js');
+var Dal = require('./assets/scripts/modules/dal.js');
+
+env(__dirname + '/.env');
+
+console.log(process.env.DATABASE_URL);
+
+// Server
 
 var app = module.exports = express.createServer();
 
 // Configuration
+
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
@@ -37,16 +49,36 @@ app.listen(port, function() {
   console.log("Node app is running at localhost: " + port)
 });
 
-//var pg = require('pg');
+// Database
+
+var dbUrl = process.env.DATABASE_URL + "?ssl=true";
+
+pg.connect(dbUrl, function(err, client) {
+
+    if(err) throw "[ERROR:pg.connect] " + err;
+
+    var dal = new Dal(client);
+
+    console.log(dal.pages.getAll());
 //
-//app.get('/db', function (request, response) {
-//  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-//    client.query('SELECT * FROM test_table', function(err, result) {
-//      done();
-//      if (err)
-//       { console.error(err); response.send("Error " + err); }
-//      else
-//       { response.send(result.rows); }
+//    var query = client.query('SELECT * FROM Pages');
+//
+//    console.log("[INFO:LabX] Available pages:");
+//
+//     query.on('row', function(row) {
+//        console.log(JSON.stringify(row));
 //    });
-//  });
+
+
+});
+
+//var manager = new breeze.EntityManager('api/test');
+//
+//var query = new breeze.EntityQuery()
+//    .from("Pages");
+//
+//manager.executeQuery(query).then(function(data){
+//   console.log(data);
+//}).fail(function(e) {
+//    alert(e);
 //});
