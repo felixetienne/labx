@@ -34,6 +34,39 @@ module.exports = (function(mod, dal){
     };
 
     mod.pages = {};
+    mod.projects = {};
+
+    mod.projects.getFromName = function(name, action, emptyAction){
+
+        if(isInvalidAction(action)) return;
+
+        dal.work(function(client){
+
+            client
+            .query(dal.queries.projects.getFromNameQuery(name))
+            .on('row', function(row, res){ res.addRow(row) })
+            .on('end', function(res){
+
+                if(hasResults(res, emptyAction)) {
+
+                    var project = res.rows[0];
+
+                    var data = {
+                        name: project.name,
+                        image: {
+                            title: "test"
+                        }
+                    };
+
+                    console.log(project);
+
+                    action(data);
+                }
+
+                client.end();
+            });
+        });
+    };
 
     mod.pages.getFromName = function(name, action, emptyAction){
 
@@ -42,16 +75,15 @@ module.exports = (function(mod, dal){
         dal.work(function(client){
 
             client
-            //.query('SELECT * FROM Pages WHERE Pages.Name = $1 LIMIT 1', [name])
             .query(dal.queries.pages.getFromNameQuery(name))
             .on('row', function(row, res){ res.addRow(row) })
             .on('end', function(res){
 
                 if(hasResults(res, emptyAction)) {
 
-                    var page = rowToPage(res.rows[0]);
+                    var data = rowToPage(res.rows[0]);
 
-                    action(page);
+                    action(data);
                 }
 
                 client.end();
@@ -66,17 +98,17 @@ module.exports = (function(mod, dal){
         dal.work(function(client){
 
              client
-            .query('SELECT * FROM Pages')
+            .query(dal.queries.pages.getAllQuery())
             .on('row', function(row, res) { res.addRow(row) })
             .on('end', function(res){
 
                 if(hasResults(res, emptyAction)) {
 
-                    var pages = [];
+                    var data = [];
 
-                    res.rows.forEach(function(row) { pages.push(rowToPage(row)) });
+                    res.rows.forEach(function(row) { data.push(rowToPage(row)) });
 
-                    action(pages);
+                    action(data);
                 };
 
                 client.end();

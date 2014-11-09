@@ -1,8 +1,13 @@
 module.exports = (function (mod, pg, queryBuilder){
 
+    var temporaryImageDir = 'public/medias/images/tmp';
+
+    mod.temporaryImageDir = temporaryImageDir;
+
     var getColumnName = function(table, column){ return  table.name + '.' + column; }
 
     var tables = {};
+
     tables.pages = { name: 'pages' };
     tables.pages.columns = {
         name: getColumnName(tables.pages, 'name'),
@@ -10,9 +15,24 @@ module.exports = (function (mod, pg, queryBuilder){
         pageTitle: getColumnName(tables.pages, 'pageTitle'),
         pageOrder: getColumnName(tables.pages, 'pageOrder')
     };
+
     tables.pageCategories = { name: 'pageCategories' };
     tables.pageCategories.columns = {
         title: getColumnName(tables.pageCategories, 'title')
+    };
+
+    tables.images = { name: 'images' };
+    tables.images.columns = {
+        name: getColumnName(tables.images, 'name'),
+        title: getColumnName(tables.images, 'title'),
+        image: getColumnName(tables.images, 'image'),
+        projectId: getColumnName(tables.images, 'projectId')
+    };
+
+    tables.projects = { name: 'projects' };
+    tables.projects.columns = {
+        id: getColumnName(tables.projects, 'id'),
+        title: getColumnName(tables.projects, 'title')
     };
 
     mod.queries = {
@@ -33,6 +53,19 @@ module.exports = (function (mod, pg, queryBuilder){
                 .limit(1)
                 .toString();
 
+                return q;
+            }
+        },
+        projects:{
+            getFromNameQuery: function(projectName){
+                var q = queryBuilder
+                .select("*, lo_export(images.raster, '" + temporaryImageDir + "')")
+                .from(tables.projects.name)
+                .join('images', {'projects.id': 'images.projectid' })
+                .where('projects.name', projectName)
+                .limit(1)
+                .toString();
+                console.log(q);
                 return q;
             }
         }

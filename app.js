@@ -36,3 +36,4 @@ var routes = require('./assets/scripts/modules/routes');
 app.get('/', routes.index);
 app.get('/about', routes.about);
 app.get('/contact', routes.contact);
+app.get('/project/:name', routes.project);
