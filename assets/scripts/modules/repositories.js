@@ -1,4 +1,4 @@
-module.exports = (function(mod, dal){
+module.exports = (function(mod, dal, fs){
 
     var isInvalidAction = function(action){
 
@@ -58,7 +58,9 @@ module.exports = (function(mod, dal){
                         }
                     };
 
-                    console.log(project);
+                    console.log(project.image);
+                    fs.writeFile(dal.temporaryImageDir + '/test.jpg', project.image);
+
 
                     action(data);
                 }
@@ -118,4 +120,4 @@ module.exports = (function(mod, dal){
 
     return mod;
 
-})({}, require('./dal'));
+})({}, require('./dal'), require('fs'));

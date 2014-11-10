@@ -1,6 +1,6 @@
 module.exports = (function (mod, pg, queryBuilder){
 
-    var temporaryImageDir = 'public/medias/images/tmp';
+    var temporaryImageDir = __dirname + '/public/medias/images/tmp';
 
     mod.temporaryImageDir = temporaryImageDir;
 
@@ -59,13 +59,14 @@ module.exports = (function (mod, pg, queryBuilder){
         projects:{
             getFromNameQuery: function(projectName){
                 var q = queryBuilder
-                .select("*, lo_export(images.raster, '" + temporaryImageDir + "')")
+                .select()
                 .from(tables.projects.name)
                 .join('images', {'projects.id': 'images.projectid' })
                 .where('projects.name', projectName)
                 .limit(1)
                 .toString();
                 console.log(q);
+
                 return q;
             }
         }
