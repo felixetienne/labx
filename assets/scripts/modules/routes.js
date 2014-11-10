@@ -4,7 +4,7 @@
  */
 
 var repo = require('./repositories');
-//var _ = require('underscore');
+var imageFolder = "/public/medias/images/tmp/";
 
 exports.index = function(req, res){
     var name = 'index';
@@ -109,7 +109,7 @@ exports.project = function(req, res){
         res.render('404');
     };
 
-    repo.projects.getFromName(req.params.name, function(data){
+    repo.projects.getFromName(req.params.name, imageFolder, function(data){
         page = data;
 
         renderView();

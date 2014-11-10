@@ -1,4 +1,6 @@
-module.exports = (function(mod, dal, fs){
+module.exports = (function(mod, dal, fs, buffer){
+
+    var rootPath = __dirname + "/../../..";
 
     var isInvalidAction = function(action){
 
@@ -33,10 +35,20 @@ module.exports = (function(mod, dal, fs){
         return page;
     };
 
+    var writeImage = function(imagePath, data){
+        var bin = new Buffer(data, 'binary');
+        console.log(bin);
+        var fullPath = rootPath + imagePath;
+        fs.writeFile(fullPath, bin, function (err) {
+          if (err) throw err;
+          console.log('Image saved at ' + imagePath + ' (' + fullPath + ').');
+        });
+    };
+
     mod.pages = {};
     mod.projects = {};
 
-    mod.projects.getFromName = function(name, action, emptyAction){
+    mod.projects.getFromName = function(name, imageFolder, action, emptyAction){
 
         if(isInvalidAction(action)) return;
 
@@ -49,18 +61,19 @@ module.exports = (function(mod, dal, fs){
 
                 if(hasResults(res, emptyAction)) {
 
-                    var project = res.rows[0];
+                    var d = res.rows[0];
+
+                    var imagePath = imageFolder + d.imagename + '.jpg';
 
                     var data = {
-                        name: project.name,
+                        title: d.projecttitle,
                         image: {
-                            title: "test"
+                            title: d.imagetitle,
+                            path: imagePath
                         }
                     };
 
-                    console.log(project.image);
-                    fs.writeFile(dal.temporaryImageDir + '/test.jpg', project.image);
-
+                    writeImage(imagePath, d.rawimage);
 
                     action(data);
                 }
@@ -120,4 +133,4 @@ module.exports = (function(mod, dal, fs){
 
     return mod;
 
-})({}, require('./dal'), require('fs'));
+})({}, require('./dal'), require('fs'), require('buffer'));

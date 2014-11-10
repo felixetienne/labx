@@ -1,9 +1,5 @@
 module.exports = (function (mod, pg, queryBuilder){
 
-    var temporaryImageDir = __dirname + '/public/medias/images/tmp';
-
-    mod.temporaryImageDir = temporaryImageDir;
-
     var getColumnName = function(table, column){ return  table.name + '.' + column; }
 
     var tables = {};
@@ -59,7 +55,10 @@ module.exports = (function (mod, pg, queryBuilder){
         projects:{
             getFromNameQuery: function(projectName){
                 var q = queryBuilder
-                .select()
+                .select("   projects.title as projectitle, \
+                            images.title as imagetitle, \
+                            images.name as imagename, \
+                            encode(images.image, 'base64') as rawimage")//encode(images.image, 'base64')
                 .from(tables.projects.name)
                 .join('images', {'projects.id': 'images.projectid' })
                 .where('projects.name', projectName)
