@@ -2,6 +2,7 @@
 # https://help.github.com/articles/ignoring-files
 # Example .gitignore files: https://github.com/github/gitignore
 /node_modules/
+/public/medias/images/tmp/
 npm-debug.log
 .env
 -#

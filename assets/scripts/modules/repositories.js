@@ -35,13 +35,17 @@ module.exports = (function(mod, dal, fs, buffer){
         return page;
     };
 
-    var writeImage = function(imagePath, data){
-        var bin = new Buffer(data, 'binary');
-        console.log(bin);
+    var writeImage = function(fullImagePath, rawData){
+        fs.writeFile(fullImagePath, rawData, function (error) {
+          if (error) throw error;
+        });
+    };
+
+    var testImage = function(imagePath, notExistsAction){
         var fullPath = rootPath + imagePath;
-        fs.writeFile(fullPath, bin, function (err) {
-          if (err) throw err;
-          console.log('Image saved at ' + imagePath + ' (' + fullPath + ').');
+        fs.exists(fullPath, function(exists){
+            if(exists) return;
+            notExistsAction(fullPath);
         });
     };
 
@@ -73,7 +77,23 @@ module.exports = (function(mod, dal, fs, buffer){
                         }
                     };
 
-                    writeImage(imagePath, d.rawimage);
+                    testImage(imagePath, function(fullImagePath){
+
+                        dal.work(function(c){
+
+                            var image = c
+                            .query(dal.queries.images.getRawDataFromIdQuery(d.imageid))
+                            .on('row', function(row, res){ res.addRow(row) })
+                            .on('end', function(imageResult){
+
+                                var i = imageResult.rows[0];
+
+                                writeImage(fullImagePath, i.rawimage);
+
+                                c.end();
+                            });
+                        });
+                    });
 
                     action(data);
                 }
