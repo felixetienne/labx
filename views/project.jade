@@ -3,4 +3,5 @@
     h1(class="muted") #{content.title}
     hr
     div(class="jumbotron")
-      p(class="lead") #{content.text}
+      p(class="lead") #{content.text}, #{project.image.url}
+      img(src= project.image.url)

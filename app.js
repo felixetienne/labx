@@ -14,21 +14,21 @@ var app = module.exports = express.createServer();
 
 app
 .configure(function(){
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+    app.use(express.static(__dirname + '/public'));
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(app.router);
 })
 .configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 })
 .configure('production', function(){
-  app.use(express.errorHandler());
+    app.use(express.errorHandler());
 })
 .listen(process.env.PORT, function() {
-  console.log("Node app is running at localhost: " + process.env.PORT)
+    console.log("Node app is running at localhost: " + process.env.PORT)
 });
 
 var routes = require('./assets/scripts/modules/routes');

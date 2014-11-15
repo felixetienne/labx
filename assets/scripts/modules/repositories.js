@@ -1,6 +1,6 @@
 module.exports = (function(mod, dal, fs, buffer){
 
-    var rootPath = __dirname + "/../../..";
+    var rootPath = __dirname + "/../../../public";
 
     var isInvalidAction = function(action){
 

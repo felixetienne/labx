@@ -4,7 +4,7 @@
  */
 
 var repo = require('./repositories');
-var imageFolder = "/public/medias/images/tmp/";
+var imageFolder = "/medias/images/tmp/";
 
 exports.index = function(req, res){
     var name = 'index';
@@ -66,60 +66,67 @@ exports.contact = function(req, res){
 
 exports.project = function(req, res){
     var name = 'project';
-    var page = null;
-    var project = null;
-    var hasError = false;
 
-    var isReady = function(){
-        if(hasError) return false;
-        if(page == null) return false;
-        if(project == null) return false;
+    var states = (function(onCallback){
+        var error = false;
+        var projectIsLoaded = false;
+        var pageIsLoaded = false;
+        var data = {};
 
-        return true;
-    };
+        return {
+            errorOccur: function(){ error = true; },
+            hasError: function(){ return error; },
+            isReady: function(){ return projectIsLoaded && pageIsLoaded; },
+            getData: function(){ return data; },
+            setPageData: function(page){
+                data.page = page;
+                pageIsLoaded = true;
+                onCallback();
+            },
+            setProjectData: function(project){
+                data.project = project;
+                projectIsLoaded = true;
+                onCallback();
+            }
+        };
+    })(function(){ renderView(); });
 
     var renderView = function(){
 
-        if(!isReady()) return;
+        if(!states.isReady()) return;
 
-         res.render(name, {
+        if(states.hasError()) {
+            renderErrorView();
+            return;
+        }
+
+        var data = states.getData();
+        console.log(data);
+        res.render(name, {
             page:{
-                title: page.pageTitle
+                title: data.page.pageTitle
             },
             content: {
-                title: page.title,
-                shortTitle: page.shortTitle,
-                text: page.text
+                title: data.page.title,
+                shortTitle: data.page.shortTitle,
+                text: data.page.text
             },
             project: {
-                title: project.projectTitle,
+                title: data.project.title,
                 image: {
-                    title: project.imageTitle,
-                    url: project.imageUrl
+                    title: data.project.image.title,
+                    url: data.project.image.path
                 }
             }
         });
     };
 
     var renderErrorView = function (){
-        if(hasError) return;
-
-        hasError = true;
-
+        if(states.hasError()) return;
+        states.errorOccur();
         res.render('404');
     };
 
-    repo.projects.getFromName(req.params.name, imageFolder, function(data){
-        page = data;
-
-        renderView();
-
-    }, renderErrorView);
-
-    repo.pages.getFromName(name, function(data){
-        project = data;
-
-        renderView();
-
-    }, renderErrorView);
+    repo.projects.getFromName(req.params.name, imageFolder, states.setProjectData, renderErrorView);
+    repo.pages.getFromName(name, states.setPageData, renderErrorView);
 };
