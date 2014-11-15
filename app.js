@@ -2,7 +2,7 @@
 /**
  * LabX
  * Felix-Etienne Tetrault
- * 2014
+ * Copyright 2014
  */
 
 var express = require('express');
