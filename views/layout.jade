@@ -2,12 +2,10 @@ doctype
 html
   head
     title= title
-    link(rel='stylesheet', href='styles/main.css')
-    script(type='text/javascript', src='scripts/libraries/jquery-min.2.1.1.js')
-    script(type='text/javascript', src='scripts/frameworks/bootstrap.js')
+    link(rel='stylesheet', href='/styles/main.css')
+    script(type='text/javascript', src='/scripts/libraries/jquery-min.2.1.1.js')
+    script(type='text/javascript', src='/scripts/frameworks/bootstrap.js')
   body
     include included/contextBuilder.jade
-
     div!= body
-
-    script(type='text/javascript', src='scripts/main.js')
+    script(type='text/javascript', src='/scripts/main.js')
