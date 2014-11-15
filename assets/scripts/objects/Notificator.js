@@ -4,29 +4,18 @@ module.exports = function Notificator(){
 
     var registry = new Array();
 
-//    var contains = function(obj){
-//
-//        registry.forEach(function(o){
-//            if(o === obj) return true;
-//        });
-//
-//        return false;
-//    }
-
     this.subscribe = function(obj){
 
         if(registry.contains(obj)) return this;
 
-        registry.push(obj);
+        registry.add(obj);
 
         return this;
     };
 
     this.remove = function(obj){
 
-        if(!registry.contains(obj)) return this;
-
-        registry.pop(obj);
+        registry.remove(obj);
 
         return this;
     }
