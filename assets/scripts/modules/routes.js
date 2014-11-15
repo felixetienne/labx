@@ -101,7 +101,7 @@ exports.project = function(req, res){
         }
 
         var data = states.getData();
-        console.log(data);
+
         res.render(name, {
             page:{
                 title: data.page.pageTitle
