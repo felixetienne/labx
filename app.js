@@ -5,8 +5,8 @@
  * 2014
  */
 
-var env = require('node-env-file');
 var express = require('express');
+var env = require('node-env-file');
 
 env(__dirname + '/.env');
 
