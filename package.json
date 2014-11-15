@@ -18,8 +18,7 @@
     "grunt-cli": "^0.1.13",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-sass": "^0.15.0",
-    "load-grunt-tasks": "^1.0.0",
-    "sql-bricks-postgres": "^0.3.0"
+    "load-grunt-tasks": "^1.0.0"
   },
   "description": "LabX ===========",
   "main": "Gruntfile.js",
