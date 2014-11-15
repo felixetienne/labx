@@ -146,7 +146,7 @@ module.exports = (function(mod, dal, fs, buffer){
                     action(data);
                 };
 
-                //client.end();
+                client.end();
             });
         });
     };
