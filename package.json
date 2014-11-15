@@ -6,18 +6,20 @@
     "node": "0.8.x"
   },
   "dependencies": {
+    "express": "^2.5.11",
+    "jade": ">= 0.0.1",
     "pg": "3.x",
-    "express": "~2.5.x",
-    "jade": ">= 0.0.1"
+    "sql-bricks-postgres": "^0.3.0",
+    "uglify-js": "^2.4.15",
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
-    "breeze": "^0.4.0",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-sass": "^0.15.0",
     "load-grunt-tasks": "^1.0.0",
-    "pg": "^3.x",
+    "pg": "3.x",
     "sql-bricks-postgres": "^0.3.0",
     "uglify-js": "^2.4.15",
     "underscore": "^1.7.0"
