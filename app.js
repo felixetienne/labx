@@ -8,7 +8,7 @@
 var express = require('express');
 var env = require('node-env-file');
 
-env(__dirname + '/.env');
+if(env.TYPE!='dev') env(__dirname + '/.env');
 
 var app = module.exports = express.createServer();
 
