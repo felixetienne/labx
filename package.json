@@ -17,7 +17,6 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-sass": "^0.15.0",
     "load-grunt-tasks": "^1.0.0",
-    "node-env-file": "^0.1.4",
     "pg": "^3.x",
     "sql-bricks-postgres": "^0.3.0",
     "uglify-js": "^2.4.15",

@@ -8,13 +8,6 @@
 var express = require('express');
 var fs = require('fs');
 
-//var envConfig = (function(filePath){
-//    fs.exists(filePath, function(){
-//        var env = require('node-env-file');
-//        env(filePath);
-//    });
-//})(__dirname + '/.env');
-
 var app = module.exports = express.createServer();
 
 app
