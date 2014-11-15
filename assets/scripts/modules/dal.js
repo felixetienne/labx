@@ -1,7 +1,5 @@
 module.exports = (function (mod, pg, queryBuilder){
 
-    var getColumnName = function(table, column){ return  table.name + '.' + column; }
-
     mod.queries = {
         pages:{
             getAllQuery: function(){
