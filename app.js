@@ -7,10 +7,10 @@
 
 var express = require('express');
 var fs = require('fs');
-var env = require('node-env-file');
 
 var envConfig = (function(filePath){
     fs.exists(filePath, function(){
+        var env = require('node-env-file');
         env(filePath);
     });
 })(__dirname + '/.env');
