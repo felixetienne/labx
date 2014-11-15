@@ -6,9 +6,14 @@
  */
 
 var express = require('express');
+var fs = require('fs');
 var env = require('node-env-file');
 
-if(env.TYPE!='dev') env(__dirname + '/.env');
+var envConfig = (function(filePath){
+    fs.exists(filePath, function(){
+        env(filePath);
+    });
+})(__dirname + '/.env');
 
 var app = module.exports = express.createServer();
 
