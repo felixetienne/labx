@@ -6,7 +6,6 @@
  */
 
 var express = require('express');
-var fs = require('fs');
 
 var app = module.exports = express.createServer();
 
@@ -28,6 +27,7 @@ app
 .listen(process.env.PORT, function() {
     console.log("Node app is running at localhost: " + process.env.PORT)
 });
+
 
 var routes = require('./assets/scripts/modules/routes');
 
