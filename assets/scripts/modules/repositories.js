@@ -109,7 +109,6 @@ module.exports = (function(mod, dal, fs, buffer){
 
         dal.work(function(client){
 
-            console.log(dal.queries.pages.getFromNameQuery(name));
             client
             .query(dal.queries.pages.getFromNameQuery(name))
             .on('row', function(row, res){ console.log(row); res.addRow(row) })
