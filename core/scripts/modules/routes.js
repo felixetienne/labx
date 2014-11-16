@@ -67,14 +67,7 @@ exports.contact = function(req, res){
 
 exports.project = function(req, res){
     var name = 'project';
-
     var data = {};
-
-    var states = new States(function(){
-        return data.page && data.project;
-    }, function(){
-        renderView();
-    });
 
     var renderView = function(){
 
@@ -107,6 +100,12 @@ exports.project = function(req, res){
         states.errorOccur();
         res.render('404');
     };
+
+    var states = new States(function(){
+        return data.page && data.project;
+    }, function(){
+        renderView();
+    });
 
     repo.projects.getFromName(req.params.name, imageFolder, function(project){
         data.project = project;

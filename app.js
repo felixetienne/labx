@@ -29,7 +29,7 @@ app
 });
 
 
-var routes = require('./assets/scripts/modules/routes');
+var routes = require('./core/scripts/modules/routes');
 
 app.get('/', routes.index);
 app.get('/about', routes.about);
