@@ -3,7 +3,8 @@
  * GET home page.
  */
 
-var States = require('../objects/States');
+//var States = require('../objects/States');
+var async = require('async');
 var repo = require('./repositories');
 var imageFolder = "/medias/images/tmp/";
 
@@ -67,11 +68,12 @@ exports.contact = function(req, res){
 
 exports.project = function(req, res){
     var name = 'project';
+    var error = false;
     var data = {};
 
     var renderView = function(){
 
-        if(states.hasError()) {
+        if(error) {
             renderErrorView();
             return;
         }
@@ -96,22 +98,63 @@ exports.project = function(req, res){
     };
 
     var renderErrorView = function (){
-        if(states.hasError()) return;
-        states.errorOccur();
+        if(error) return;
+        error = true;
         res.render('404');
     };
 
-    var states = new States(
-        function(){ return data.page && data.project; },
-        function(){ renderView(); });
+    async.parallel([
+        repo.projects.getFromName(req.params.name, imageFolder, function(project){
+            data.project = project;
+        }, renderErrorView),
+        repo.pages.getFromName(name, function(page){
+            data.page = page;
+        }, renderErrorView)
+    ], renderView);
 
-    repo.projects.getFromName(req.params.name, imageFolder, function(project){
-        data.project = project;
-        states.test();
-    }, renderErrorView);
+//    var renderView = function(){
+//
+//        if(states.hasError()) {
+//            renderErrorView();
+//            return;
+//        }
+//
+//        res.render(name, {
+//            page:{
+//                title: data.page.pageTitle
+//            },
+//            content: {
+//                title: data.page.title,
+//                shortTitle: data.page.shortTitle,
+//                text: data.page.text
+//            },
+//            project: {
+//                title: data.project.title,
+//                image: {
+//                    title: data.project.image.title,
+//                    url: data.project.image.path
+//                }
+//            }
+//        });
+//    };
+//
+//    var renderErrorView = function (){
+//        if(states.hasError()) return;
+//        states.errorOccur();
+//        res.render('404');
+//    };
 
-    repo.pages.getFromName(name, function(page){
-        data.page = page;
-        states.test();
-    }, renderErrorView);
+//    var states = new States(
+//        function(){ return data.page && data.project; },
+//        function(){ renderView(); });
+
+//    repo.projects.getFromName(req.params.name, imageFolder, function(project){
+//        data.project = project;
+//        states.test();
+//    }, renderErrorView);
+//
+//    repo.pages.getFromName(name, function(page){
+//        data.page = page;
+//        states.test();
+//    }, renderErrorView);
 };
