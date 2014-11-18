@@ -101,11 +101,9 @@ exports.project = function(req, res){
         res.render('404');
     };
 
-    var states = new States(function(){
-        return data.page && data.project;
-    }, function(){
-        renderView();
-    });
+    var states = new States(
+        function(){ return data.page && data.project; },
+        function(){ renderView(); });
 
     repo.projects.getFromName(req.params.name, imageFolder, function(project){
         data.project = project;

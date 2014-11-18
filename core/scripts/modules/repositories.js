@@ -1,6 +1,6 @@
-module.exports = (function(mod, fs, pg, bricks){
+module.exports = (function(mod, pg, bricks, ImageManager){
 
-    var rootPath = __dirname + "/../../../public";
+    var imageManager = new ImageManager();
 
     var isInvalidAction = function(action){
         if(!action) throw "[ERROR:Dal:getAll] 'action' parameter is null.";
@@ -10,7 +10,7 @@ module.exports = (function(mod, fs, pg, bricks){
 
     var hasResults = function(res, emptyAction){
         if(typeof(res) == 'undefined') throw "[ERROR:repositories:hasResults] 'res' is undefined.";
-        if(typeof(res.rows) != 'undefined' && res.rows.length > 0) return true;
+        if(typeof(res.rows) != 'undefined' && res.rowCount > 0) return true;
         if(typeof(emptyAction) == 'function') emptyAction();
         return false;
     };
@@ -27,26 +27,10 @@ module.exports = (function(mod, fs, pg, bricks){
         return page;
     };
 
-    var writeImage = function(fullImagePath, rawData){
-        fs.writeFile(fullImagePath, rawData, function (error) {
-          if (error) throw error;
-        });
-    };
-
-    var testImage = function(imagePath, notExistsAction){
-        var fullPath = rootPath + imagePath;
-        fs.exists(fullPath, function(exists){
-            if(exists) return;
-            notExistsAction(fullPath);
-        });
-    };
-
     var open = function(callback){
         pg.connect(process.env.DATABASE_URL + "?ssl=true", function(err, client) {
-
             if(err) throw "[ERROR:pg:connect] " + err;
             if(!client) throw "[ERROR:dal:pages:getAll] the parameter 'client' is null";
-
             callback(client);
         });
     };
@@ -93,7 +77,9 @@ module.exports = (function(mod, fs, pg, bricks){
                             }
                         };
 
-                        testImage(imagePath, function(fullImagePath){
+                        imageManager.testImage(imagePath, function(){
+                            console.log('[INFO:repositories:projects.getFromName] Image ' + imagePath + ' already exists on disk.');
+                        }, function(){
 
                             open(function(client2){
 
@@ -101,25 +87,29 @@ module.exports = (function(mod, fs, pg, bricks){
                                     bricks
                                     .select("images.image as rawimage")
                                     .from('images')
-                                    .where('images.id', p.imageId)
+                                    .where('images.id', p.imageid)
                                     .toString();
 
                                 client2
                                 .query(imageQuery, function(imageError, imageResult){
-
                                     if(imageError) {
                                         console.log(imageError);
                                         close(client2);
                                         return;
                                     }
+console.log(imageResult);
 
-                                    var i = imageResult.rows[0];
-
-                                    writeImage(fullImagePath, i.rawimage);
+                                    if(imageResult.rowCount > 0){
+                                        var i = imageResult.rows[0];
+                                        imageManager.writeImage(imagePath, i.rawimage);
+                                    }else{
+                                        console.log('No image for the current project.');
+                                    }
 
                                     close(client2);
                                 });
                             });
+                            console.log('[INFO:repositories:projects.getFromName] Image ' + imagePath + ' does not exists on disk.');
                         });
 
                         action(data);
@@ -180,15 +170,12 @@ module.exports = (function(mod, fs, pg, bricks){
                 .query(pagesQuery, function(err, res){
 
                     if(hasResults(res, emptyAction)) {
-
-                        var data = [];
-
+                        var data = new Array();
                         res.rows.forEach(function(row) { data.push(rowToPage(row)) });
-
                         action(data);
-                    };
+                    }
 
-                    client.end();
+                    close(client);
                 });
             });
         }
@@ -196,4 +183,4 @@ module.exports = (function(mod, fs, pg, bricks){
 
     return mod;
 
-})({}, require('fs'), require('pg'), require('sql-bricks-postgres'));
+})({}, require('pg'), require('sql-bricks-postgres'), require('../objects/ImageManager'));
