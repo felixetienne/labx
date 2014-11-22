@@ -97,13 +97,12 @@ module.exports = (function(mod, pg, bricks, ImageManager){
                                         close(client2);
                                         return;
                                     }
-console.log(imageResult);
 
                                     if(imageResult.rowCount > 0){
                                         var i = imageResult.rows[0];
                                         imageManager.writeImage(imagePath, i.rawimage);
                                     }else{
-                                        console.log('No image for the current project.');
+                                        console.log('[INFO:repositories:projects.getFromName] No image for the current project.');
                                     }
 
                                     close(client2);

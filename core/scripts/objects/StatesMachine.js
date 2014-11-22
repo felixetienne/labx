@@ -1,4 +1,4 @@
-module.exports = function States(condition, callback){
+module.exports = function StatesMachine(condition, callback){
 
     var error = false;
 
@@ -6,7 +6,9 @@ module.exports = function States(condition, callback){
 
     this.hasError = function(){ return error; }
 
-    this.test = function(){
+    this.tryCallback = function(action){
+
+        if(action) action();
 
         if(condition()){
             callback();

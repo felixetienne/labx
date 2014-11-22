@@ -3,25 +3,24 @@
  * GET home page.
  */
 
-//var States = require('../objects/States');
-var async = require('async');
+//var async = require('async');
 var repo = require('./repositories');
 var imageFolder = "/medias/images/tmp/";
+var StatesMachine = require('../objects/StatesMachine');
 
 exports.index = function(req, res){
     var name = 'index';
 
     repo.pages.getFromName(name, function(page){
-
         res.render(name, {
             page:{
-                    title: page.pageTitle
-                },
-                content: {
-                    title: page.title,
-                    shortTitle: page.shortTitle,
-                    text: page.text
-                }
+                title: page.pageTitle
+            },
+            content: {
+                title: page.title,
+                shortTitle: page.shortTitle,
+                text: page.text
+            }
         });
     }, function(){
          res.render('404');
@@ -34,13 +33,13 @@ exports.about = function(req, res){
     repo.pages.getFromName(name, function(page){
         res.render(name, {
             page:{
-                    title: page.pageTitle
-                },
-                content: {
-                    title: page.title,
-                    shortTitle: page.shortTitle,
-                    text: page.text
-                }
+                title: page.pageTitle
+            },
+            content: {
+                title: page.title,
+                shortTitle: page.shortTitle,
+                text: page.text
+            }
         });
     }, function(){
          res.render('404');
@@ -68,12 +67,11 @@ exports.contact = function(req, res){
 
 exports.project = function(req, res){
     var name = 'project';
-    var error = false;
     var data = {};
 
     var renderView = function(){
 
-        if(error) {
+        if(statesMachine.hasError()) {
             renderErrorView();
             return;
         }
@@ -98,23 +96,36 @@ exports.project = function(req, res){
     };
 
     var renderErrorView = function (){
-        if(error) return;
-        error = true;
+        if(statesMachine.hasError()) return;
+        statesMachine.errorOccur();
         res.render('404');
     };
 
-    async.parallel([
-        repo.projects.getFromName(req.params.name, imageFolder, function(project){
+    var statesMachine = new StatesMachine(
+        // condition
+        function(){ return data.page && data.project; },
+        // callback
+        function(){ renderView(); });
+
+    repo.projects.getFromName(req.params.name, imageFolder, function(project){
+        statesMachine.tryCallback(function(){
             data.project = project;
-        }, renderErrorView),
-        repo.pages.getFromName(name, function(page){
+        });
+    }, renderErrorView);
+
+    repo.pages.getFromName(name, function(page){
+        statesMachine.tryCallback(function(){
             data.page = page;
-        }, renderErrorView)
-    ], renderView);
+        });
+    }, renderErrorView);
+
+//*** Using Async module ***
+
+//    var error = false;
 
 //    var renderView = function(){
 //
-//        if(states.hasError()) {
+//        if(error) {
 //            renderErrorView();
 //            return;
 //        }
@@ -139,22 +150,21 @@ exports.project = function(req, res){
 //    };
 //
 //    var renderErrorView = function (){
-//        if(states.hasError()) return;
-//        states.errorOccur();
+//        if(error) return;
+//        error = true;
 //        res.render('404');
 //    };
-
-//    var states = new States(
-//        function(){ return data.page && data.project; },
-//        function(){ renderView(); });
-
-//    repo.projects.getFromName(req.params.name, imageFolder, function(project){
-//        data.project = project;
-//        states.test();
-//    }, renderErrorView);
 //
-//    repo.pages.getFromName(name, function(page){
-//        data.page = page;
-//        states.test();
-//    }, renderErrorView);
+//    async.parallel([
+//        function(){
+//            repo.projects.getFromName(req.params.name, imageFolder, function(project){
+//                data.project = project;
+//            }, renderErrorView);
+//        },
+//        function(){
+//            repo.pages.getFromName(name, function(page){
+//                data.page = page;
+//            }, renderErrorView);
+//        }
+//    ], renderView);
 };
