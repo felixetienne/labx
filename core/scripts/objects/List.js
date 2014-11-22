@@ -1,13 +1,13 @@
 module.exports = function List(){
 
-    var container = new Array();
+    var _container = new Array();
 
-    this.count = function(){ return container.length; }
+    this.count = function(){ return _container.length; }
 
     this.contains = function(obj){
 
-        for(var i = 0; i < container.length; i++){
-            if(container[i] === obj) return true;
+        for(var i = 0; i < _container.length; i++){
+            if(_container[i] === obj) return true;
         };
 
         return false;
@@ -15,9 +15,9 @@ module.exports = function List(){
 
     this.remove = function(obj){
 
-        for(var i = 0; i < container.length; i++){
-            if(container[i] === obj){
-                container.splice(i, 1);
+        for(var i = 0; i < _container.length; i++){
+            if(_container[i] === obj){
+                _container.splice(i, 1);
                 return this;
             }
         };
@@ -26,11 +26,15 @@ module.exports = function List(){
 
     this.add = function(obj){
         if(this.contains(obj)) return this;
-        container.push(obj);
+        _container.push(obj);
         return this;
     }
 
     this.at = function(i){
-        return i>=container.length ? null : container[i];
+        return i >= _container.length ? null : _container[i];
+    }
+
+    this.clear = function(){
+        _container.splice(0, _container.length);
     }
 }

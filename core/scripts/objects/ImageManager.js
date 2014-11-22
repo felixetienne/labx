@@ -1,12 +1,12 @@
 module.exports = function ImageManager(){
 
-    var fs = require('fs');
+    var _fs = require('fs');
 
-    var rootPath = __dirname + "/../../../public";
+    var _rootPath = __dirname + "/../../../public";
 
     this.testImage = function(imagePath, imageExistsAction, imageNotExistsAction){
-        var fullPath = rootPath + imagePath;
-        fs.exists(fullPath, function(exists){
+        var fullPath = _rootPath + imagePath;
+        _fs.exists(fullPath, function(exists){
             if(exists) {
                 imageExistsAction();
                 return;
@@ -16,8 +16,8 @@ module.exports = function ImageManager(){
     };
 
     this.writeImage = function(imagePath, rawData){
-        var fullPath = rootPath + imagePath;
-        fs.writeFile(fullPath, rawData, function (error) {
+        var fullPath = _rootPath + imagePath;
+        _fs.writeFile(fullPath, rawData, function (error) {
           if (error) throw error;
         });
     };

@@ -1,6 +1,8 @@
-module.exports = (function(mod, pg, bricks, ImageManager){
+var ImageManager = require('../objects/ImageManager');
 
-    var imageManager = new ImageManager();
+module.exports = (function(mod, pg, bricks){
+
+    var _imageManager = new ImageManager();
 
     var isInvalidAction = function(action){
         if(!action) throw "[ERROR:Dal:getAll] 'action' parameter is null.";
@@ -77,7 +79,7 @@ module.exports = (function(mod, pg, bricks, ImageManager){
                             }
                         };
 
-                        imageManager.testImage(imagePath, function(){
+                        _imageManager.testImage(imagePath, function(){
                             console.log('[INFO:repositories:projects.getFromName] Image ' + imagePath + ' already exists on disk.');
                         }, function(){
 
@@ -100,7 +102,7 @@ module.exports = (function(mod, pg, bricks, ImageManager){
 
                                     if(imageResult.rowCount > 0){
                                         var i = imageResult.rows[0];
-                                        imageManager.writeImage(imagePath, i.rawimage);
+                                        _imageManager.writeImage(imagePath, i.rawimage);
                                     }else{
                                         console.log('[INFO:repositories:projects.getFromName] No image for the current project.');
                                     }
@@ -182,4 +184,4 @@ module.exports = (function(mod, pg, bricks, ImageManager){
 
     return mod;
 
-})({}, require('pg'), require('sql-bricks-postgres'), require('../objects/ImageManager'));
+})({}, require('pg'), require('sql-bricks-postgres'));

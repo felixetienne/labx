@@ -1,10 +1,10 @@
 module.exports = function StatesMachine(condition, callback){
 
-    var error = false;
+    var _error = false;
 
-    this.errorOccur = function(){ error = true; }
+    this.errorOccur = function(){ _error = true; }
 
-    this.hasError = function(){ return error; }
+    this.hasError = function(){ return _error; }
 
     this.tryCallback = function(action){
 
