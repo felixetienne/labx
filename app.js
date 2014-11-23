@@ -5,14 +5,20 @@
  * Copyright 2014
  */
 
+var config = require('./core/scripts/modules/appConfig');
+var routes = require('./core/scripts/modules/routes');
 var express = require('express');
 
+var root = __dirname;
+var port = config.getCurrentPort();
 var app = module.exports = express.createServer();
+
+if(!app) throw "[ERROR:app] The 'app' cannot be created.";
 
 app
 .configure(function(){
-    app.use(express.static(__dirname + '/public'));
-    app.set('views', __dirname + '/views');
+    app.use(express.static(root + '/public'));
+    app.set('views', root + '/views');
     app.set('view engine', 'jade');
     app.use(express.bodyParser());
     app.use(express.methodOverride());
@@ -24,12 +30,9 @@ app
 .configure('production', function(){
     app.use(express.errorHandler());
 })
-.listen(process.env.PORT, function() {
-    console.log("Node app is running at localhost: " + process.env.PORT)
+.listen(port, function() {
+    console.log("Node app is running at localhost: " + port)
 });
-
-
-var routes = require('./core/scripts/modules/routes');
 
 app.get('/', routes.index);
 app.get('/about', routes.about);

@@ -1,164 +1,62 @@
-
-/*
- * GET home page.
- */
-
+// Objects
 var Context = require('../objects/Context');
-var servicesFactory = require('./servicesFactory');
-var viewsMap = require('./viewsMap');
 
+// Modules
+var viewsMap = require('./viewsMap');
+var servicesFactory = require('./factories/servicesFactory');
+
+// Instances
 var context = new Context();
+var page404 = viewsMap.getNotFound();
 
 exports.index = function(req, res){
 
     context
     .setCurrentRequest(req)
-    .setCurrentView(viewsMap.default);
+    .setCurrentView(viewsMap.getDefault());
 
     servicesFactory
     .createPageService(context)
     .getData(
         function(data){ res.render(context.getCurrentView(), data); },
-        function(){ res.render(context.getErrorView()); });
+        function(){ res.render(page404); });
 };
 
 exports.about = function(req, res){
 
     context
     .setCurrentRequest(req)
-    .setCurrentView(viewsMap.about);
+    .setCurrentView(viewsMap.getAbout());
 
     servicesFactory
     .createPageService(context)
     .getData(
         function(data){ res.render(context.getCurrentView(), data); },
-        function(){ res.render(context.getErrorView()); });
+        function(){ res.render(page404); });
 };
 
 exports.contact = function(req, res){
 
     context
     .setCurrentRequest(req)
-    .setCurrentView(viewsMap.contact);
+    .setCurrentView(viewsMap.getContact());
 
     servicesFactory
     .createPageService(context)
     .getData(
         function(data){ res.render(context.getCurrentView(), data); },
-        function(){ res.render(context.getErrorView()); });
+        function(){ res.render(page404); });
 };
 
 exports.project = function(req, res){
 
     context
     .setCurrentRequest(req)
-    .setCurrentView(viewsMap.project);
+    .setCurrentView(viewsMap.getProject());
 
     servicesFactory
     .createPageService(context)
     .getData(
         function(data){ res.render(context.getCurrentView(), data); },
-        function(){ res.render(context.getErrorView()); });
-
-//    var name = 'project';
-//    var data = {};
-//
-//    var renderView = function(){
-//
-//        if(statesMachine.hasError()) {
-//            renderErrorView();
-//            return;
-//        }
-//
-//        res.render(name, {
-//            page:{
-//                title: data.page.pageTitle
-//            },
-//            content: {
-//                title: data.page.title,
-//                shortTitle: data.page.shortTitle,
-//                text: data.page.text
-//            },
-//            project: {
-//                title: data.project.title,
-//                image: {
-//                    title: data.project.image.title,
-//                    url: data.project.image.path
-//                }
-//            }
-//        });
-//    };
-//
-//    var renderErrorView = function (){
-//        if(statesMachine.hasError()) return;
-//        statesMachine.errorOccur();
-//        res.render('404');
-//    };
-//
-//    var statesMachine = new StatesMachine(
-//        // condition
-//        function(){ return data.page && data.project; },
-//        // callback
-//        function(){ renderView(); });
-//
-//    repo.projects.getFromName(req.params.name, imageFolder, function(project){
-//        statesMachine.tryCallback(function(){
-//            data.project = project;
-//        });
-//    }, renderErrorView);
-//
-//    repo.pages.getFromName(name, function(page){
-//        statesMachine.tryCallback(function(){
-//            data.page = page;
-//        });
-//    }, renderErrorView);
-
-//*** Using Async module ***
-
-//    var error = false;
-
-//    var renderView = function(){
-//
-//        if(error) {
-//            renderErrorView();
-//            return;
-//        }
-//
-//        res.render(name, {
-//            page:{
-//                title: data.page.pageTitle
-//            },
-//            content: {
-//                title: data.page.title,
-//                shortTitle: data.page.shortTitle,
-//                text: data.page.text
-//            },
-//            project: {
-//                title: data.project.title,
-//                image: {
-//                    title: data.project.image.title,
-//                    url: data.project.image.path
-//                }
-//            }
-//        });
-//    };
-//
-//    var renderErrorView = function (){
-//        if(error) return;
-//        error = true;
-//        res.render('404');
-//    };
-//
-//    async.parallel([
-//        function(){
-//            repo.projects.getFromName(req.params.name, imageFolder, function(project){
-//                data.project = project;
-//            }, renderErrorView);
-//        },
-//        function(){
-//            repo.pages.getFromName(name, function(page){
-//                data.page = page;
-//            }, renderErrorView);
-//        }
-//    ], renderView);
+        function(){ res.render(page404); });
 };
