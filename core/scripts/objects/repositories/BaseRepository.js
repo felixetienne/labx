@@ -2,6 +2,7 @@ var ImageManager = require('../ImageManager');
 
 module.exports = function BaseRepository(pg, config){
 
+    var _fullDatabaseUrl = config.getDatabaseUrl() + "?ssl=true";
 
     this.imageManager = new ImageManager();
 
@@ -19,7 +20,7 @@ module.exports = function BaseRepository(pg, config){
     };
 
     this.open = function(callback){
-        pg.connect(config.getDatabaseUrl() + "?ssl=true", function(err, client) {
+        pg.connect(_fullDatabaseUrl, function(err, client) {
             if(err) throw "[ERROR:pg:connect] " + err;
             if(!client) throw "[ERROR:dal:pages:getAll] the parameter 'client' is null";
             callback(client);
