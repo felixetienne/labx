@@ -13,8 +13,9 @@ module.exports = function BaseRepository(pg, config){
     };
 
     this.hasResults = function(res, emptyAction){
-        if(typeof(res) == 'undefined') throw "[ERROR:repositories:hasResults] 'res' is undefined.";
-        if(typeof(res.rows) != 'undefined' && res.rowCount > 0) return true;
+        if(typeof(res) != 'undefined' &&
+           typeof(res.rows) != 'undefined' &&
+           res.rowCount > 0) return true;
         if(typeof(emptyAction) == 'function') emptyAction();
         return false;
     };

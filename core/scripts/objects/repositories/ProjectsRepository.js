@@ -26,9 +26,8 @@ module.exports = function ProjectsRepository(pg, bricks, config){
             .query(projectQuery, function(err, res){
 
                 if(err) {
-                    console.log(err);
                     _base.close(client);
-                    return;
+                    throw err;
                 }
 
                 if(_base.hasResults(res, emptyAction)) {
@@ -45,7 +44,7 @@ module.exports = function ProjectsRepository(pg, bricks, config){
                     };
 
                     _base.imageManager.testImage(imagePath, function(){
-                        console.log('[INFO:repositories:projects.getFromName] Image ' + imagePath + ' already exists on disk.');
+                        //console.log('[INFO:repositories:projects.getFromName] Image ' + imagePath + ' already exists on disk.');
                     }, function(){
 
                         _base.open(function(client2){

@@ -1,12 +1,13 @@
+var BaseService = require('./BaseService');
 var StatesMachine = require('../StatesMachine');
 
 module.exports = function ProjectPageService(context, repositoriesFactory){
 
-    var _appConfig = require('../../modules/appConfig');
+    var _base = new BaseService(context);
+    var _pagesRepository = repositoriesFactory.createPagesRepository();
+    var _projectsRepository = repositoriesFactory.createProjectsRepository();
 
     this.getData = function(successAction, errorAction){
-
-        var request = context.getCurrentRequest();
         var result = {};
 
         var onError = function (){
@@ -37,7 +38,8 @@ module.exports = function ProjectPageService(context, repositoriesFactory){
                         title: result.project.image.title,
                         url: result.project.image.path
                     }
-                }
+                },
+                allPages: result.allPages
             };
 
             successAction(data);
@@ -45,18 +47,19 @@ module.exports = function ProjectPageService(context, repositoriesFactory){
 
         var statesMachine = new StatesMachine(
             // condition
-            function(){ return result.page && result.project; },
+            function(){ return result.page && result.project && result.allPages; },
             // callback
             function(){ onCompleted(); });
 
-        var pagesRepo = repositoriesFactory.createPagesRepository();
-        var projectsRepo = repositoriesFactory.createProjectsRepository();
-
-        pagesRepo.getPageByName(context.getCurrentView(), function(page){
+        _pagesRepository.getPageByName(_base.currentView, function(page){
             statesMachine.tryCallback(function(){ result.page = page; });
         }, onError);
 
-        projectsRepo.getProjectByName(request.params.name, _appConfig.getImageFolder(), function(project){
+        _pagesRepository.getBasicPages(function(pages){
+            statesMachine.tryCallback(function(){ result.allPages = pages; });
+        }, onError);
+
+        _projectsRepository.getProjectByName(_base.currentRequest.params.name, _base.config.getImageFolder(), function(project){
             statesMachine.tryCallback(function(){ result.project = project; });
         }, onError);
     }

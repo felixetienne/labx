@@ -36,9 +36,8 @@ module.exports = function PagesRepository(pg, bricks, config){
             .query(pageQuery, function(err, res){
 
                 if(err) {
-                    console.log(err);
                     _base.close(client);
-                    return;
+                    throw err;
                 }
 
                 if(_base.hasResults(res, emptyAction)) {
@@ -59,17 +58,30 @@ module.exports = function PagesRepository(pg, bricks, config){
 
             var pagesQuery =
                 bricks
-                .select('pages.title')
+                .select('pages.title, pages.name')
                 .from('pages')
                 .where('pages.isactive', true)
+                //.orderBy('pages.order')
                 .toString();
 
              client
             .query(pagesQuery, function(err, res){
 
+                if(err) {
+                    _base.close(client);
+                    throw err;
+                }
+
                 if(_base.hasResults(res, emptyAction)) {
                     var data = new Array();
-                    res.rows.forEach(function(row) { data.push(rowToPage(row)) });
+                    res.rows.forEach(function(row) {
+                        var page = {
+                            title: row.title,
+                            name: row.name
+                        };
+
+                        data.push(page);
+                    });
                     action(data);
                 }
 
