@@ -1,5 +1,5 @@
 // Objects
-var BasicPageService = require('../../objects/services/BasicPageService');
+var SimplePageService = require('../../objects/services/SimplePageService');
 var ProjectPageService = require('../../objects/services/ProjectPageService');
 
 module.exports = (function(mod, repositoriesFactory, viewsMap){
@@ -9,7 +9,7 @@ module.exports = (function(mod, repositoriesFactory, viewsMap){
 
         if(view == viewsMap.getProject()) return new ProjectPageService(context, repositoriesFactory);
 
-        return new BasicPageService(context, repositoriesFactory);
+        return new SimplePageService(context, repositoriesFactory);
     };
 
     return mod;

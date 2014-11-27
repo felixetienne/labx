@@ -6,12 +6,12 @@ module.exports = function StatesMachine(condition, callback){
 
     this.hasError = function(){ return _error; }
 
-    this.tryCallback = function(action){
+    this.tryCallback = function(x, action){
 
-        if(action) action();
+        if(action) action(x);
 
-        if(condition()){
-            callback();
+        if(condition(x)){
+            callback(x);
             return true;
         }
 

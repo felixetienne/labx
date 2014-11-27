@@ -1,10 +1,6 @@
 .masthead
-    ul(class="nav nav-pills pull-right")
-      li
-        a(href="/") Accueil
-      li
-        a(href="/about") À propos
-      li
-        a(href="/contact") CV
-      li
-        a(href="/project/test") Projets
+    if allPages
+        ul(class="nav nav-pills pull-right")
+            each p in allPages
+                li
+                    a(href= p.url) #{p.title}
