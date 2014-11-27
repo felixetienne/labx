@@ -5,6 +5,18 @@ module.exports = function BasePageService(context){
     this.config = require('../../modules/appConfig');
     this.currentView = context.getCurrentView();
     this.currentRequest = context.getCurrentRequest();
+
+    var getUrl = function(page){
+        var url = '/';
+        if(p.name == 'index') return url;
+
+        url += p.name;
+
+        if(p.name != 'project') return url;
+
+        return url += '/test';
+    }
+
     this.getPageData = function(x){
 
         var data = {
@@ -21,16 +33,10 @@ module.exports = function BasePageService(context){
 
         for(k in x.allPages){
             var p = x.allPages[k];
-            var url = '/';
-            if(p.name != 'index'){
-                url += p.name;
-                if(p.name == 'project'){
-                    url += '/test';
-                }
-            }
+
             data.allPages.push({
                 title: p.title,
-                url: url
+                url: getUrl(p);
             });
         }
 
