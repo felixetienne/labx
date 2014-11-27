@@ -8,11 +8,11 @@ module.exports = function BasePageService(context){
 
     var getUrl = function(page){
         var url = '/';
-        if(p.name == 'index') return url;
+        if(page.name == 'index') return url;
 
-        url += p.name;
+        url += page.name;
 
-        if(p.name != 'project') return url;
+        if(page.name != 'project') return url;
 
         return url += '/test';
     }
