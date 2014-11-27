@@ -36,7 +36,7 @@ module.exports = function BasePageService(context){
 
             data.allPages.push({
                 title: p.title,
-                url: getUrl(p);
+                url: getUrl(p)
             });
         }
 
