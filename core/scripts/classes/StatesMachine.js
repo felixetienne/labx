@@ -1,20 +1,24 @@
-module.exports = function StatesMachine(condition, callback){
+(function(){
 
-    var _error = false;
+    module.exports = function StatesMachine(condition, callback){
 
-    this.errorOccur = function(){ _error = true; }
+        var _error = false;
 
-    this.hasError = function(){ return _error; }
+        this.errorOccur = function(){ _error = true; }
 
-    this.tryCallback = function(x, action){
+        this.hasError = function(){ return _error; }
 
-        if(action) action(x);
+        this.tryCallback = function(x, action){
 
-        if(condition(x)){
-            callback(x);
-            return true;
+            if(action) action(x);
+
+            if(condition(x)){
+                callback(x);
+                return true;
+            }
+
+            return false;
         }
-
-        return false;
     }
-}
+
+})();

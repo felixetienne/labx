@@ -1,14 +1,13 @@
-#{console.log(content)}
 header(class="jumbotron subhead")
   .row
     .span6
-      h1 title//#{title}
+      h1 #{content.title}
       p(class="lead") SUBTITLE
     .span6
       div(class="bsa well")
         div(class="bsarocks")
   .subnav
-//    ul(class="nav nav-pills")
-//      each p in allPages
-//        li
-//            a(href= p.url) #{p.title}
+    ul(class="nav nav-pills")
+      each p in allPages
+        li
+            a(href= p.url) #{p.title}

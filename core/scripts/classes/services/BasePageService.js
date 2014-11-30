@@ -1,45 +1,47 @@
-//var List = require('../List');
+(function(){
 
-module.exports = function BasePageService(context){
+    module.exports = function (context){
 
-    this.config = require('../../modules/appConfig');
-    this.currentView = context.getCurrentView();
-    this.currentRequest = context.getCurrentRequest();
+        this.config = require('../../modules/appConfig');
+        this.currentView = context.getCurrentView();
+        this.currentRequest = context.getCurrentRequest();
 
-    var getUrl = function(page){
-        var url = '/';
-        if(page.name == 'index') return url;
+        var buildUrl = function(page){
+            var url = '/';
 
-        url += page.name;
+            if(page.name == 'index') return url;
 
-        if(page.name != 'project') return url;
+            url += page.name;
 
-        return url += '/test';
-    }
-
-    this.getPageData = function(x){
-
-        var data = {
-            page:{
-                title: x.page.pageTitle
-            },
-            content: {
-                title: x.page.title,
-                shortTitle: x.page.shortTitle,
-                text: x.page.text
-            },
-            allPages: []
-        };
-
-        for(k in x.allPages){
-            var p = x.allPages[k];
-
-            data.allPages.push({
-                title: p.title,
-                url: getUrl(p)
-            });
+            // temporary for test
+            if(page.name != 'project') return url;
+            return url += '/test';
         }
 
-        return data;
+        this.getPageData = function(x){
+
+            var data = {
+                page:{
+                    title: x.page.pageTitle
+                },
+                content: {
+                    title: x.page.title,
+                    shortTitle: x.page.shortTitle,
+                    text: x.page.text
+                },
+                allPages: []
+            };
+
+            for(k in x.allPages){
+                var p = x.allPages[k];
+
+                data.allPages.push({
+                    title: p.title,
+                    url: buildUrl(p)
+                });
+            }
+
+            return data;
+        }
     }
-}
+})();
