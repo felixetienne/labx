@@ -1,6 +1,6 @@
 // Objects
-var PagesRepository = require('../../objects/repositories/PagesRepository');
-var ProjectsRepository = require('../../objects/repositories/ProjectsRepository');
+var PagesRepository = require('../../classes/repositories/PagesRepository');
+var ProjectsRepository = require('../../classes/repositories/ProjectsRepository');
 
 module.exports = (function(mod, pg, bricks, config){
 

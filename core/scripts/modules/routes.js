@@ -1,5 +1,5 @@
 // Objects
-var Context = require('../objects/Context');
+var Context = require('../classes/Context');
 
 // Modules
 var viewsMap = require('./viewsMap');
@@ -36,6 +36,19 @@ exports.about = function(req, res){
 };
 
 exports.contact = function(req, res){
+
+    context
+    .setCurrentRequest(req)
+    .setCurrentView(viewsMap.getContact());
+
+    servicesFactory
+    .createPageService(context)
+    .getData(
+        function(data){ res.render(context.getCurrentView(), data); },
+        function(){ res.render(page404); });
+};
+
+exports.projects = function(req, res){
 
     context
     .setCurrentRequest(req)

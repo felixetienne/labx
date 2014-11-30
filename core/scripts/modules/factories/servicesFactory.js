@@ -1,6 +1,6 @@
 // Objects
-var SimplePageService = require('../../objects/services/SimplePageService');
-var ProjectPageService = require('../../objects/services/ProjectPageService');
+var SimplePageService = require('../../classes/services/SimplePageService');
+var ProjectPageService = require('../../classes/services/ProjectPageService');
 
 module.exports = (function(mod, repositoriesFactory, viewsMap){
 

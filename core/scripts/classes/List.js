@@ -1,4 +1,4 @@
-module.exports = function List(){
+module.exports = function (){
 
     var _container = new Array();
     var clipFromRange = function(index){ return Math.max(0, Math.min(_container.length - 1, index)); }

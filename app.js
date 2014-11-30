@@ -39,8 +39,9 @@ try{
     app.get('/', routes.index);
     app.get('/about', routes.about);
     app.get('/contact', routes.contact);
+    app.get('/projects', routes.projects);
     app.get('/project/:name', routes.project);
 }
 catch(e){
-    console.log(e);
+    console.error(e);
 }
