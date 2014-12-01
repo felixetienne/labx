@@ -11,14 +11,14 @@
 
                 var projectQuery =
                     bricks
-                    .select("   projects.title as projectitle, \
-                                images.title as imagetitle, \
-                                images.id as imageid, \
-                                images.name as imagename")
+                    .select("   projects.title, \
+                                images.title as image_title, \
+                                images.id as image_id, \
+                                images.name as image_name")
                     .from('projects')
-                    .join('images', { 'projects.id': 'images.projectid' })
+                    .join('images', { 'projects.id': 'images.id_project' })
                     .where('projects.name', projectName)
-                    .where('projects.isactive', true)
+                    .where('projects.active', true)
                     .limit(1)
                     .toString();
 
@@ -32,18 +32,11 @@
 
                     if(_base.hasResults(res, emptyAction)) {
 
-                        var p = res.rows[0];
-                        var imagePath = imageFolder + p.imagename + '.jpg';
+                        var data = res.rows[0];
 
-                        var data = {
-                            title: p.projecttitle,
-                            image: {
-                                title: p.imagetitle,
-                                path: imagePath
-                            }
-                        };
+                        data.image_path = imageFolder + data.image_name + '.jpg';
 
-                        _base.imageManager.testImage(imagePath, function(){
+                        _base.imageManager.testImage(data.image_path, function(){
                             //console.log('[INFO:repositories:projects.getFromName] Image ' + imagePath + ' already exists on disk.');
                         }, function(){
 
@@ -51,10 +44,10 @@
 
                                 var imageQuery =
                                     bricks
-                                    .select("images.image as rawimage")
+                                    .select("images.image as image_raw")
                                     .from('images')
-                                    .where('images.id', p.imageid)
-                                    .where('images.isactive', true)
+                                    .where('images.id', data.image_id)
+                                    .where('images.active', true)
                                     .toString();
 
                                 client2
@@ -67,7 +60,7 @@
 
                                     if(imageResult.rowCount > 0){
                                         var i = imageResult.rows[0];
-                                        _base.imageManager.writeImage(imagePath, i.rawimage);
+                                        _base.imageManager.writeImage(data.image_path, i.image_raw);
                                     }else{
                                         console.log('[INFO:repositories:projects.getFromName] No image for the current project.');
                                     }
@@ -75,7 +68,7 @@
                                     _base.close(client2);
                                 });
                             });
-                            console.log('[INFO:repositories:projects.getFromName] Image ' + imagePath + ' does not exists on disk.');
+                            console.log('[INFO:repositories:projects.getFromName] Image ' + data.image_path + ' does not exists on disk.');
                         });
 
                         action(data);

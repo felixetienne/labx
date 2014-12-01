@@ -4,6 +4,7 @@
 
         var _base = new BasePageService(context);
         var _pagesRepository = repositoriesFactory.createPagesRepository();
+        var _websitesRepository = repositoriesFactory.createWebsitesRepository();
 
         this.getData = function(successAction, errorAction){
             var result = {};
@@ -27,17 +28,23 @@
             };
 
             var statesMachine = new StatesMachine(
-                // condition
-                function(x){ return x.page && x.allPages; },
-                // callback
+                 // tested object
+                result,
+                // object condition
+                function(x){ return x.website && x.page && x.allPages; },
+                // callback action
                 function(x){ onCompleted(x); });
 
+            _websitesRepository.getWebsiteProperties(context.getCurrentWebsiteName(), function(properties){
+                statesMachine.tryCallback(function(x){ x.website = properties; })
+            }, onError);
+
             _pagesRepository.getPageByName(_base.currentView, function(page){
-                statesMachine.tryCallback(result, function(x){ x.page = page; });
+                statesMachine.tryCallback(function(x){ x.page = page; });
             }, onError);
 
             _pagesRepository.getBasicPages(function(pages){
-                statesMachine.tryCallback(result, function(x){ x.allPages = pages; });
+                statesMachine.tryCallback(function(x){ x.allPages = pages; });
             }, onError);
         }
     }

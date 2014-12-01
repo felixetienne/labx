@@ -4,19 +4,6 @@
 
         var _base = new BaseRepository(pg, config);
 
-        var rowToPage = function(row){
-            var page = {
-                name: row.name,
-                title: row.title,
-                shortTitle: row.shortTitle,
-                pageTitle: row.pageTitle,
-                pageOrder: row.pageOrder,
-                pageCategory: row.pageCategory
-            };
-
-            return page;
-        };
-
         this.getPageByName = function(pageName, action, emptyAction){
 
             if(_base.isInvalidAction(action)) return;
@@ -25,10 +12,13 @@
 
                 var pageQuery =
                     bricks
-                    .select()
+                    .select('   pages.title as title, \
+                                pages.title_short as title_short, \
+                                pages.description as description, \
+                                pages.name')
                     .from('pages')
                     .where('pages.name', pageName)
-                    .where('pages.isactive', true)
+                    .where('pages.active', true)
                     .limit(1)
                     .toString();
 
@@ -41,7 +31,7 @@
                     }
 
                     if(_base.hasResults(res, emptyAction)) {
-                        var data = rowToPage(res.rows[0]);
+                        var data = res.rows[0];
                         action(data);
                     }
 
@@ -58,9 +48,11 @@
 
                 var pagesQuery =
                     bricks
-                    .select('pages.title, pages.name')
+                    .select('   pages.title_short, \
+                                pages.description_short, \
+                                pages.name')
                     .from('pages')
-                    .where('pages.isactive', true)
+                    .where('pages.active', true)
                     //.orderBy('pages.order')
                     .toString();
 
@@ -74,14 +66,7 @@
 
                     if(_base.hasResults(res, emptyAction)) {
                         var data = new Array();
-                        res.rows.forEach(function(row) {
-                            var page = {
-                                title: row.title,
-                                name: row.name
-                            };
-
-                            data.push(page);
-                        });
+                        res.rows.forEach(function(row) { data.push(row); });
                         action(data);
                     }
 

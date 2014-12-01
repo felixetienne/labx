@@ -2,12 +2,12 @@
 
     module.exports = function (){
 
+        var _currentWebsiteName = 'labx';
         var _currentRequest = null;
         var _currentView = null;
         var _errorView = null;
 
-        this.getConfig = function(){ return _appConfig; }
-        this.getMap = function(){ return _viewsMap; }
+        this.getCurrentWebsiteName = function(){ return _currentWebsiteName; }
 
         this.getCurrentRequest = function(){ return _currentRequest; }
         this.setCurrentRequest = function(value){

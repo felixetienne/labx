@@ -1,6 +1,6 @@
 (function(List){
 
-    module.exports = function Notificator(){
+    module.exports = function (){
 
         var _registry = new List();
 

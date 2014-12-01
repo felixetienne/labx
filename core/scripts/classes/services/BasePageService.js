@@ -21,23 +21,28 @@
         this.getPageData = function(x){
 
             var data = {
-                page:{
-                    title: x.page.pageTitle
+                website: {
+                    title: x.website.title,
+                    subtitle: x.website.subtitle,
+                    date: x.website.date
                 },
-                content: {
+                page:{
                     title: x.page.title,
-                    shortTitle: x.page.shortTitle,
-                    text: x.page.text
+                    shortTitle: x.page.title_short,
+                    description: x.page.description,
+                    name: x.page.name
                 },
                 allPages: []
             };
 
             for(k in x.allPages){
-                var p = x.allPages[k];
+                var page = x.allPages[k];
 
                 data.allPages.push({
-                    title: p.title,
-                    url: buildUrl(p)
+                    shortTitle: page.title_short,
+                    shortDescription: page.description_short,
+                    name: page.name,
+                    url: buildUrl(page)
                 });
             }
 

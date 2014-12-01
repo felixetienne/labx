@@ -1,11 +1,14 @@
 extends ../layout
 
+block head
+    include ../included/head.jade
+
 block header
     include ../included/header.jade
 
 block content
     .container-narrow
-        h1(class="muted") #{content.title}
+        h1(class="muted") #{page.title}
         hr
         div(class="jumbotron")
-          p(class="lead") #{content.text}
+          p(class="lead") #{page.description}

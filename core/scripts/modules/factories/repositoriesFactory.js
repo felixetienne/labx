@@ -1,4 +1,4 @@
-(function(PagesRepository, ProjectsRepository){
+(function(PagesRepository, ProjectsRepository, WebsitesRepository){
 
     module.exports = (function(mod, pg, bricks, config){
 
@@ -10,6 +10,10 @@
             return new ProjectsRepository(pg, bricks, config);
         }
 
+        mod.createWebsitesRepository = function(){
+            return new WebsitesRepository(pg, bricks, config);
+        }
+
         return mod;
 
     })({},
@@ -18,4 +22,5 @@
        require('../appConfig'));
 
 })(require('../../classes/repositories/PagesRepository'),
-   require('../../classes/repositories/ProjectsRepository'));
+   require('../../classes/repositories/ProjectsRepository'),
+   require('../../classes/repositories/WebsitesRepository'));
