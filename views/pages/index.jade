@@ -7,8 +7,6 @@ block header
     include ../included/header.jade
 
 block content
-    .container-narrow
-        h1(class="muted") #{page.title}
-        hr
-        div(class="jumbotron")
-          p(class="lead") #{page.description}
+    h1(class="muted") #{page.title}
+    div(class="jumbotron")
+      p(class="lead") #{page.description}
