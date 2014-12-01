@@ -12,13 +12,18 @@
                 var projectQuery =
                     bricks
                     .select("   projects.title, \
+                                projects.title_short, \
+                                projects.description, \
+                                projects.description_short, \
+                                projects.name, \
                                 images.title as image_title, \
                                 images.id as image_id, \
                                 images.name as image_name")
                     .from('projects')
                     .join('images', { 'projects.id': 'images.id_project' })
-                    .where('projects.name', projectName)
+                    .where('images.active', true)
                     .where('projects.active', true)
+                    .where('projects.name', projectName)
                     .limit(1)
                     .toString();
 

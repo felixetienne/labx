@@ -27,6 +27,9 @@
 
                 data.project = {
                     title: x.project.title,
+                    shortTite: x.project.title_short,
+                    description: x.project.description_short,
+                    name: x.project.name,
                     image: {
                         title: x.project.image_title,
                         url: x.project.image_path
