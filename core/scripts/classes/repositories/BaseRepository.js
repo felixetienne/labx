@@ -28,6 +28,8 @@
             });
         };
 
+        this.getEmptyResultError = function(){ return new Error('Empty result.'); }
+
         this.close = function(client){ client.end(); }
     }
 

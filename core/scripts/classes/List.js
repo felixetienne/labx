@@ -3,8 +3,6 @@
     module.exports = function (){
 
         var _container = new Array();
-        var clipFromRange = function(index){ return Math.max(0, Math.min(_container.length - 1, index)); }
-        var isOutOfRange = function(index){ return index < 0 || index >= _container.length; }
 
         this.count = function(){ return _container.length; }
         this.contains = function(value){ return _container.indexOf(value) >= 0; }
@@ -66,6 +64,9 @@
             console.log(_container);
             return this;
         }
+
+        function clipFromRange(index){ return Math.max(0, Math.min(_container.length - 1, index)); }
+        function isOutOfRange(index){ return index < 0 || index >= _container.length; }
     }
 
 })();

@@ -3,7 +3,6 @@
     var context = new Context();
     var pagesRoots = viewsDef.getPagesPath();
     var page404 = pagesRoots + viewsDef.getNotFound();
-    var getPagePath = function(context){ return pagesRoots + context.getCurrentView(); }
 
     module.exports.index = function(req, res){
 
@@ -69,6 +68,8 @@
             function(data){ res.render(getPagePath(context), data); },
             function(){ res.render(page404); });
     };
+
+    function getPagePath(context){ return pagesRoots + context.getCurrentView(); }
 
 })(require('./factories/servicesFactory'),
    require('./viewsDef'),

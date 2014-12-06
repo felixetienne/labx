@@ -41,9 +41,8 @@
 
                         data.image_path = imageFolder + data.image_name + '.jpg';
 
-                        _base.imageManager.testImage(data.image_path, function(){
-                            //console.log('[INFO:repositories:projects.getFromName] Image ' + imagePath + ' already exists on disk.');
-                        }, function(){
+                        //TODO: Write images from seprarated post-deploy task.
+                        _base.imageManager.testImage(data.image_path, null, function(){
 
                             _base.open(function(client2){
 

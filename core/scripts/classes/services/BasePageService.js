@@ -6,7 +6,7 @@
         this.currentView = context.getCurrentView();
         this.currentRequest = context.getCurrentRequest();
 
-        var buildUrl = function(page){
+        function buildUrl(page){
             var url = '/';
 
             if(page.name == 'index') return url;

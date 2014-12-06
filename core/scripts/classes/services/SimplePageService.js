@@ -1,53 +1,70 @@
-(function(BasePageService, StatesMachine){
+(function(q, BasePageService){
 
     module.exports = function (context, repositoriesFactory){
-
         var _base = new BasePageService(context);
         var _pagesRepository = repositoriesFactory.createPagesRepository();
         var _websitesRepository = repositoriesFactory.createWebsitesRepository();
 
         this.getData = function(successAction, errorAction){
-            var result = {};
 
-             var onError = function (){
-                if(statesMachine.hasError()) return;
-                statesMachine.errorOccur();
-                errorAction();
+            return q
+            .all([
+                getWebsiteProperties(),
+                getPageByName(),
+                getBasicPages()
+            ])
+            .spread(computeData)
+            .then(successAction)
+            .fail(errorAction)
+            .done();
+
+            function getWebsiteProperties() {
+                var deferred = q.defer();
+
+                _websitesRepository.getWebsiteProperties(context.getCurrentWebsiteName(), function(x){
+                    deferred.resolve(x);
+                }, function() {
+                    deferred.reject(_base.getEmptyResultError());
+                });
+
+                return deferred.promise;
             }
 
-            var onCompleted = function(x){
+            function getPageByName() {
+                var deferred = q.defer();
 
-                if(statesMachine.hasError()) {
-                    onError();
-                    return;
-                }
+                _pagesRepository.getPageByName(_base.currentView, function(x){
+                    deferred.resolve(x);
+                }, function() {
+                    deferred.reject(_base.getEmptyResultError());
+                });
 
-                var data = _base.getPageData(x);
+                return deferred.promise;
+            }
 
-                successAction(data);
-            };
+            function getBasicPages() {
+                var deferred = q.defer();
 
-            var statesMachine = new StatesMachine(
-                 // tested object
-                result,
-                // object condition
-                function(x){ return x.website && x.page && x.allPages; },
-                // callback action
-                function(x){ onCompleted(x); });
+                _pagesRepository.getBasicPages(function(x){
+                    deferred.resolve(x);
+                }, function() {
+                    deferred.reject(_base.getEmptyResultError());
+                });
 
-            _websitesRepository.getWebsiteProperties(context.getCurrentWebsiteName(), function(properties){
-                statesMachine.tryCallback(function(x){ x.website = properties; })
-            }, onError);
+                return deferred.promise;
+            }
 
-            _pagesRepository.getPageByName(_base.currentView, function(page){
-                statesMachine.tryCallback(function(x){ x.page = page; });
-            }, onError);
+            function computeData(properties, page, pages) {
+                var data = _base.getPageData({
+                    website: properties,
+                    page: page,
+                    allPages: pages
+                });
 
-            _pagesRepository.getBasicPages(function(pages){
-                statesMachine.tryCallback(function(x){ x.allPages = pages; });
-            }, onError);
+                return data;
+            }
         }
     }
 
-})(require('./BasePageService'),
-   require('../StatesMachine'));
+})(require('q'),
+   require('./BasePageService'));

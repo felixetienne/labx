@@ -8,18 +8,21 @@
             var fullPath = _rootPath + imagePath;
             fs.exists(fullPath, function(exists){
                 if(exists) {
-                    imageExistsAction();
+                    if(imageExistsAction != null) imageExistsAction();
                     return;
                 }
-                imageNotExistsAction();
+                if(imageNotExistsAction != null) imageNotExistsAction();
             });
+        };
+
+        this.writeImageSync = function(imagePath, rawData){
+            var fullPath = _rootPath + imagePath;
+            fs.writeFileSync(fullPath, rawData);
         };
 
         this.writeImage = function(imagePath, rawData){
             var fullPath = _rootPath + imagePath;
-            fs.writeFile(fullPath, rawData, function (error) {
-              if (error) throw error;
-            });
+            fs.writeFile(fullPath, rawData);
         };
     }
 
