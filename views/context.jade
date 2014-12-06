@@ -1,6 +1,7 @@
 
 script(type='text/javascript').
-    window.Context = (function(mod){
-        mod.version = "0.1.0";
-        return mod;
-    })(window.Context || {});
+    window.currentContext = (function(context){
+        context.version = "0.1.0";
+        context.projectName = "LabX";
+        return context;
+    })(window.currentContext || {});

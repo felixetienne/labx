@@ -3,10 +3,12 @@ extends ../layout
 block head
     include ../included/head.jade
 
+block navigation
+    include ../included/navigation.jade
+
 block header
     include ../included/header.jade
 
 block content
-    h1(class="muted") #{page.title}
-    div(class="jumbotron")
-      p(class="lead") #{page.description}
+    .container
+        p TEST

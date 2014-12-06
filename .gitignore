@@ -3,5 +3,6 @@
 # Example .gitignore files: https://github.com/github/gitignore
 /node_modules/
 /public/medias/images/tmp/
+/public/medias/images/excluded/
 npm-debug.log
 .env

@@ -1,5 +1,8 @@
 body{
-    background: black url(/medias/images/bg.jpg);
+    background-color: gray;
+    background-image: url(/medias/images/bg.jpg);
     background-repeat: repeat;
     background-position: center;
+    background-attachment: fixed;
 }
+

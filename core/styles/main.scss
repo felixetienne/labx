@@ -1,5 +1,5 @@
 // Core variables and mixins
-@import "theme/variables";
+//@import "theme/variables";
 @import "variables";
 @import "frameworks/bootstrap/mixins";
 @import "mixins";
@@ -52,7 +52,7 @@
 @import "frameworks/bootstrap/responsive-utilities";
 
 // Cyborg
-@import "theme/bootswatch";
+//@import "theme/bootswatch";
 
 // Custom
 @import "included/global";

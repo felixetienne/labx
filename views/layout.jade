@@ -4,12 +4,12 @@ html
     block head
     link(rel='stylesheet', href='/styles/main.css')
     script(type='text/javascript', src='/scripts/libraries/jquery-min.2.1.1.js')
-    script(type='text/javascript', src='/scripts/frameworks/bootstrap.js')
   body
     include context.jade
-    .container
-        block header
-        block content
+    block navigation
+    block header
+    block content
+    script(type='text/javascript', src='/scripts/frameworks/bootstrap.js')
     script(type='text/javascript', src='/scripts/main.js')
 
     block test
