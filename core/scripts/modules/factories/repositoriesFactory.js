@@ -1,26 +1,33 @@
-(function(PagesRepository, ProjectsRepository, WebsitesRepository){
+(function (PagesRepository, ProjectsRepository, WebsitesRepository,
+	ImagesRepository) {
 
-    module.exports = (function(mod, pg, bricks, config){
+	module.exports = (function (mod, pg, bricks, config) {
 
-        mod.createPagesRepository = function(){
-            return new PagesRepository(pg, bricks, config);
-        }
+		mod.createPagesRepository = function () {
+			return new PagesRepository(pg, bricks, config);
+		}
 
-        mod.createProjectsRepository = function(){
-            return new ProjectsRepository(pg, bricks, config);
-        }
+		mod.createProjectsRepository = function () {
+			return new ProjectsRepository(pg, bricks, config);
+		}
 
-        mod.createWebsitesRepository = function(){
-            return new WebsitesRepository(pg, bricks, config);
-        }
+		mod.createWebsitesRepository = function () {
+			return new WebsitesRepository(pg, bricks, config);
+		}
 
-        return mod;
+		mod.createImagesRepository = function () {
+			return new ImagesRepository(pg, bricks, config);
+		}
 
-    })({},
-       require('pg'),
-       require('sql-bricks-postgres'),
-       require('../appConfig'));
+		return mod;
 
-})(require('../../classes/repositories/PagesRepository'),
-   require('../../classes/repositories/ProjectsRepository'),
-   require('../../classes/repositories/WebsitesRepository'));
+	})({},
+		require('pg'),
+		require('sql-bricks-postgres'),
+		require('../appConfig'));
+
+})(
+	require('../../classes/repositories/PagesRepository'),
+	require('../../classes/repositories/ProjectsRepository'),
+	require('../../classes/repositories/WebsitesRepository'),
+	require('../../classes/repositories/ImagesRepository'));

@@ -1,48 +1,47 @@
 {
-  "name": "LabX",
-  "version": "0.1.0",
-  "private": true,
-  "engines": {
-    "node": "latest"
-  },
-  "dependencies": {
-    "async": "^0.9.0",
-    "ejs": "^1.0.0",
-    "express": "^4.10.4",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-express-server": "^0.4.19",
-    "include-all": "^0.1.6",
-    "jade": "^1.8.0",
-    "jshint-stylish": "^1.0.0",
-    "load-grunt-tasks": "^1.0.0",
-    "pg": "^3.6.3",
-    "q": "^1.1.2",
-    "sql-bricks-postgres": "^0.3.0",
-    "time-grunt": "^1.0.0",
-    "uglify-js": "^2.4.15",
-    "underscore": "^1.7.0"
-  },
-  "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-sass": "^0.15.0",
-    "load-grunt-tasks": "^1.0.0"
-  },
-  "description": "LabX ===========",
-  "main": "Gruntfile.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "node processImageWriting.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://felixetienne:0751gitlab%21@github.com/felixetienne/labx.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/felixetienne/labx/issues"
-  },
-  "homepage": "https://github.com/felixetienne/labx"
+	"name": "LabX",
+	"version": "0.1.0",
+	"private": true,
+	"engines": {
+		"node": "latest"
+	},
+	"dependencies": {
+		"async": "^0.9.0",
+		"express": "^4.10.4",
+		"grunt-contrib-jshint": "^0.10.0",
+		"grunt-express-server": "^0.4.19",
+		"include-all": "^0.1.6",
+		"jade": "^1.8.0",
+		"jshint-stylish": "^1.0.0",
+		"load-grunt-tasks": "^1.0.0",
+		"node-env-file": "^0.1.4",
+		"pg": "^3.6.3",
+		"q": "^1.1.2",
+		"sql-bricks-postgres": "^0.3.0",
+		"time-grunt": "^1.0.0",
+		"uglify-js": "^2.4.15",
+		"underscore": "^1.7.0"
+	},
+	"devDependencies": {
+		"grunt": "^0.4.5",
+		"grunt-cli": "^0.1.13",
+		"grunt-contrib-watch": "^0.6.1",
+		"grunt-sass": "^0.15.0",
+		"load-grunt-tasks": "^1.0.0"
+	},
+	"description": "LabX ===========",
+	"main": "Gruntfile.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://felixetienne:0751gitlab%21@github.com/felixetienne/labx.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/felixetienne/labx/issues"
+	},
+	"homepage": "https://github.com/felixetienne/labx"
 }

@@ -1,79 +1,91 @@
-(function(BaseRepository){
+(function (BaseRepository) {
 
-    module.exports = function (pg, bricks, config){
+	module.exports = function (pg, bricks, config) {
+		var _base = new BaseRepository(pg, config);
 
-        var _base = new BaseRepository(pg, config);
+		this.getPageByName = function (pageName, action, emptyAction) {
 
-        this.getPageByName = function(pageName, action, emptyAction){
+			if (_base.isInvalidAction(action)) return;
 
-            if(_base.isInvalidAction(action)) return;
+			_base.open(function (client) {
 
-            _base.open(function(client){
+				var query =
+					bricks
+					.select(
+						'\
+						pages.title as title, \
+            pages.title_short as title_short, \
+            pages.description as description, \
+            pages.name'
+					)
+					.from('pages')
+					.where('pages.name', pageName)
+					.where('pages.active', true)
+					.limit(1)
+					.toString();
 
-                var pageQuery =
-                    bricks
-                    .select('   pages.title as title, \
-                                pages.title_short as title_short, \
-                                pages.description as description, \
-                                pages.name')
-                    .from('pages')
-                    .where('pages.name', pageName)
-                    .where('pages.active', true)
-                    .limit(1)
-                    .toString();
+				client
+					.query(query, function (err, res) {
 
-                client
-                .query(pageQuery, function(err, res){
+						if (err) {
+							_base.close(client);
+							throw err;
+						}
 
-                    if(err) {
-                        _base.close(client);
-                        throw err;
-                    }
+						if (_base.hasResults(res)) {
+							var data = res.rows[0];
+							action(data);
+						} else if (typeof emptyAction === 'function') {
+							emptyAction();
+						}
 
-                    if(_base.hasResults(res, emptyAction)) {
-                        var data = res.rows[0];
-                        action(data);
-                    }
+						_base.close(client);
+					});
+			});
+		}
 
-                    _base.close(client);
-                });
-            });
-        }
+		this.getBasicPages = function (action, emptyAction) {
 
-        this.getBasicPages = function(action, emptyAction){
+			if (_base.isInvalidAction(action)) return;
 
-            if(_base.isInvalidAction(action)) return;
+			_base.open(function (client) {
 
-            _base.open(function(client){
+				var query = bricks
+					.select(
+						'\
+						pages.title_short, \
+            pages.description_short, \
+            pages.name'
+					)
+					.from('pages')
+					.where('pages.active', true)
+					//.orderBy('pages.order')
+					.toString();
 
-                var pagesQuery =
-                    bricks
-                    .select('   pages.title_short, \
-                                pages.description_short, \
-                                pages.name')
-                    .from('pages')
-                    .where('pages.active', true)
-                    //.orderBy('pages.order')
-                    .toString();
+				client
+					.query(query, function (err, res) {
 
-                 client
-                .query(pagesQuery, function(err, res){
+						if (err) {
+							_base.close(client);
+							throw err;
+						}
 
-                    if(err) {
-                        _base.close(client);
-                        throw err;
-                    }
+						if (_base.hasResults(res)) {
+							var data = new Array();
 
-                    if(_base.hasResults(res, emptyAction)) {
-                        var data = new Array();
-                        res.rows.forEach(function(row) { data.push(row); });
-                        action(data);
-                    }
+							res.rows.forEach(function (row) {
+								data.push(row);
+							});
 
-                    _base.close(client);
-                });
-            });
-        }
-    }
+							action(data);
+						} else if (typeof emptyAction === 'function') {
+							emptyAction();
+						}
+
+						_base.close(client);
+					});
+			});
+		}
+	}
 
 })(require('./BaseRepository'));
