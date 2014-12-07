@@ -17,11 +17,8 @@ window.main.dependancies = (function(dependancies){
 
 (function(main){
 
-    var undefined = 'undefined';
-
     main.helpers = (function(mod){
 
-        mod.isNullOrUndefined = function(obj){ return typeof obj === undefined || obj == null; }
         mod.throw = function(exeption) { throw exeption.getMessage(); }
 
         return mod;
