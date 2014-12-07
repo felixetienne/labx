@@ -16,9 +16,17 @@
 					getProjectByName()
 				])
 				.spread(computeData)
-				.then(successAction)
-				.fail(errorAction)
+				.then(onSuccess)
+				.fail(onError)
 				.done();
+
+			function onSuccess(data) {
+				successAction(data, context);
+			}
+
+			function onError() {
+				errorAction(context);
+			}
 
 			function getWebsiteProperties() {
 				var deferred = q.defer();

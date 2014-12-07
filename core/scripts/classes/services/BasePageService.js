@@ -1,51 +1,53 @@
-(function() {
+(function () {
 
-  module.exports = function(context) {
+	module.exports = function (context) {
 
-    this.config = require('../../modules/appConfig');
-    this.currentView = context.getCurrentView();
-    this.currentRequest = context.getCurrentRequest();
+		this.config = require('../../modules/appConfig');
+		this.currentView = context.getCurrentView();
+		this.currentRequest = context.getCurrentRequest();
 
-    function buildUrl(page) {
-      var url = '/';
+		function buildUrl(page) {
+			var url = '/';
 
-      if (page.name === 'index') return url;
+			if (page.name === 'index') return url;
 
-      url += page.name;
+			url += page.name;
 
-      // temporary for test
-      if (page.name !== 'project') return url;
-      return url += '/test';
-    }
+			// temporary for test
+			if (page.name !== 'project') return url;
+			return url += '/test';
+		}
 
-    this.getPageData = function(x) {
-      var data = {
-        website: {
-          title: x.website.title,
-          subtitle: x.website.subtitle,
-          date: x.website.date
-        },
-        page: {
-          title: x.page.title,
-          shortTitle: x.page.title_short,
-          description: x.page.description,
-          name: x.page.name
-        },
-        allPages: []
-      };
+		this.getPageData = function (x) {
+			var data = {
+				website: {
+					title: x.website.title,
+					subtitle: x.website.subtitle,
+					date: x.website.date
+				},
+				page: {
+					title: x.page.title,
+					shortTitle: x.page.title_short,
+					description: x.page.description,
+					name: x.page.name
+				},
+				allPages: []
+			};
 
-      for (k in x.allPages) {
-        var page = x.allPages[k];
+			for (k in x.allPages) {
+				if (!x.allPages.hasOwnProperty(k)) continue;
 
-        data.allPages.push({
-          shortTitle: page.title_short,
-          shortDescription: page.description_short,
-          name: page.name,
-          url: buildUrl(page)
-        });
-      }
+				var page = x.allPages[k];
 
-      return data;
-    }
-  }
+				data.allPages.push({
+					shortTitle: page.title_short,
+					shortDescription: page.description_short,
+					name: page.name,
+					url: buildUrl(page)
+				});
+			}
+
+			return data;
+		}
+	}
 })();

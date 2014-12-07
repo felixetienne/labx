@@ -1,4 +1,4 @@
-(function (env) {
+(function (envFile) {
 
 	module.exports = (function (mod) {
 
@@ -11,7 +11,7 @@
 
 		mod.setEnvFile = function (filePath) {
 
-			env(filePath);
+			envFile(filePath);
 			updateFromEnvFile();
 
 			return this;
