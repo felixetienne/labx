@@ -2,26 +2,22 @@
 
 	module.exports = function (pg, bricks, config) {
 		var _base = new BaseRepository(pg, config);
+		var _imageFolder = config.getImageFolder();
 
-		this.getPageByName = function (pageName, action, emptyAction) {
-
+		this.getAll = function (action, emptyAction) {
 			if (_base.isInvalidAction(action)) return;
 
 			_base.open(function (client) {
 
-				var query =
-					bricks
+				var query = bricks
 					.select(
 						'\
-						pages.title as title, \
-            pages.title_short as title_short, \
-            pages.description as description, \
-            pages.name'
+            images.title, \
+            images.name, \
+            images.id'
 					)
-					.from('pages')
-					.where('pages.name', pageName)
-					.where('pages.active', true)
-					.limit(1)
+					.from('images')
+					.where('images.active', true)
 					.toString();
 
 				client
@@ -34,8 +30,11 @@
 
 						if (_base.hasResults(res)) {
 							var data = res.rows[0];
+
+							data.path = _imageFolder + data.name + '.jpg';
+
 							action(data);
-						} else if (typeof emptyAction === 'function') {
+						} else {
 							emptyAction();
 						}
 
@@ -44,23 +43,27 @@
 			});
 		}
 
-		this.getBasicPages = function (action, emptyAction) {
-
+		this.getByIds = function (idsList, includeRawData, action, emptyAction) {
 			if (_base.isInvalidAction(action)) return;
 
 			_base.open(function (client) {
 
 				var query = bricks
-					.select(
-						'\
-						pages.title_short, \
-            pages.description_short, \
-            pages.name'
-					)
-					.from('pages')
-					.where('pages.active', true)
-					//.orderBy('pages.order')
-					.toString();
+					.select('images.name');
+
+				if (includeRawData)
+					query = query.select('images.image as raw');
+
+
+				query = query
+					.from('images')
+					.where('images.active', true);
+
+				idsList.do(function (x, i) {
+					query = query.where('images.id', x);
+				});
+
+				query = query.toString();
 
 				client
 					.query(query, function (err, res) {
@@ -71,11 +74,9 @@
 						}
 
 						if (_base.hasResults(res)) {
-							var data = new Array();
+							var data = res.rows[0];
 
-							res.rows.forEach(function (row) {
-								data.push(row);
-							});
+							data.path = _imageFolder + data.name + '.jpg';
 
 							action(data);
 						} else if (typeof emptyAction === 'function') {
@@ -87,5 +88,4 @@
 			});
 		}
 	}
-
 })(require('./BaseRepository'));

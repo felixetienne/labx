@@ -1,23 +1,18 @@
 (function(ImageManager) {
 
   module.exports = function(pg, config) {
-
     var _fullDatabaseUrl = config.getDatabaseUrl() + "?ssl=true";
 
     this.imageManager = new ImageManager();
 
     this.isInvalidAction = function(action) {
       if (!action) throw "[ERROR:Dal:getAll] 'action' parameter is null.";
-      if (typeof(action) !== "function") throw "[ERROR:Dal:getAll] 'action' parameter is not a function.";
+      if (typeof(action) !== "function") throw "[ERROR] The argument 'action' parameter is not a function.";
       return false;
     };
 
-    this.hasResults = function(res, emptyAction) {
-      if (typeof res !== 'undefined' &&
-        typeof res.rows !== 'undefined' &&
-        res.rowCount > 0) return true;
-      if (typeof(emptyAction) === 'function') emptyAction();
-      return false;
+    this.hasResults = function(res) {
+      return res && res.rows && res.rowCount > 0;
     };
 
     this.open = function(callback) {

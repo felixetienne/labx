@@ -19,7 +19,6 @@
     }
 
     this.getPageData = function(x) {
-
       var data = {
         website: {
           title: x.website.title,

@@ -1,1 +1,1 @@
-web: node app.js
+web: node tasks/processor/processImageWriting.js app.js
