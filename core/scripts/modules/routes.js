@@ -1,76 +1,99 @@
-(function(servicesFactory, viewsDef, Context){
+(function (servicesFactory, viewsDef, Context) {
+	var context = new Context();
+	var pagesRoots = viewsDef.getPagesPath();
+	var page404 = pagesRoots + viewsDef.getNotFound();
 
-    var context = new Context();
-    var pagesRoots = viewsDef.getPagesPath();
-    var page404 = pagesRoots + viewsDef.getNotFound();
+	module.exports.index = function (req, res) {
 
-    module.exports.index = function(req, res){
+		context
+			.setCurrentRequest(req)
+			.setCurrentView(viewsDef.getDefault());
 
-        context
-        .setCurrentRequest(req)
-        .setCurrentView(viewsDef.getDefault());
+		servicesFactory
+			.createPageService(context)
+			.getData(
+				function (x, c) {
+					res.render(getPagePath(c), x);
+				},
+				function (c) {
+					res.render(page404);
+				});
+	};
 
-        servicesFactory
-        .createPageService(context)
-        .getData(
-            function(data){ res.render(getPagePath(context), data); },
-            function(){ res.render(page404); });
-    };
+	module.exports.about = function (req, res) {
 
-    module.exports.about = function(req, res){
+		context
+			.setCurrentRequest(req)
+			.setCurrentView(viewsDef.getAbout());
 
-        context
-        .setCurrentRequest(req)
-        .setCurrentView(viewsDef.getAbout());
+		servicesFactory
+			.createPageService(context)
+			.getData(
+				function (x, c) {
+					res.render(getPagePath(c), x);
+				},
+				function (c) {
+					res.render(page404);
+				});
+	};
 
-        servicesFactory
-        .createPageService(context)
-        .getData(
-            function(data){ res.render(getPagePath(context), data); },
-            function(){ res.render(page404); });
-    };
+	module.exports.contact = function (req, res) {
 
-    module.exports.contact = function(req, res){
+		context
+			.setCurrentRequest(req)
+			.setCurrentView(viewsDef.getContact());
 
-        context
-        .setCurrentRequest(req)
-        .setCurrentView(viewsDef.getContact());
+		servicesFactory
+			.createPageService(context)
+			.getData(
+				function (x, c) {
+					res.render(getPagePath(c), x);
+				},
+				function (c) {
+					res.render(page404);
+				});
+	};
 
-        servicesFactory
-        .createPageService(context)
-        .getData(
-            function(data){ res.render(getPagePath(context), data); },
-            function(){ res.render(page404); });
-    };
+	module.exports.projects = function (req, res) {
 
-    module.exports.projects = function(req, res){
+		context
+			.setCurrentRequest(req)
+			.setCurrentView(viewsDef.getContact());
 
-        context
-        .setCurrentRequest(req)
-        .setCurrentView(viewsDef.getContact());
+		servicesFactory
+			.createPageService(context)
+			.getData(
+				function (x, c) {
+					res.render(getPagePath(c), x);
+				},
+				function (c) {
+					res.render(page404);
+				});
+	};
 
-        servicesFactory
-        .createPageService(context)
-        .getData(
-            function(data){ res.render(getPagePath(context), data); },
-            function(){ res.render(page404); });
-    };
+	module.exports.project = function (req, res) {
 
-    module.exports.project = function(req, res){
+		context
+			.setCurrentRequest(req)
+			.setCurrentView(viewsDef.getProject());
 
-        context
-        .setCurrentRequest(req)
-        .setCurrentView(viewsDef.getProject());
+		servicesFactory
+			.createPageService(context)
+			.getData(
+				function (data, currentContext) {
+					res.render(getPagePath(currentContext), data);
+				},
+				function () {
+					res.render(page404);
+				});
+	};
 
-        servicesFactory
-        .createPageService(context)
-        .getData(
-            function(data){ res.render(getPagePath(context), data); },
-            function(){ res.render(page404); });
-    };
+	function getPagePath(context) {
+		var path = pagesRoots + context.getCurrentView();
+		return path;
+	}
 
-    function getPagePath(context){ return pagesRoots + context.getCurrentView(); }
-
-})(require('./factories/servicesFactory'),
-   require('./viewsDef'),
-   require('../classes/Context'));
+})(
+	require('./factories/servicesFactory'),
+	require('./viewsDef'),
+	require('../classes/Context'));
