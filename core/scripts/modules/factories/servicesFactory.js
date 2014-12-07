@@ -5,7 +5,7 @@
         mod.createPageService = function(context){
             var view = context.getCurrentView();
 
-            if(view == viewsMap.getProject()) return new ProjectPageService(context, repositoriesFactory);
+            if(view === viewsMap.getProject()) return new ProjectPageService(context, repositoriesFactory);
 
             return new SimplePageService(context, repositoriesFactory);
         };
