@@ -1,4 +1,4 @@
-(function (envFile) {
+(function () {
 
 	module.exports = (function (mod) {
 
@@ -11,7 +11,10 @@
 
 		mod.setEnvFile = function (filePath) {
 
-			envFile(filePath);
+			throw 'Not implemented exeption.';
+			// Required to load 'node-env-file' as envFile.
+			//envFile(filePath);
+
 			updateFromEnvFile();
 
 			return this;
@@ -46,4 +49,4 @@
 
 	})({});
 
-})(require('node-env-file'));
+})();
