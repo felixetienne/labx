@@ -1,63 +1,65 @@
-(function (q, appConfig, repositoriesFactory, ImageManager, List) {
+(function(q, appConfig, repositoriesFactory, ImageManager, List) {
 
-	require('../../core/scripts/extensions/ObjectExtensions');
+  require('../../core/scripts/extensions/ObjectExtensions');
 
-	module.exports = (function (mod) {
-		var _imageManager = new ImageManager();
-		var _repo = repositoriesFactory.createImagesRepository();
+  module.exports = (function(mod) {
+    var _imageManager = new ImageManager();
+    var _repo = repositoriesFactory.createImagesRepository();
 
-		mod.process = function () {
-			var totalOfImageProcessed = 0;
+    mod.process = function() {
+      var totalOfImageProcessed = 0;
 
-			getAllImages()
-				.then(getWritesImages)
-				.done(doneAction);
+      getAllImages()
+        .then(getWritesImages)
+        .done(doneAction);
 
-			function doneAction() {
-				console.info(totalOfImageProcessed + ' images was processed.');
-			}
+      function doneAction() {
+        console.info(totalOfImageProcessed + ' images was processed.');
+      }
 
-			function getAllImages() {
-				var deferred = q.defer();
+      function getAllImages() {
+        var deferred = q.defer();
 
-				_repo.getAll(function (data) {
-					var ids = new List();
+        _repo.getAll(function(data) {
+          var ids = new List();
 
-					data.forEach(function (x) {
-						if (_imageManager.exists(x.path)) return;
-						ids.add(x.id);
-					});
+          data.forEach(function(x) {
+            if (_imageManager.exists(x.path)) return;
+            ids.add(x.id);
+          });
 
-					deferred.resolve(ids);
-				}, function () {
-					deferred.reject();
-				});
+          deferred.resolve(ids);
+        }, function() {
+          deferred.reject();
+        });
 
-				return deferred.promise
-			}
+        return deferred.promise
+      }
 
-			function getWritesImages(ids) {
-				totalOfImageProcessed = ids.count();
+      function getWritesImages(ids) {
+        totalOfImageProcessed = ids.count();
 
-				if (totalOfImageProcessed === 0) return;
+        if (totalOfImageProcessed === 0) return;
 
-				_repo.getByIds(ids, true, function (data) {
+        if (ids.count() === 0) return;
 
-					data.forEach(function (x) {
-						_imageManager.write(x.path, x.raw);
-					});
+        _repo.getByIds(ids, true, function(data) {
 
-				}, null);
-			}
-		}
+          data.forEach(function(x) {
+            _imageManager.write(x.path, x.raw);
+          });
 
-		return mod;
+        }, null);
+      }
+    }
 
-	})({});
+    return mod;
+
+  })({});
 
 })(
-	require('q'),
-	require('../../core/scripts/modules/appConfig'),
-	require('../../core/scripts/modules/factories/repositoriesFactory'),
-	require('../../core/scripts/classes/ImageManager'),
-	require('../../core/scripts/classes/List'));
+  require('q'),
+  require('../../core/scripts/modules/appConfig'),
+  require('../../core/scripts/modules/factories/repositoriesFactory'),
+  require('../../core/scripts/classes/ImageManager'),
+  require('../../core/scripts/classes/List'));
