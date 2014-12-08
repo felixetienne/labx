@@ -9,8 +9,6 @@
 		mod.process = function () {
 			var totalOfImageProcessed = 0;
 
-			//appConfig.setEnvFile(__dirname + '../../../.env');
-
 			getAllImages()
 				.then(getWritesImages)
 				.done(doneAction);
@@ -39,14 +37,14 @@
 			}
 
 			function getWritesImages(ids) {
+				totalOfImageProcessed = ids.count();
 
-				if (ids.count() === 0) return;
+				if (totalOfImageProcessed === 0) return;
 
 				_repo.getByIds(ids, true, function (data) {
 
 					data.forEach(function (x) {
 						_imageManager.write(x.path, x.raw);
-						totalOfImageProcessed++;
 					});
 
 				}, null);
