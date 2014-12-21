@@ -12,9 +12,9 @@
         var query = bricks
           .select(
             '\
-            images.title, \
-            images.name, \
-            images.id'
+          images.title, \
+          images.name, \
+          images.id'
           )
           .from('images')
           .where('images.active', true)
