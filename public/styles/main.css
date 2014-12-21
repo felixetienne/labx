@@ -1,3 +1,7 @@
+@font-face {
+  font-family: SpecialFont;
+  src: url("/medias/fonts/frenchy.ttf"); }
+
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -818,7 +822,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
 
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: SpecialFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.428571429;
   color: #333333;
@@ -1137,7 +1141,7 @@ address {
   line-height: 1.428571429; }
 
 code, kbd, pre, samp {
-  font-family: Menlo, Monaco, Consolas, "Courier New", monospace; }
+  font-family: SpecialFont, Menlo, Monaco, Consolas, "Courier New", monospace; }
 
 code {
   padding: 2px 4px;
@@ -4130,7 +4134,7 @@ button.close {
   z-index: 1070;
   display: block;
   visibility: visible;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: SpecialFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 12px;
   font-weight: normal;
   line-height: 1.4;
@@ -4225,7 +4229,7 @@ button.close {
   display: none;
   max-width: 276px;
   padding: 1px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: SpecialFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   font-weight: normal;
   line-height: 1.428571429;
@@ -4686,8 +4690,15 @@ button.close {
     display: none !important; } }
 
 body {
-  background-color: gray;
-  background-image: url(/medias/images/bg.jpg);
+  background-color: white;
+  background-image: url(/medias/images/bg.png);
   background-repeat: repeat;
   background-position: center;
   background-attachment: fixed; }
+
+.jumbotron {
+  background-color: transparent; }
+
+.mod-content.mod-content--main {
+  background-color: white;
+  border: 1px black solid; }

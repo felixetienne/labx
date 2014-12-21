@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-      <%- include included/head.ejs %>
-      <meta charset="utf-8">
-      <meta name="description" content="">
-      <meta name="author" content="">
+  <head>
+    <%- include included/head.ejs %>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-      <!-- HTML5 shim, for IE6-8 support of HTML elements -->
-      <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-      <![endif]-->
+    <!-- HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-      <!-- styles -->
-      <link href="/styles/main.css" rel="stylesheet">
-      <script type="text/javascript" src="/scripts/libraries/jquery-min.2.1.1.js"></script>
-    </head>
-    <body>
-      <%- include included/context.ejs %>
-      <%- include included/navigation.ejs %>
-      <%- include included/header.ejs %>
-      <%- body %>
-      <script type="text/javascript" src="/scripts/frameworks/bootstrap.js"></script>
-      <script type="text/javascript" src="/scripts/main.js"></script>
-    </body>
-    </html>
+    <!-- styles -->
+    <link href="/styles/main.css" rel="stylesheet">
+    <script type="text/javascript" src="/scripts/libraries/jquery-min.2.1.1.js"></script>
+  </head>
+  <body>
+    <%- include included/context.ejs %>
+    <%- include included/navigation.ejs %>
+    <div class="jumbotron">
+      <div class="container mod-content mod-content--main">
+        <%- include included/header.ejs %>
+        <%- body %>
+      </div>
+    </div>
+    <script type="text/javascript" src="/scripts/frameworks/bootstrap.js"></script>
+    <script type="text/javascript" src="/scripts/main.js"></script>
+  </body>
+</html>

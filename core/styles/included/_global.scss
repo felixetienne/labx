@@ -1,8 +1,16 @@
 body{
-    background-color: gray;
-    background-image: url(/medias/images/bg.jpg);
+    background-color: white;
+    background-image: url(/medias/images/bg.png);
     background-repeat: repeat;
     background-position: center;
     background-attachment: fixed;
 }
 
+.jumbotron{
+  background-color: transparent;
+}
+
+.mod-content.mod-content--main {
+  background-color: white;
+  border: 1px black solid;
+}

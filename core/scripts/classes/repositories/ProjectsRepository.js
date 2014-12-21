@@ -1,18 +1,18 @@
-(function (BaseRepository) {
+(function(BaseRepository) {
 
-	module.exports = function (pg, bricks, config) {
-		var _base = new BaseRepository(pg, config);
-		var _imageFolder = config.getImageFolder();
+  module.exports = function(pg, bricks, config) {
+    var _base = new BaseRepository(pg, config);
+    var _imageFolder = config.getImageFolder();
 
-		this.getProjectByName = function (projectName, action,
-			emptyAction) {
-			if (_base.isInvalidAction(action)) return;
+    this.getProjectByName = function(projectName, action,
+      emptyAction) {
+      if (_base.isInvalidAction(action)) return;
 
-			_base.open(function (client) {
+      _base.open(function(client) {
 
-				var query = bricks
-					.select(
-						'\
+        var query = bricks
+          .select(
+            '\
 						projects.title, \
 						projects.title_short, \
 						projects.description, \
@@ -20,38 +20,40 @@
 						projects.name, \
 						images.title as image_title, \
 						images.name as image_name'
-					)
-					.from('projects')
-					.join('images', {
-						'projects.id': 'images.id_project'
-					})
-					.where('images.active', true)
-					.where('projects.active', true)
-					.where('projects.name', projectName)
-					.limit(1)
-					.toString();
+          )
+          .from('projects')
+          .join('images', {
+            'projects.id': 'images.id_project'
+          })
+          .where('images.active', true)
+          .where('projects.active', true)
+          .where('projects.name', projectName)
+          .groupBy('projects.name')
+          .limit(1)
+          .toString();
 
-				client
-					.query(query, function (err, res) {
+        client
+          .query(query, function(err, res) {
 
-						if (err) {
-							_base.close(client);
-							throw err;
-						}
+            if (err) {
+              _base.close(client);
+              throw err;
+            }
 
-						if (_base.hasResults(res)) {
-							var data = res.rows[0];
+            if (_base.hasResults(res)) {
+              var data = res.rows[0];
 
-							data.image_path = _imageFolder + data.image_name + '.jpg';
+              data.image_path = _imageFolder + data.image_name +
+                '.jpg';
 
-							action(data);
-						} else if (typeof emptyAction === 'function') {
-							emptyAction();
-						}
+              action(data);
+            } else if (typeof emptyAction === 'function') {
+              emptyAction();
+            }
 
-						_base.close(client);
-					});
-			});
-		}
-	}
+            _base.close(client);
+          });
+      });
+    }
+  }
 })(require('./BaseRepository'));

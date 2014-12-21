@@ -41,8 +41,6 @@
 
         if (totalOfImageProcessed === 0) return;
 
-        if (ids.count() === 0) return;
-
         _repo.getByIds(ids, true, function(data) {
 
           data.forEach(function(x) {

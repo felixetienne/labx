@@ -1,91 +1,99 @@
-(function (BaseRepository) {
+(function(BaseRepository) {
 
-	module.exports = function (pg, bricks, config) {
-		var _base = new BaseRepository(pg, config);
-		var _imageFolder = config.getImageFolder();
+  module.exports = function(pg, bricks, config) {
+    var _base = new BaseRepository(pg, config);
+    var _imageFolder = config.getImageFolder();
 
-		this.getAll = function (action, emptyAction) {
-			if (_base.isInvalidAction(action)) return;
+    this.getAll = function(action, emptyAction) {
+      if (_base.isInvalidAction(action)) return;
 
-			_base.open(function (client) {
+      _base.open(function(client) {
 
-				var query = bricks
-					.select(
-						'\
+        var query = bricks
+          .select(
+            '\
             images.title, \
             images.name, \
             images.id'
-					)
-					.from('images')
-					.where('images.active', true)
-					.toString();
+          )
+          .from('images')
+          .where('images.active', true)
+          .toString();
 
-				client
-					.query(query, function (err, res) {
+        client
+          .query(query, function(err, res) {
 
-						if (err) {
-							_base.close(client);
-							throw err;
-						}
+            if (err) {
+              _base.close(client);
+              throw err;
+            }
 
-						if (_base.hasResults(res)) {
-							var data = res.rows[0];
+            if (_base.hasResults(res)) {
+              action(convertToData(res));
+            } else {
+              emptyAction();
+            }
 
-							data.path = _imageFolder + data.name + '.jpg';
+            _base.close(client);
+          });
+      });
+    }
 
-							action(data);
-						} else {
-							emptyAction();
-						}
+    this.getByIds = function(idsList, includeRawData, action, emptyAction) {
+      if (_base.isInvalidAction(action)) return;
 
-						_base.close(client);
-					});
-			});
-		}
+      _base.open(function(client) {
 
-		this.getByIds = function (idsList, includeRawData, action, emptyAction) {
-			if (_base.isInvalidAction(action)) return;
+        var query = bricks.select('images.name');
 
-			_base.open(function (client) {
+        if (includeRawData) {
+          query = query.select('images.image as raw');
+        }
 
-				var query = bricks
-					.select('images.name');
+        query = query
+          .from('images')
+          .where('images.active', true)
+          .toString();
 
-				if (includeRawData)
-					query = query.select('images.image as raw');
+        var last = idsList.count() - 1;
 
+        idsList.do(function(x, i) {
+          query += (i == 0 ? ' AND (' : ' OR ') + 'images.id = ' +
+            x;
+          if (i == last) query += ')';
+        });
 
-				query = query
-					.from('images')
-					.where('images.active', true);
+        client
+          .query(query, function(err, res) {
 
-				idsList.do(function (x, i) {
-					query = query.where('images.id', x);
-				});
+            if (err) {
+              _base.close(client);
+              throw err;
+            }
 
-				query = query.toString();
+            if (_base.hasResults(res)) {
+              action(convertToData(res));
+            } else if (typeof emptyAction === 'function') {
+              emptyAction();
+            }
 
-				client
-					.query(query, function (err, res) {
+            _base.close(client);
+          });
+      });
+    }
 
-						if (err) {
-							_base.close(client);
-							throw err;
-						}
+    function convertToData(res) {
+      var data = [];
 
-						if (_base.hasResults(res)) {
-							var data = res.rows[0];
+      for (var i = 0; i < res.rowCount; i++) {
+        var obj = res.rows[i];
 
-							data.path = _imageFolder + data.name + '.jpg';
+        obj.path = _imageFolder + obj.name + '.jpg';
 
-							action(data);
-						} else if (typeof emptyAction === 'function') {
-							emptyAction();
-						}
+        data.push(obj);
+      }
 
-						_base.close(client);
-					});
-			});
-		}
-	}
+      return data;
+    }
+  }
 })(require('./BaseRepository'));
