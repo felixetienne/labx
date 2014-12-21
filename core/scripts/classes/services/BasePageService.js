@@ -1,53 +1,74 @@
-(function () {
+(function() {
 
-	module.exports = function (context) {
+  module.exports = function(context, viewHelpers) {
+    this.currentPage = context.getCurrentPage();
+    this.currentRequest = context.getCurrentRequest();
+    var _errors = [];
 
-		this.config = require('../../modules/appConfig');
-		this.currentView = context.getCurrentView();
-		this.currentRequest = context.getCurrentRequest();
+    this.getPageData = function(x) {
+      var data = {
+        website: {
+          title: x.website.title,
+          subtitle: x.website.subtitle,
+          date: x.website.date,
+          copyright: x.website.copyright,
+          version: x.website.version
+        },
+        page: {
+          title: x.page.title,
+          shortTitle: x.page.title_short,
+          description: x.page.description,
+          name: x.page.name
+        },
+        allPages: []
+      };
 
-		function buildUrl(page) {
-			var url = '/';
+      for (k in x.allPages) {
+        if (!x.allPages.hasOwnProperty(k)) continue;
 
-			if (page.name === 'index') return url;
+        var page = x.allPages[k];
 
-			url += page.name;
+        data.allPages.push({
+          shortTitle: page.title_short,
+          shortDescription: page.description_short,
+          name: page.name,
+          url: buildUrl(page)
+        });
+      }
 
-			// temporary for test
-			if (page.name !== 'project') return url;
-			return url += '/test';
-		}
+      return data;
+    }
 
-		this.getPageData = function (x) {
-			var data = {
-				website: {
-					title: x.website.title,
-					subtitle: x.website.subtitle,
-					date: x.website.date
-				},
-				page: {
-					title: x.page.title,
-					shortTitle: x.page.title_short,
-					description: x.page.description,
-					name: x.page.name
-				},
-				allPages: []
-			};
+    this.getErrors = function() {
+      return _errors;
+    }
 
-			for (k in x.allPages) {
-				if (!x.allPages.hasOwnProperty(k)) continue;
+    this.addErrors = function(errors) {
+      if (!errors) return;
+      if (errors instanceof Array) {
+        for (var i = 0; i < errors.length; i++) {
+          addError(errors[i]);
+        }
+      } else {
+        addError(errors);
+      }
+    }
 
-				var page = x.allPages[k];
+    function addError(error) {
+      _errors.push(error);
+    }
 
-				data.allPages.push({
-					shortTitle: page.title_short,
-					shortDescription: page.description_short,
-					name: page.name,
-					url: buildUrl(page)
-				});
-			}
+    function buildUrl(page) {
+      var url = '/';
 
-			return data;
-		}
-	}
+      if (page.name === viewHelpers.getIndexPage()) return url;
+
+      url += page.name;
+
+      // temporary for test
+      if (page.name !== viewHelpers.getProjectPage()) return url;
+      return url += '/faces';
+    }
+  }
+
 })();

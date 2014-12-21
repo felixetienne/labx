@@ -1,91 +1,102 @@
-(function (BaseRepository) {
+(function(BaseRepository, Error) {
 
-	module.exports = function (pg, bricks, config) {
-		var _base = new BaseRepository(pg, config);
+  module.exports = function(pg, bricks, config) {
+    var _base = new BaseRepository(pg, config);
 
-		this.getPageByName = function (pageName, action, emptyAction) {
+    this.getPageByName = function(pageName, action, emptyAction, isRequired) {
 
-			if (_base.isInvalidAction(action)) return;
+      if (_base.isInvalidAction(action)) return;
 
-			_base.open(function (client) {
+      _base.open(function(client) {
 
-				var query =
-					bricks
-					.select(
-						'\
+        var query =
+          bricks
+          .select(
+            '\
 						pages.title as title, \
             pages.title_short as title_short, \
             pages.description as description, \
             pages.name'
-					)
-					.from('pages')
-					.where('pages.name', pageName)
-					.where('pages.active', true)
-					.limit(1)
-					.toString();
+          )
+          .from('pages')
+          .where('pages.name', pageName)
+          .where('pages.active', true)
+          .limit(1)
+          .toString();
+        console.log(query);
+        client
+          .query(query, function(err, res) {
 
-				client
-					.query(query, function (err, res) {
+            if (err) {
+              _base.close(client);
+              throw err;
+            }
 
-						if (err) {
-							_base.close(client);
-							throw err;
-						}
+            if (_base.hasResults(res)) {
+              var data = res.rows[0];
+              action(data);
+            } else if (typeof emptyAction === 'function') {
+              if (isRequired) {
+                emptyAction(new Error('Page not found.', 404));
+              } else {
+                emptyAction();
+              }
+            }
 
-						if (_base.hasResults(res)) {
-							var data = res.rows[0];
-							action(data);
-						} else if (typeof emptyAction === 'function') {
-							emptyAction();
-						}
+            _base.close(client);
+          });
+      });
+    }
 
-						_base.close(client);
-					});
-			});
-		}
+    this.getBasicPages = function(action, emptyAction, isRequired) {
 
-		this.getBasicPages = function (action, emptyAction) {
+      if (_base.isInvalidAction(action)) return;
 
-			if (_base.isInvalidAction(action)) return;
+      _base.open(function(client) {
 
-			_base.open(function (client) {
-
-				var query = bricks
-					.select(
-						'\
+        var query = bricks
+          .select(
+            '\
 						pages.title_short, \
             pages.description_short, \
             pages.name'
-					)
-					.from('pages')
-					.where('pages.active', true)
-					//.orderBy('pages.order')
-					.toString();
+          )
+          .from('pages')
+          .where('pages.active', true)
+          //.orderBy('pages.order')
+          .toString();
 
-				client
-					.query(query, function (err, res) {
+        client
+          .query(query, function(err, res) {
 
-						if (err) {
-							_base.close(client);
-							throw err;
-						}
+            if (err) {
+              _base.close(client);
+              throw err;
+            }
 
-						if (_base.hasResults(res)) {
-							var data = new Array();
+            if (_base.hasResults(res)) {
+              var data = new Array();
 
-							res.rows.forEach(function (row) {
-								data.push(row);
-							});
+              res.rows.forEach(function(row) {
+                data.push(row);
+              });
 
-							action(data);
-						} else if (typeof emptyAction === 'function') {
-							emptyAction();
-						}
+              action(data);
+            } else if (typeof emptyAction === 'function') {
+              if (isRequired) {
+                emptyAction(new Error('Basic page data not found.',
+                  500));
+              } else {
+                emptyAction();
+              }
+            }
 
-						_base.close(client);
-					});
-			});
-		}
-	}
+            _base.close(client);
+          });
+      });
+    }
+  }
 
-})(require('./BaseRepository'));
+})(
+  require('./BaseRepository'),
+  require('../Error'));

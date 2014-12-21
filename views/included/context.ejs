@@ -1,7 +1,12 @@
 <script type="text/javascript">
   window.currentContext = (function(context){
-    context.version = "0.1.1";
-    context.projectName = "LabX";
+    <% if(!meta.hasError){%>
+
+      context.version = <%- website.version %>;
+
+      context.projectName = <%- website.title %>;
+
+    <%}%>
     return context;
   })(window.currentContext || {});
 </script>

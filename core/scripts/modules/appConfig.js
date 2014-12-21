@@ -12,8 +12,6 @@
     mod.setEnvFile = function(filePath) {
 
       throw 'Not implemented exeption.';
-      // Required to load 'node-env-file' as envFile.
-      //envFile(filePath);
 
       updateFromEnvFile();
 

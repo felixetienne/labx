@@ -1,10 +1,10 @@
-(function(BaseRepository) {
+(function(BaseRepository, Error) {
 
   module.exports = function(pg, bricks, config) {
     var _base = new BaseRepository(pg, config);
     var _imageFolder = config.getImageFolder();
 
-    this.getAll = function(action, emptyAction) {
+    this.getAll = function(action, emptyAction, isRequired) {
       if (_base.isInvalidAction(action)) return;
 
       _base.open(function(client) {
@@ -31,7 +31,11 @@
             if (_base.hasResults(res)) {
               action(convertToData(res));
             } else {
-              emptyAction();
+              if (isRequired) {
+                emptyAction(new Error('Images not found.', 500));
+              } else {
+                emptyAction();
+              }
             }
 
             _base.close(client);
@@ -39,7 +43,8 @@
       });
     }
 
-    this.getByIds = function(idsList, includeRawData, action, emptyAction) {
+    this.getByIds = function(idsList, includeRawData, action, emptyAction,
+      isRequired) {
       if (_base.isInvalidAction(action)) return;
 
       _base.open(function(client) {
@@ -74,7 +79,11 @@
             if (_base.hasResults(res)) {
               action(convertToData(res));
             } else if (typeof emptyAction === 'function') {
-              emptyAction();
+              if (isRequired) {
+                emptyAction(new Error('Images not found.', 500));
+              } else {
+                emptyAction();
+              }
             }
 
             _base.close(client);
@@ -96,4 +105,6 @@
       return data;
     }
   }
-})(require('./BaseRepository'));
+})(
+  require('./BaseRepository'),
+  require('../Error'));

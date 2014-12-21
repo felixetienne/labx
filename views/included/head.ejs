@@ -1,1 +1,6 @@
-<title><%- website.title + ' | ' + page.shortTitle %></title>
+<% if(meta.hasError()) {%>
+  <title>LabX | Error</title>
+<%}%>
+<% if(!meta.hasError()) {%>
+  <title><%- website.title + ' | ' + page.shortTitle %></title>
+<%}%>

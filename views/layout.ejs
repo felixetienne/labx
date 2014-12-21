@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-    <%- include included/head.ejs %>
+    <% include included/head.ejs %>
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -16,14 +16,17 @@
     <script type="text/javascript" src="/scripts/libraries/jquery-min.2.1.1.js"></script>
   </head>
   <body>
-    <%- include included/context.ejs %>
-    <%- include included/navigation.ejs %>
+    <% include included/context.ejs %>
+    <% if(!meta.hasError()){%>
+      <% include included/navigation.ejs %>
+    <%}%>
     <div class="jumbotron">
       <div class="container mod-content mod-content--main">
-        <%- include included/header.ejs %>
+        <% include included/header.ejs %>
         <%- body %>
       </div>
     </div>
+    <% include included/footer.ejs %>
     <script type="text/javascript" src="/scripts/frameworks/bootstrap.js"></script>
     <script type="text/javascript" src="/scripts/main.js"></script>
   </body>

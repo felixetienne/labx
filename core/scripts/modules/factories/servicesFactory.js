@@ -1,20 +1,23 @@
-(function(SimplePageService, ProjectPageService){
+(function(SimplePageService, ProjectPageService) {
 
-    module.exports = (function(mod, repositoriesFactory, viewsMap){
+  module.exports = (function(mod, repositoriesFactory, viewHelpers) {
 
-        mod.createPageService = function(context){
-            var view = context.getCurrentView();
+    mod.createPageService = function(context) {
+      var view = context.getCurrentView();
 
-            if(view === viewsMap.getProject()) return new ProjectPageService(context, repositoriesFactory);
+      if (view === viewHelpers.getProjectPage())
+        return new ProjectPageService(context, repositoriesFactory,
+          viewHelpers);
 
-            return new SimplePageService(context, repositoriesFactory);
-        };
+      return new SimplePageService(context, repositoriesFactory,
+        viewHelpers);
+    };
 
-        return mod;
+    return mod;
 
-    })({},
-       require('./repositoriesFactory'),
-       require('../viewsDef'));
+  })({},
+    require('./repositoriesFactory'),
+    require('../viewHelpers'));
 
 })(require('../../classes/services/SimplePageService'),
-   require('../../classes/services/ProjectPageService'));
+  require('../../classes/services/ProjectPageService'));

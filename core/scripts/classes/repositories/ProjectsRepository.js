@@ -1,11 +1,11 @@
-(function(BaseRepository) {
+(function(BaseRepository, Error) {
 
   module.exports = function(pg, bricks, config) {
     var _base = new BaseRepository(pg, config);
     var _imageFolder = config.getImageFolder();
 
     this.getProjectByName = function(projectName, action,
-      emptyAction) {
+      emptyAction, isRequired) {
       if (_base.isInvalidAction(action)) return;
 
       _base.open(function(client) {
@@ -48,7 +48,11 @@
 
               action(data);
             } else if (typeof emptyAction === 'function') {
-              emptyAction();
+              if (isRequired) {
+                emptyAction(new Error('Project not found.', 500));
+              } else {
+                emptyAction();
+              }
             }
 
             _base.close(client);
@@ -56,4 +60,6 @@
       });
     }
   }
-})(require('./BaseRepository'));
+})(
+  require('./BaseRepository'),
+  require('../Error'));

@@ -1,0 +1,8 @@
+<footer>
+  <% if(meta.hasError()) {%>
+    <p>Tout droits réservé. &copy; 2015</p>
+  <%}%>
+  <% if(!meta.hasError()) {%>
+    <p><%- website.copyright %></p>
+  <%}%>
+</footer>

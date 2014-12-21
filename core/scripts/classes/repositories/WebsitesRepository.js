@@ -1,46 +1,55 @@
-(function (BaseRepository) {
+(function(BaseRepository, Error) {
 
-	module.exports = function (pg, bricks, config) {
-		var _base = new BaseRepository(pg, config);
+  module.exports = function(pg, bricks, config) {
+    var _base = new BaseRepository(pg, config);
 
-		this.getWebsiteProperties = function (websiteName, action, emptyAction) {
+    this.getWebsiteProperties = function(websiteName, action, emptyAction,
+      isRequired) {
 
-			if (_base.isInvalidAction(action)) return;
+      if (_base.isInvalidAction(action)) return;
 
-			_base.open(function (client) {
+      _base.open(function(client) {
 
-				var query = bricks
-					.select(
-						'\
-						website.title, \
-						website.subtitle, \
-						website.date'
-					)
-					.from('website')
-					.where('website.name', websiteName)
-					.where('website.active', true)
-					.limit(1)
-					.toString();
+        var query = bricks
+          .select(
+            '\
+						websites.title, \
+						websites.subtitle, \
+						websites.date,\
+            websites.copyright, \
+            websites.version'
+          )
+          .from('websites')
+          .where('websites.name', websiteName)
+          .where('websites.active', true)
+          .limit(1)
+          .toString();
 
-				client
-					.query(query, function (err, res) {
+        client
+          .query(query, function(err, res) {
 
-						if (err) {
-							_base.close(client);
-							throw err;
-						}
+            if (err) {
+              _base.close(client);
+              throw err;
+            }
 
-						if (_base.hasResults(res)) {
-							var data = res.rows[0];
-							action(data);
-						} else if (typeof emptyAction === 'function') {
-							emptyAction();
-						}
+            if (_base.hasResults(res)) {
+              var data = res.rows[0];
+              action(data);
+            } else if (typeof emptyAction === 'function') {
+              if (isRequired) {
+                emptyAction(new Error('Website not found.', 500));
+              } else {
+                emptyAction();
+              }
+            }
 
-						_base.close(client);
-					});
-			});
-		}
-	}
+            _base.close(client);
+          });
+      });
+    }
+  }
 
-})(require('./BaseRepository'));
+})(
+  require('./BaseRepository'),
+  require('../Error'));
