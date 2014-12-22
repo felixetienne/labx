@@ -31,7 +31,7 @@
           .where('projects.active', true)
           .where('projects.name', projectName)
           .groupBy('projects.name')
-          .orderBy('projects.shorting', 'image_shorting')
+          .orderBy('projects.shorting ASC', 'image_shorting ASC')
           .limit(1)
           .toString();
 

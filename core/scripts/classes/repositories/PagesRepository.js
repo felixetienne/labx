@@ -62,7 +62,7 @@
           )
           .from('pages')
           .where('pages.active', true)
-          .orderBy('pages.shorting')
+          .orderBy('pages.shorting ASC')
           .toString();
 
         console.log(query);

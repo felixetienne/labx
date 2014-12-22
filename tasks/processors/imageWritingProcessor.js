@@ -24,7 +24,8 @@
           var ids = new List();
 
           data.forEach(function(x) {
-            if (_imageManager.exists(x.path)) return;
+            if (!x.force_deploy && _imageManager.exists(x.path))
+              return;
             ids.add(x.id);
           });
 

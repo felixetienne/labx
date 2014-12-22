@@ -23,7 +23,7 @@
           .from('websites')
           .where('websites.name', websiteName)
           .where('websites.active', true)
-          .orderBy('websites.shorting')
+          .orderBy('websites.shorting ASC')
           .limit(1)
           .toString();
 

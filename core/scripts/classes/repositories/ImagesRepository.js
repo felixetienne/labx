@@ -15,11 +15,12 @@
           images.title, \
           images.name, \
           images.id, \
+          images.force_deploy, \
           images.shorting'
           )
           .from('images')
           .where('images.active', true)
-          .orderBy('images.shorting')
+          .orderBy('images.shorting ASC')
           .toString();
 
         client
@@ -70,14 +71,13 @@
         var last = idsList.count() - 1;
 
         idsList.do(function(x, i) {
-          query += (i == 0 ? ' AND (' : ' OR ') + 'images.id = ' +
+          query += (i === 0 ? ' AND (' : ' OR ') + 'images.id = ' +
             x;
-          if (i == last) query += ')';
+          if (i === last) query += ')';
         });
 
         query += 'ORDER BY images.shorting ASC'
 
-        console.log(query);
         client
           .query(query, function(err, res) {
 
