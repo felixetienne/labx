@@ -25,7 +25,6 @@
           .orderBy('pages.shorting ASC')
           .limit(1)
           .toString();
-        console.log(query);
 
         client
           .query(query, function(err, res) {
