@@ -15,15 +15,14 @@
             '\
 						websites.title, \
 						websites.subtitle, \
-						websites.date,\
             websites.copyright, \
             websites.version, \
-						websites.shorting'
+						websites.sorting'
           )
           .from('websites')
           .where('websites.name', websiteName)
           .where('websites.active', true)
-          .orderBy('websites.shorting ASC')
+          .orderBy('websites.sorting ASC')
           .limit(1)
           .toString();
 

@@ -16,11 +16,11 @@
           images.name, \
           images.id, \
           images.force_deploy, \
-          images.shorting'
+          images.sorting'
           )
           .from('images')
           .where('images.active', true)
-          .orderBy('images.shorting ASC')
+          .orderBy('images.sorting ASC')
           .toString();
 
         client
@@ -56,7 +56,7 @@
           .select(
             '\
             images.name, \
-            images.shorting'
+            images.sorting'
           );
 
         if (includeRawData) {
@@ -76,7 +76,7 @@
           if (i === last) query += ')';
         });
 
-        query += 'ORDER BY images.shorting ASC'
+        query += 'ORDER BY images.sorting ASC'
 
         client
           .query(query, function(err, res) {

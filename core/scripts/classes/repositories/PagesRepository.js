@@ -13,16 +13,18 @@
           bricks
           .select(
             '\
-						pages.title as title, \
-            pages.title_short as title_short, \
-            pages.description as description, \
-						pages.shorting, \
+						pages.title, \
+            pages.description, \
+            pages.doc_title, \
+            pages.doc_description, \
+            pages.doc_keywords, \
+						pages.sorting, \
             pages.name'
           )
           .from('pages')
           .where('pages.name', pageName)
           .where('pages.active', true)
-          .orderBy('pages.shorting ASC')
+          .orderBy('pages.sorting ASC')
           .limit(1)
           .toString();
 
@@ -58,14 +60,13 @@
 						pages.title_short, \
             pages.description_short, \
             pages.name, \
-						pages.shorting'
+						pages.sorting'
           )
           .from('pages')
           .where('pages.active', true)
-          .orderBy('pages.shorting ASC')
+          .orderBy('pages.sorting ASC')
           .toString();
 
-        console.log(query);
         client
           .query(query, function(err, res) {
 
