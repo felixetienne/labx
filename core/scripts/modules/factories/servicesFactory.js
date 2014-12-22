@@ -5,12 +5,14 @@
     mod.createPageService = function(context) {
       var view = context.getCurrentPage();
 
-      if (view === viewHelpers.getProjectPage())
-        return new ProjectPageService(context, repositoriesFactory,
-          viewHelpers);
-
-      return new SimplePageService(context, repositoriesFactory,
-        viewHelpers);
+      switch (view) {
+        case viewHelpers.getProjectPage():
+          return new ProjectPageService(context, repositoriesFactory,
+            viewHelpers);
+        default:
+          return new SimplePageService(context, repositoriesFactory,
+            viewHelpers);
+      }
     };
 
     return mod;

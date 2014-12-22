@@ -2,5 +2,8 @@
   <title>LabX | Error</title>
 <%}%>
 <% if(!meta.hasError()) {%>
-  <title><%- website.title + ' | ' + page.shortTitle %></title>
+  <title><%- website.title + ' | ' + page.docTitle %></title>
+  <meta name="description" content="<%- page.docDescription %>" />
+  <meta name="keywords" content="<%- page.docKeywords %>" />
+  <meta name="author" content="<%- website.author %>" />
 <%}%>

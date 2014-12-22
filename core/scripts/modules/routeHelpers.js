@@ -13,7 +13,7 @@
           .getData(
             function(x, c) {
               x.meta = new ModelMetaData();
-              console.log(x);
+              //console.log(x);
               res.render(getViewPath(c), x);
             },
             function(e, c) {

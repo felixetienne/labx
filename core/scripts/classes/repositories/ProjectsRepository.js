@@ -20,26 +20,28 @@
             projects.date, \
             projects.sorting, \
             project_categories.title as category_title, \
-            project_categories.sorting as category_sorting, \
-						images.title as image_title, \
-						images.name as image_name, \
-            images.sorting as image_sorting'
+            project_categories.sorting as category_sorting'
+            // , \
+            // images.title as image_title, \
+            // images.name as image_name, \
+            // images.sorting as image_sorting'
           )
           .from('projects')
-          .join('images', {
-            'projects.id': 'images.id'
-          })
+          // .join('images', {
+          //   'projects.id': 'images.id'
+          // })
           .join('project_categories', {
             'projects.category_id': 'project_categories.id'
           })
-          .where('images.thumbnail', false)
-          .where('images.active', true)
+          //.where('images.thumbnail', false)
+          //.where('images.active', true)
           .where('projects.active', true)
           .where('project_categories.active', true)
           .where('projects.name', projectName)
           //.groupBy('projects.id', 'category_title')
-          .orderBy('projects.sorting ASC', 'category_sorting ASC',
-            'image_sorting ASC')
+          .orderBy('projects.sorting ASC', 'category_sorting ASC'
+            //, 'image_sorting ASC'
+          )
           .limit(1)
           .toString();
 
@@ -60,7 +62,7 @@
               action(data);
             } else if (typeof emptyAction === 'function') {
               if (isRequired) {
-                emptyAction(new Error('Project not found.', 500));
+                emptyAction(new Error('Project not found.', 404));
               } else {
                 emptyAction();
               }

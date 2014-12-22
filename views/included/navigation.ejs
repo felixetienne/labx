@@ -10,12 +10,12 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-              <% for(var i=0; i<allPages.length; i++) {
-                  var p = allPages[i];
+              <% for(var i=0; i<menuPages.length; i++) {
+                  var p = menuPages[i];
                   var cssClass = p.name == page.name ? 'active' : '';
                 %>
                 <li>
-                  <a href="<%- p.url%>" class="<%- cssClass %>"><%- p.shortTitle %></a>
+                  <a href="<%- p.url%>" class="<%- cssClass %>"><%- p.title %></a>
                 </li>
               <% } %>
           </ul>

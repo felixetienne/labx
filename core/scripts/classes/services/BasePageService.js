@@ -12,25 +12,28 @@
           subtitle: x.website.subtitle,
           date: x.website.date,
           copyright: x.website.copyright,
-          version: x.website.version
+          version: x.website.version,
+          author: x.website.author
         },
         page: {
+          docTitle: x.page.doc_title,
+          docDescription: x.page.doc_description,
+          docKeywords: x.page.doc_keywords,
           title: x.page.title,
-          shortTitle: x.page.title_short,
           description: x.page.description,
           name: x.page.name
         },
-        allPages: []
+        menuPages: []
       };
 
-      for (k in x.allPages) {
-        if (!x.allPages.hasOwnProperty(k)) continue;
+      for (k in x.menuPages) {
+        if (!x.menuPages.hasOwnProperty(k)) continue;
 
-        var page = x.allPages[k];
+        var page = x.menuPages[k];
 
-        data.allPages.push({
-          shortTitle: page.title_short,
-          shortDescription: page.description_short,
+        data.menuPages.push({
+          title: page.title_short,
+          description: page.description_short,
           name: page.name,
           url: buildUrl(page)
         });

@@ -3,8 +3,8 @@
   module.exports = function(context, repositoriesFactory, viewHelpers) {
     var _base = new BasePageService(context, viewHelpers);
     var _pagesRepository = repositoriesFactory.createPagesRepository();
-    var _projectsRepository = repositoriesFactory.createProjectsRepository();
     var _websitesRepository = repositoriesFactory.createWebsitesRepository();
+    var _projectsRepository = repositoriesFactory.createProjectsRepository();
 
     this.getData = function(successAction, errorAction) {
 
@@ -12,7 +12,7 @@
         .all([
           getWebsiteProperties(),
           getPageByName(),
-          getBasicPages(),
+          getMenuPages(),
           getProjectByName()
         ])
         .spread(computeData)
@@ -32,8 +32,8 @@
         var deferred = q.defer();
 
         _websitesRepository.getWebsiteProperties(context.getCurrentWebsiteName(),
-          function(properties) {
-            deferred.resolve(properties);
+          function(x) {
+            deferred.resolve(x);
           },
           function(e) {
             _base.addErrors(e);
@@ -46,8 +46,8 @@
       function getPageByName() {
         var deferred = q.defer();
 
-        _pagesRepository.getPageByName(_base.currentView, function(page) {
-          deferred.resolve(page);
+        _pagesRepository.getPageByName(_base.currentPage, function(x) {
+          deferred.resolve(x);
         }, function(e) {
           _base.addErrors(e);
           deferred.reject();
@@ -56,11 +56,11 @@
         return deferred.promise;
       }
 
-      function getBasicPages() {
+      function getMenuPages() {
         var deferred = q.defer();
 
-        _pagesRepository.getBasicPages(function(pages) {
-          deferred.resolve(pages);
+        _pagesRepository.getMenuPages(function(x) {
+          deferred.resolve(x);
         }, function(e) {
           _base.addErrors(e);
           deferred.reject();
@@ -74,8 +74,8 @@
 
         _projectsRepository.getProjectByName(_base.currentRequest.params
           .name,
-          function(project) {
-            deferred.resolve(project);
+          function(x) {
+            deferred.resolve(x);
           },
           function(e) {
             _base.addErrors(e);
@@ -85,18 +85,20 @@
         return deferred.promise;
       }
 
-      function computeData(properties, page, pages, project) {
+      function computeData(website, page, menuPages, project) {
         var data = _base.getPageData({
-          website: properties,
+          website: website,
           page: page,
-          allPages: pages
+          menuPages: menuPages
         });
 
+        data.page.docTitle = project.title;
+        data.page.title = project.title;
+        data.page.description = project.description;
+
         data.project = {
-          title: project.title,
-          shortTite: project.title_short,
-          description: project.description_short,
-          name: project.name,
+          date: project.date,
+          category: project.category_title,
           image: {
             title: project.image_title,
             url: project.image_path

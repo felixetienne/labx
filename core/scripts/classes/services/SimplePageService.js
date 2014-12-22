@@ -11,7 +11,7 @@
         .all([
           getWebsiteProperties(),
           getPageByName(),
-          getBasicPages()
+          getMenuPages()
         ])
         .spread(computeData)
         .then(onSuccess)
@@ -54,10 +54,10 @@
         return deferred.promise;
       }
 
-      function getBasicPages() {
+      function getMenuPages() {
         var deferred = q.defer();
 
-        _pagesRepository.getBasicPages(function(x) {
+        _pagesRepository.getMenuPages(function(x) {
           deferred.resolve(x);
         }, function(e) {
           _base.addErrors(e);
@@ -67,11 +67,11 @@
         return deferred.promise;
       }
 
-      function computeData(properties, page, pages) {
+      function computeData(website, page, menuPages) {
         var data = _base.getPageData({
-          website: properties,
+          website: website,
           page: page,
-          allPages: pages
+          menuPages: menuPages
         });
 
         return data;

@@ -17,6 +17,7 @@
 						websites.subtitle, \
             websites.copyright, \
             websites.version, \
+            websites.author, \
 						websites.sorting'
           )
           .from('websites')
