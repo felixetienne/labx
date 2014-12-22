@@ -1,9 +1,9 @@
-(function(BaseRepository, Error) {
+(function(BaseRepository) {
 
   module.exports = function(pg, bricks, config) {
     var _base = new BaseRepository(pg, config);
 
-    this.getPageByName = function(pageName, action, emptyAction, isRequired) {
+    this.getPageByName = function(pageName, action, emptyAction) {
 
       if (_base.isInvalidAction(action)) return;
 
@@ -16,14 +16,17 @@
 						pages.title as title, \
             pages.title_short as title_short, \
             pages.description as description, \
+						pages.shorting, \
             pages.name'
           )
           .from('pages')
           .where('pages.name', pageName)
           .where('pages.active', true)
+          .orderBy('pages.shorting ASC')
           .limit(1)
           .toString();
         console.log(query);
+
         client
           .query(query, function(err, res) {
 
@@ -36,11 +39,7 @@
               var data = res.rows[0];
               action(data);
             } else if (typeof emptyAction === 'function') {
-              if (isRequired) {
-                emptyAction(new Error('Page not found.', 404));
-              } else {
-                emptyAction();
-              }
+              emptyAction();
             }
 
             _base.close(client);
@@ -48,7 +47,7 @@
       });
     }
 
-    this.getBasicPages = function(action, emptyAction, isRequired) {
+    this.getBasicPages = function(action, emptyAction) {
 
       if (_base.isInvalidAction(action)) return;
 
@@ -59,13 +58,15 @@
             '\
 						pages.title_short, \
             pages.description_short, \
-            pages.name'
+            pages.name, \
+						pages.shorting'
           )
           .from('pages')
           .where('pages.active', true)
-          //.orderBy('pages.order')
+          .orderBy('pages.shorting')
           .toString();
 
+        console.log(query);
         client
           .query(query, function(err, res) {
 
@@ -83,12 +84,7 @@
 
               action(data);
             } else if (typeof emptyAction === 'function') {
-              if (isRequired) {
-                emptyAction(new Error('Basic page data not found.',
-                  500));
-              } else {
-                emptyAction();
-              }
+              emptyAction();
             }
 
             _base.close(client);
@@ -97,6 +93,4 @@
     }
   }
 
-})(
-  require('./BaseRepository'),
-  require('../Error'));
+})(require('./BaseRepository'));

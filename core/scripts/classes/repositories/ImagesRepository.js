@@ -14,10 +14,12 @@
             '\
           images.title, \
           images.name, \
-          images.id'
+          images.id, \
+          images.shorting'
           )
           .from('images')
           .where('images.active', true)
+          .orderBy('images.shorting')
           .toString();
 
         client
@@ -49,7 +51,12 @@
 
       _base.open(function(client) {
 
-        var query = bricks.select('images.name');
+        var query = bricks
+          .select(
+            '\
+            images.name, \
+            images.shorting '
+          );
 
         if (includeRawData) {
           query = query.select('images.image as raw');
@@ -58,6 +65,7 @@
         query = query
           .from('images')
           .where('images.active', true)
+          .orderBy('images.shorting')
           .toString();
 
         var last = idsList.count() - 1;

@@ -17,11 +17,13 @@
 						websites.subtitle, \
 						websites.date,\
             websites.copyright, \
-            websites.version'
+            websites.version, \
+						websites.shorting'
           )
           .from('websites')
           .where('websites.name', websiteName)
           .where('websites.active', true)
+          .orderBy('websites.shorting')
           .limit(1)
           .toString();
 

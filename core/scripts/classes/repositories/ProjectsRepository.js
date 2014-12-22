@@ -18,8 +18,10 @@
 						projects.description, \
 						projects.description_short, \
 						projects.name, \
+            projects.shorting, \
 						images.title as image_title, \
-						images.name as image_name'
+						images.name as image_name, \
+            images.shorting as image_shorting'
           )
           .from('projects')
           .join('images', {
@@ -29,6 +31,7 @@
           .where('projects.active', true)
           .where('projects.name', projectName)
           .groupBy('projects.name')
+          .orderBy('projects.shorting', 'image_shorting')
           .limit(1)
           .toString();
 
