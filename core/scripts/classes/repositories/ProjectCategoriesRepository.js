@@ -37,7 +37,7 @@
           .where('projects.active', true)
           .where('project_categories.active', true)
           .where('projects.name', projectName)
-          .groupBy('project_categories.id', 'projects.id')
+          //.groupBy('project_categories.id', 'projects.id')
           .orderBy('projects.sorting ASC', 'category_sorting ASC',
             'image_sorting ASC')
           .limit(1)
@@ -60,7 +60,8 @@
               action(data);
             } else if (typeof emptyAction === 'function') {
               if (isRequired) {
-                emptyAction(new Error('Project not found.', 500));
+                emptyAction(new Error(
+                  'Project categories not found.', 500));
               } else {
                 emptyAction();
               }

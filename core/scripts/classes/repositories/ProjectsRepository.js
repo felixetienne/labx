@@ -27,7 +27,7 @@
           )
           .from('projects')
           .join('images', {
-            'projects.id': 'images.id_project'
+            'projects.id': 'images.id'
           })
           .join('project_categories', {
             'projects.category_id': 'project_categories.id'
@@ -37,7 +37,7 @@
           .where('projects.active', true)
           .where('project_categories.active', true)
           .where('projects.name', projectName)
-          .groupBy('projects.id')
+          //.groupBy('projects.id', 'category_title')
           .orderBy('projects.sorting ASC', 'category_sorting ASC',
             'image_sorting ASC')
           .limit(1)

@@ -3,7 +3,7 @@
   module.exports = (function(mod, repositoriesFactory, viewHelpers) {
 
     mod.createPageService = function(context) {
-      var view = context.getCurrentView();
+      var view = context.getCurrentPage();
 
       if (view === viewHelpers.getProjectPage())
         return new ProjectPageService(context, repositoriesFactory,
