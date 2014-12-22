@@ -55,7 +55,7 @@
           .select(
             '\
             images.name, \
-            images.shorting '
+            images.shorting'
           );
 
         if (includeRawData) {
@@ -65,7 +65,6 @@
         query = query
           .from('images')
           .where('images.active', true)
-          .orderBy('images.shorting')
           .toString();
 
         var last = idsList.count() - 1;
@@ -76,6 +75,9 @@
           if (i == last) query += ')';
         });
 
+        query += 'ORDER BY images.shorting ASC'
+
+        console.log(query);
         client
           .query(query, function(err, res) {
 
