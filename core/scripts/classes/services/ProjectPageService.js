@@ -1,7 +1,7 @@
-(function(q, BasePageService, Error) {
+(function(q, dateFormat, BasePageService, Error) {
 
   module.exports = function(context, repositoriesFactory, viewHelpers) {
-    var _base = new BasePageService(context, viewHelpers);
+    var _base = new BasePageService(context, viewHelpers, dateFormat);
     var _pagesRepository = repositoriesFactory.createPagesRepository();
     var _websitesRepository = repositoriesFactory.createWebsitesRepository();
     var _projectsRepository = repositoriesFactory.createProjectsRepository();
@@ -46,7 +46,8 @@
       function getPageByName() {
         var deferred = q.defer();
 
-        _pagesRepository.getPageByName(_base.currentPage, function(x) {
+        _pagesRepository.getPageByName(_base.getCurrentPage(), function(
+          x) {
           deferred.resolve(x);
         }, function(e) {
           _base.addErrors(e);
@@ -72,7 +73,7 @@
       function getProjectByName() {
         var deferred = q.defer();
 
-        _projectsRepository.getProjectByName(_base.currentRequest.params
+        _projectsRepository.getProjectByName(_base.getCurrentRequest().params
           .name,
           function(x) {
             deferred.resolve(x);
@@ -97,7 +98,7 @@
         data.page.description = project.description;
 
         data.project = {
-          date: project.date,
+          date: project.date ? dateFormat(project.date) : null,
           category: project.category_title,
           image: {
             title: project.image_title,
@@ -112,5 +113,6 @@
 
 })(
   require('q'),
+  require('dateformat'),
   require('./BasePageService'),
   require('../Error'));

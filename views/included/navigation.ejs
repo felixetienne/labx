@@ -12,7 +12,7 @@
             <ul class="nav navbar-nav">
               <% for(var i=0; i<menuPages.length; i++) {
                   var p = menuPages[i];
-                  var cssClass = p.name == page.name ? 'active' : '';
+                  var cssClass = p.isCurrent ? 'active' : '';
                 %>
                 <li>
                   <a href="<%- p.url%>" class="<%- cssClass %>"><%- p.title %></a>

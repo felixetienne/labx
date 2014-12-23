@@ -1,7 +1,7 @@
-(function(q, BasePageService, Error) {
+(function(q, dateFormat, BasePageService, Error) {
 
   module.exports = function(context, repositoriesFactory, viewHelpers) {
-    var _base = new BasePageService(context, viewHelpers);
+    var _base = new BasePageService(context, viewHelpers, dateFormat);
     var _pagesRepository = repositoriesFactory.createPagesRepository();
     var _websitesRepository = repositoriesFactory.createWebsitesRepository();
 
@@ -44,7 +44,8 @@
       function getPageByName() {
         var deferred = q.defer();
 
-        _pagesRepository.getPageByName(_base.currentPage, function(x) {
+        _pagesRepository.getPageByName(_base.getCurrentPage(), function(
+          x) {
           deferred.resolve(x);
         }, function(e) {
           _base.addErrors(e);
@@ -80,5 +81,6 @@
   }
 
 })(require('q'),
+  require('dateformat'),
   require('./BasePageService'),
   require('../Error'));

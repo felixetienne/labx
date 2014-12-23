@@ -1,27 +1,34 @@
 (function() {
 
-  module.exports = function(context, viewHelpers) {
-    this.currentPage = context.getCurrentPage();
-    this.currentRequest = context.getCurrentRequest();
+  module.exports = function(context, viewHelpers, dateFormat) {
+    var _currentPage = context.getCurrentPage();
+    var _currentRequest = context.getCurrentRequest();
     var _errors = [];
+
+    this.getCurrentPage = function() {
+      return _currentPage;
+    }
+
+    this.getCurrentRequest = function() {
+      return _currentRequest;
+    }
 
     this.getPageData = function(x) {
       var data = {
         website: {
-          title: x.website.title,
-          subtitle: x.website.subtitle,
-          date: x.website.date,
-          copyright: x.website.copyright,
-          version: x.website.version,
-          author: x.website.author
+          date: dateFormat(x.website.date || Date.now(), 'dd/mm/yyyy'),
+          title: x.website.title || '',
+          subtitle: x.website.subtitle || '',
+          copyright: x.website.copyright || '',
+          version: x.website.version || '',
+          author: x.website.author || ''
         },
         page: {
-          docTitle: x.page.doc_title,
-          docDescription: x.page.doc_description,
-          docKeywords: x.page.doc_keywords,
+          docTitle: x.page.doc_title || '',
+          docDescription: x.page.doc_description || '',
+          docKeywords: x.page.doc_keywords || '',
           title: x.page.title,
-          description: x.page.description,
-          name: x.page.name
+          description: x.page.description
         },
         menuPages: []
       };
@@ -34,7 +41,7 @@
         data.menuPages.push({
           title: page.title_short,
           description: page.description_short,
-          name: page.name,
+          isCurrent: page.name === _currentPage,
           url: buildUrl(page)
         });
       }
