@@ -12,6 +12,7 @@
           _base.getWebsiteProperties(),
           _base.getPageByName(),
           _base.getMenuPages(),
+          _base.getMenuProjectCategories(),
           getProjectByName()
         ])
         .spread(computeData)
@@ -27,10 +28,11 @@
           function(x) {
             deferred.resolve(x);
           },
-          function(e) {
-            _base.addErrors(e);
+          function() {
+            _base.addErrors(_projectsRepository.getErrors());
+            _base.addError(new Error('Projet not found', 404));
             deferred.reject();
-          }, true);
+          });
 
         return deferred.promise;
       }
@@ -43,11 +45,13 @@
         errorAction(_base.getErrors(), context);
       }
 
-      function computeData(website, page, menuPages, project) {
+      function computeData(website, page, menuPages,
+        menuProjectCategories, project) {
         var data = _base.getPageData({
           website: website,
           page: page,
-          menuPages: menuPages
+          menuPages: menuPages,
+          menuProjectCategories: menuProjectCategories
         });
 
         data.page.docTitle = project.title;

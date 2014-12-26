@@ -1,4 +1,4 @@
-(function(q) {
+(function(q, Error) {
 
   module.exports = function(context, repositoriesFactory, viewHelpers,
     dateFormat) {
@@ -6,7 +6,13 @@
     var _currentRequest = context.getCurrentRequest();
     var _pagesRepository = repositoriesFactory.createPagesRepository();
     var _websitesRepository = repositoriesFactory.createWebsitesRepository();
+    var _projectCategoriesRepository = repositoriesFactory.createProjectCategoriesRepository();
+    var _projectPage = viewHelpers.getIndexPage();
     var _errors = [];
+
+    this.getProjectsRepository = function() {
+      return _projectsRepository;
+    }
 
     this.getCurrentPage = function() {
       return _currentPage;
@@ -23,10 +29,11 @@
         function(x) {
           deferred.resolve(x);
         },
-        function(e) {
-          this.addErrors(e);
+        function() {
+          addErrors(_websitesRepository.getErrors());
+          addError(new Error('Website not found', 404));
           deferred.reject();
-        }, true);
+        });
 
       return deferred.promise;
     }
@@ -34,13 +41,15 @@
     this.getPageByName = function() {
       var deferred = q.defer();
 
-      _pagesRepository.getPageByName(_currentPage, function(
-        x) {
+      _pagesRepository.getPageByName(_currentPage, function(x) {
         deferred.resolve(x);
-      }, function(e) {
-        this.addErrors(e);
+      }, function() {
+        addErrors(_pagesRepository.getErrors());
+        addError(new Error('Page "' + _currentPage +
+          '" not found',
+          404));
         deferred.reject();
-      }, true);
+      });
 
       return deferred.promise;
     }
@@ -50,10 +59,26 @@
 
       _pagesRepository.getMenuPages(function(x) {
         deferred.resolve(x);
-      }, function(e) {
-        this.addErrors(e);
+      }, function() {
+        addErrors(_pagesRepository.getErrors());
+        addError(new Error('Page menu not found', 404));
         deferred.reject();
-      }, true);
+      });
+
+      return deferred.promise;
+    }
+
+    this.getMenuProjectCategories = function() {
+      var deferred = q.defer();
+
+      _projectCategoriesRepository.getMenuProjectCategories(function(x) {
+        deferred.resolve(x);
+      }, function() {
+        addErrors(_projectCategoriesRepository.getErrors());
+        addError(new Error('Project category menu not found',
+          404));
+        deferred.reject();
+      });
 
       return deferred.promise;
     }
@@ -75,19 +100,29 @@
           title: x.page.title,
           description: x.page.description
         },
-        menuPages: []
+        menuPages: [],
+        menuProjectCategories: []
       };
 
       for (k in x.menuPages) {
         if (!x.menuPages.hasOwnProperty(k)) continue;
-
         var page = x.menuPages[k];
 
         data.menuPages.push({
           title: page.title_short,
           description: page.description_short,
           isCurrent: page.name === _currentPage,
-          url: buildUrl(page)
+          url: buildPageUrl(page)
+        });
+      }
+
+      for (k in x.menuProjectCategories) {
+        if (!x.menuProjectCategories.hasOwnProperty(k)) continue;
+        var projectCategory = x.menuProjectCategories[k];
+
+        data.menuProjectCategories.push({
+          title: projectCategory.title,
+          url: buildProjectCategoryUrl(projectCategory)
         });
       }
 
@@ -99,6 +134,16 @@
     }
 
     this.addErrors = function(errors) {
+      addErrors(errors);
+      return this;
+    }
+
+    this.addError = function(error) {
+      addError(error);
+      return this;
+    }
+
+    function addErrors(errors) {
       if (!errors) return;
       if (errors instanceof Array) {
         for (var i = 0; i < errors.length; i++) {
@@ -113,17 +158,23 @@
       _errors.push(error);
     }
 
-    function buildUrl(page) {
+    function buildPageUrl(page) {
+      if (page.name === viewHelpers.getProjectPage()) return null;
+
       var url = '/';
 
       if (page.name === viewHelpers.getIndexPage()) return url;
 
-      url += page.name;
+      return url + page.name;
+    }
 
-      // temporary for test
-      if (page.name !== viewHelpers.getProjectPage()) return url;
-      return url += '/faces';
+    function buildProjectCategoryUrl(projectCategory) {
+      var url = '/' + _projectPage + '/' + projectCategory.name;
+
+      return url;
     }
   }
 
-})(require('q'));
+})(
+  require('q'),
+  require('../Error'));

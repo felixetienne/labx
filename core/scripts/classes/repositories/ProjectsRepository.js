@@ -4,12 +4,15 @@
     var _base = new BaseRepository(pg, config);
     var _imageFolder = config.getImageFolder();
 
+    this.getErrors = function() {
+      return _base.getErrors();
+    }
+
     this.getProjectByName = function(projectName, action,
       emptyAction, isRequired) {
       if (_base.isInvalidAction(action)) return;
 
       _base.open(function(client) {
-
         var query = bricks
           .select(
             '\
@@ -38,7 +41,6 @@
           .where('projects.active', true)
           .where('project_categories.active', true)
           .where('projects.name', projectName)
-          //.groupBy('projects.id', 'category_title')
           .orderBy('projects.sorting ASC', 'category_sorting ASC'
             //, 'image_sorting ASC'
           )
@@ -50,7 +52,9 @@
 
             if (err) {
               _base.close(client);
-              throw err;
+              _base.addError(new Error(err, 500));
+              emptyAction();
+              return;
             }
 
             if (_base.hasResults(res)) {
@@ -61,11 +65,7 @@
 
               action(data);
             } else if (typeof emptyAction === 'function') {
-              if (isRequired) {
-                emptyAction(new Error('Project not found.', 404));
-              } else {
-                emptyAction();
-              }
+              emptyAction();
             }
 
             _base.close(client);

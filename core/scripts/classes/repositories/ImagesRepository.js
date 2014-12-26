@@ -4,11 +4,14 @@
     var _base = new BaseRepository(pg, config);
     var _imageFolder = config.getImageFolder();
 
-    this.getAll = function(action, emptyAction, isRequired) {
+    this.getErrors = function(){
+      return _base.getErrors();
+    }
+
+    this.getAll = function(action, emptyAction) {
       if (_base.isInvalidAction(action)) return;
 
       _base.open(function(client) {
-
         var query = bricks
           .select(
             '\
@@ -28,17 +31,15 @@
 
             if (err) {
               _base.close(client);
-              throw err;
+              _base.addError(new Error(err, 500));
+              emptyAction();
+              return;
             }
 
             if (_base.hasResults(res)) {
               action(convertToData(res));
             } else {
-              if (isRequired) {
-                emptyAction(new Error('Images not found.', 500));
-              } else {
-                emptyAction();
-              }
+              emptyAction();
             }
 
             _base.close(client);
@@ -46,12 +47,10 @@
       });
     }
 
-    this.getByIds = function(idsList, includeRawData, action, emptyAction,
-      isRequired) {
+    this.getByIds = function(idsList, includeRawData, action, emptyAction) {
       if (_base.isInvalidAction(action)) return;
 
       _base.open(function(client) {
-
         var query = bricks
           .select(
             '\
@@ -83,17 +82,15 @@
 
             if (err) {
               _base.close(client);
-              throw err;
+              _base.addError(new Error(err, 500));
+              emptyAction();
+              return;
             }
 
             if (_base.hasResults(res)) {
               action(convertToData(res));
             } else if (typeof emptyAction === 'function') {
-              if (isRequired) {
-                emptyAction(new Error('Images not found.', 500));
-              } else {
-                emptyAction();
-              }
+              emptyAction();
             }
 
             _base.close(client);

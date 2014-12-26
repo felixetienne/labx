@@ -1,14 +1,17 @@
-(function(BaseRepository) {
+(function(BaseRepository, Error) {
 
   module.exports = function(pg, bricks, config) {
     var _base = new BaseRepository(pg, config);
+
+    this.getErrors = function() {
+      return _base.getErrors();
+    }
 
     this.getPageByName = function(pageName, action, emptyAction) {
 
       if (_base.isInvalidAction(action)) return;
 
       _base.open(function(client) {
-
         var query =
           bricks
           .select(
@@ -30,10 +33,11 @@
 
         client
           .query(query, function(err, res) {
-
             if (err) {
               _base.close(client);
-              throw err;
+              _base.addError(new Error(err, 500));
+              emptyAction();
+              return;
             }
 
             if (_base.hasResults(res)) {
@@ -53,7 +57,6 @@
       if (_base.isInvalidAction(action)) return;
 
       _base.open(function(client) {
-
         var query = bricks
           .select(
             '\
@@ -73,7 +76,9 @@
 
             if (err) {
               _base.close(client);
-              throw err;
+              _base.addError(new Error(err, 500));
+              emptyAction();
+              return;
             }
 
             if (_base.hasResults(res)) {
@@ -91,7 +96,9 @@
             _base.close(client);
           });
       });
-    }
+    };
   }
 
-})(require('./BaseRepository'));
+})(
+  require('./BaseRepository'),
+  require('../Error'));

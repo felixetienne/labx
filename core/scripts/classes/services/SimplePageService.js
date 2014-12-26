@@ -10,7 +10,8 @@
         .all([
           _base.getWebsiteProperties(),
           _base.getPageByName(),
-          _base.getMenuPages()
+          _base.getMenuPages(),
+          _base.getMenuProjectCategories()
         ])
         .spread(computeData)
         .then(onSuccess)
@@ -25,11 +26,13 @@
         errorAction(_base.getErrors(), context);
       }
 
-      function computeData(website, page, menuPages) {
+      function computeData(website, page, menuPages,
+        menuProjectCategories) {
         var data = _base.getPageData({
           website: website,
           page: page,
-          menuPages: menuPages
+          menuPages: menuPages,
+          menuProjectCategories: menuProjectCategories
         });
 
         return data;

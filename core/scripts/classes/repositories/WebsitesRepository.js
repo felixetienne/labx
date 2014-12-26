@@ -3,13 +3,16 @@
   module.exports = function(pg, bricks, config) {
     var _base = new BaseRepository(pg, config);
 
+    this.getErrors = function() {
+      return _base.getErrors();
+    }
+
     this.getWebsiteProperties = function(websiteName, action, emptyAction,
       isRequired) {
 
       if (_base.isInvalidAction(action)) return;
 
       _base.open(function(client) {
-
         var query = bricks
           .select(
             '\
@@ -32,18 +35,16 @@
 
             if (err) {
               _base.close(client);
-              throw err;
+              _base.addError(new Error(err, 500));
+              emptyAction();
+              return;
             }
 
             if (_base.hasResults(res)) {
               var data = res.rows[0];
               action(data);
             } else if (typeof emptyAction === 'function') {
-              if (isRequired) {
-                emptyAction(new Error('Website not found.', 500));
-              } else {
-                emptyAction();
-              }
+              emptyAction();
             }
 
             _base.close(client);
