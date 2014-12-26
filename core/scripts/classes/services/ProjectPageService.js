@@ -1,74 +1,23 @@
 (function(q, dateFormat, BasePageService, Error) {
 
   module.exports = function(context, repositoriesFactory, viewHelpers) {
-    var _base = new BasePageService(context, viewHelpers, dateFormat);
-    var _pagesRepository = repositoriesFactory.createPagesRepository();
-    var _websitesRepository = repositoriesFactory.createWebsitesRepository();
+    var _base = new BasePageService(context, repositoriesFactory,
+      viewHelpers, dateFormat);
     var _projectsRepository = repositoriesFactory.createProjectsRepository();
 
     this.getData = function(successAction, errorAction) {
 
       return q
         .all([
-          getWebsiteProperties(),
-          getPageByName(),
-          getMenuPages(),
+          _base.getWebsiteProperties(),
+          _base.getPageByName(),
+          _base.getMenuPages(),
           getProjectByName()
         ])
         .spread(computeData)
         .then(onSuccess)
         .fail(onError)
         .done();
-
-      function onSuccess(data) {
-        successAction(data, context);
-      }
-
-      function onError() {
-        errorAction(_base.getErrors(), context);
-      }
-
-      function getWebsiteProperties() {
-        var deferred = q.defer();
-
-        _websitesRepository.getWebsiteProperties(context.getCurrentWebsiteName(),
-          function(x) {
-            deferred.resolve(x);
-          },
-          function(e) {
-            _base.addErrors(e);
-            deferred.reject();
-          }, true);
-
-        return deferred.promise;
-      }
-
-      function getPageByName() {
-        var deferred = q.defer();
-
-        _pagesRepository.getPageByName(_base.getCurrentPage(), function(
-          x) {
-          deferred.resolve(x);
-        }, function(e) {
-          _base.addErrors(e);
-          deferred.reject();
-        }, true);
-
-        return deferred.promise;
-      }
-
-      function getMenuPages() {
-        var deferred = q.defer();
-
-        _pagesRepository.getMenuPages(function(x) {
-          deferred.resolve(x);
-        }, function(e) {
-          _base.addErrors(e);
-          deferred.reject();
-        }, true);
-
-        return deferred.promise;
-      }
 
       function getProjectByName() {
         var deferred = q.defer();
@@ -84,6 +33,14 @@
           }, true);
 
         return deferred.promise;
+      }
+
+      function onSuccess(data) {
+        successAction(data, context);
+      }
+
+      function onError() {
+        errorAction(_base.getErrors(), context);
       }
 
       function computeData(website, page, menuPages, project) {

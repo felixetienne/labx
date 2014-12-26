@@ -1,8 +1,11 @@
-(function() {
+(function(q) {
 
-  module.exports = function(context, viewHelpers, dateFormat) {
+  module.exports = function(context, repositoriesFactory, viewHelpers,
+    dateFormat) {
     var _currentPage = context.getCurrentPage();
     var _currentRequest = context.getCurrentRequest();
+    var _pagesRepository = repositoriesFactory.createPagesRepository();
+    var _websitesRepository = repositoriesFactory.createWebsitesRepository();
     var _errors = [];
 
     this.getCurrentPage = function() {
@@ -11,6 +14,48 @@
 
     this.getCurrentRequest = function() {
       return _currentRequest;
+    }
+
+    this.getWebsiteProperties = function() {
+      var deferred = q.defer();
+
+      _websitesRepository.getWebsiteProperties(context.getCurrentWebsiteName(),
+        function(x) {
+          deferred.resolve(x);
+        },
+        function(e) {
+          this.addErrors(e);
+          deferred.reject();
+        }, true);
+
+      return deferred.promise;
+    }
+
+    this.getPageByName = function() {
+      var deferred = q.defer();
+
+      _pagesRepository.getPageByName(_currentPage, function(
+        x) {
+        deferred.resolve(x);
+      }, function(e) {
+        this.addErrors(e);
+        deferred.reject();
+      }, true);
+
+      return deferred.promise;
+    }
+
+    this.getMenuPages = function() {
+      var deferred = q.defer();
+
+      _pagesRepository.getMenuPages(function(x) {
+        deferred.resolve(x);
+      }, function(e) {
+        this.addErrors(e);
+        deferred.reject();
+      }, true);
+
+      return deferred.promise;
     }
 
     this.getPageData = function(x) {
@@ -81,4 +126,4 @@
     }
   }
 
-})();
+})(require('q'));
