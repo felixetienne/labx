@@ -13,30 +13,42 @@
 
     mod.getView = function(pageName) {
       switch (pageName) {
+
         case
         index:
           return 'index';
+
         case
         contact:
           return 'contact';
+
         case
         about:
           return 'about';
+
         case
         events:
           return 'events';
+
         case
         services:
           return 'services';
+
         case
         curriculumVitae:
           return 'curriculumVitae';
+
         case
         project:
           return 'project';
+
         case
         projects:
           return 'projects';
+
+        case 'projectCategory':
+          return 'projectCategory';
+
         default:
           return 'error';
       }

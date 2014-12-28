@@ -23,8 +23,15 @@
     app.get('/' + p, routeHelpers.getRoute(p));
   }
 
+  var page = viewHelpers.getProjectsPage();
+  app.get('/' + page + '/:name', routeHelpers.getRoute(page, {
+    isProjectCategoriesPage: true
+  }));
+
   var page = viewHelpers.getProjectPage();
-  app.get('/' + page + '/:name', routeHelpers.getRoute(page));
+  app.get('/' + page + '/:name', routeHelpers.getRoute(page, {
+    isProjectDetailsPage: true
+  }));
 
   app.listen(port, function() {
     console.log("Node app is running at localhost: " + port);

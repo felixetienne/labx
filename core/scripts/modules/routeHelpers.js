@@ -2,19 +2,22 @@
 
   module.exports = (function(mod, servicesFactory, viewHelpers) {
 
-    mod.getRoute = function(pageName) {
+    mod.getRoute = function(pageName, argsObj) {
+      var argsObj = argsObj || {};
       var f = function(req, res) {
         var context = new Context()
           .setCurrentRequest(req)
           .setCurrentPage(pageName);
 
         servicesFactory
-          .createPageService(context)
+          .createPageService(context, argsObj)
           .getData(
             function(x, c) {
               x.meta = new ModelMetaData();
-              //console.log(x);
-              res.render(getViewPath(c), x);
+              // console.log('\n\n===== DEBUG =====\n');
+              // console.log(x);
+              // console.log('\n=================\n\n');
+              res.render(getViewPath(c, argsObj), x);
             },
             function(e, c) {
               res.render(viewHelpers.getErrorPage(), {
@@ -26,8 +29,15 @@
       return f;
     }
 
-    function getViewPath(context) {
-      var page = context.getCurrentPage();
+    function getViewPath(context, argsObj) {
+      var page;
+
+      if (argsObj.isProjectCategoriesPage) {
+        page = 'projectCategory';
+      } else {
+        page = context.getCurrentPage();
+      }
+
       return viewHelpers.getView(page);
     }
 

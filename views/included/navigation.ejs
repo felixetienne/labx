@@ -12,10 +12,31 @@
             <ul class="nav navbar-nav">
               <% for(var i=0; i<menuPages.length; i++) {
                   var p = menuPages[i];
-                  var cssClass = p.isCurrent ? 'active' : '';
+                  var totalSubPages = p.subMenuPages.length;
+                  var isDropdown = totalSubPages > 0;
+                  var linkClasses = p.isCurrent ? 'active' : '';
+                  if(isDropdown){
+                    if(linkClasses.length){
+                      linkClasses += ' ';
+                    }
+                    linkClasses += 'dropdown-toggle';
+                  }
                 %>
-                <li>
-                  <a href="<%- p.url%>" class="<%- cssClass %>"><%- p.title %></a>
+                <li<%- isDropdown ? ' class="dropdown"' : '' %>>
+                  <a href="<%- p.url %>"<%- linkClasses.length ? ' class="' + linkClasses + '"' : '' %><%- isDropdown ? ' data-toggle="dropdown" role="button" aria-expanded="false"' : '' %>><%- p.title %><%- isDropdown ? ' <span class="caret"></span>' : '' %></a>
+                  <%
+                    for(var j=0; j<totalSubPages; j++){
+                      var sp = p.subMenuPages[j];%>
+                      <% if(j===0){%>
+                          <ul class="dropdown-menu" role="menu">
+                      <%}%>
+                        <li>
+                          <a href="<%- sp.url %>"<%- sp.isCurrent ? ' class="active"' : '' %>><%- sp.title %></a>
+                        </li>
+                      <% if(j===totalSubPages-1){%>
+                      </ul>
+                      <%}%>
+                  <%}%>
                 </li>
               <% } %>
           </ul>

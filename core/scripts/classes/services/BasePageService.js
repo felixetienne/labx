@@ -2,13 +2,34 @@
 
   module.exports = function(context, repositoriesFactory, viewHelpers,
     dateFormat) {
+    var _dateFormat = 'dd/mm/yyyy';
     var _currentPage = context.getCurrentPage();
     var _currentRequest = context.getCurrentRequest();
+    var _currentNameParam = _currentRequest.params ? _currentRequest.params
+      .name : null;
     var _pagesRepository = repositoriesFactory.createPagesRepository();
     var _websitesRepository = repositoriesFactory.createWebsitesRepository();
     var _projectCategoriesRepository = repositoriesFactory.createProjectCategoriesRepository();
-    var _projectPage = viewHelpers.getIndexPage();
+    var _projectsPage = viewHelpers.getProjectsPage();
     var _errors = [];
+
+    this.getProjectCategoriesRepository = function() {
+      return _projectCategoriesRepository;
+    }
+
+    this.getErrors = function() {
+      return _errors;
+    }
+
+    this.addErrors = function(errors) {
+      addErrors(errors);
+      return this;
+    }
+
+    this.addError = function(error) {
+      addError(error);
+      return this;
+    }
 
     this.getProjectsRepository = function() {
       return _projectsRepository;
@@ -86,7 +107,7 @@
     this.getPageData = function(x) {
       var data = {
         website: {
-          date: dateFormat(x.website.date || Date.now(), 'dd/mm/yyyy'),
+          date: formatDate(x.website.date || Date.now()),
           title: x.website.title || '',
           subtitle: x.website.subtitle || '',
           copyright: x.website.copyright || '',
@@ -100,62 +121,88 @@
           title: x.page.title,
           description: x.page.description
         },
-        menuPages: [],
-        menuProjectCategories: []
+        menuPages: getMenuPagesData(x)
       };
-
-      for (k in x.menuPages) {
-        if (!x.menuPages.hasOwnProperty(k)) continue;
-        var page = x.menuPages[k];
-
-        data.menuPages.push({
-          title: page.title_short,
-          description: page.description_short,
-          isCurrent: page.name === _currentPage,
-          url: buildPageUrl(page)
-        });
-      }
-
-      for (k in x.menuProjectCategories) {
-        if (!x.menuProjectCategories.hasOwnProperty(k)) continue;
-        var projectCategory = x.menuProjectCategories[k];
-
-        data.menuProjectCategories.push({
-          title: projectCategory.title,
-          url: buildProjectCategoryUrl(projectCategory)
-        });
-      }
 
       return data;
     }
 
-    this.getErrors = function() {
-      return _errors;
+    this.formatDate = function(date) {
+      return formatDate(date);
     }
 
-    this.addErrors = function(errors) {
-      addErrors(errors);
-      return this;
+    function formatDate(date) {
+      if (!date) return null;
+
+      return dateFormat(date, _dateFormat);
     }
 
-    this.addError = function(error) {
-      addError(error);
-      return this;
-    }
+    function getMenuPagesData(x) {
+      var pages = [];
 
-    function addErrors(errors) {
-      if (!errors) return;
-      if (errors instanceof Array) {
-        for (var i = 0; i < errors.length; i++) {
-          addError(errors[i]);
-        }
-      } else {
-        addError(errors);
+      for (k in x.menuPages) {
+        if (!x.menuPages.hasOwnProperty(k)) continue;
+        var page = x.menuPages[k];
+        var isCurrent = isCurrentPage(page.name);
+
+        pages.push({
+          title: page.title_short,
+          description: page.description_short,
+          isCurrent: isCurrent,
+          url: buildPageUrl(page),
+          subMenuPages: getSubMenuPagesData(page.name, isCurrent, x)
+        });
       }
+
+      return pages;
     }
 
-    function addError(error) {
-      _errors.push(error);
+    function getSubMenuPagesData(pageName, isCurrent, x) {
+      var subPages = [];
+
+      if (pageName === viewHelpers.getProjectsPage()) {
+        for (k in x.menuProjectCategories) {
+          if (!x.menuProjectCategories.hasOwnProperty(k)) continue;
+          var projectCategory = x.menuProjectCategories[k];
+          var subPage = {
+            title: projectCategory.title,
+            url: buildProjectCategoryUrl(projectCategory),
+            isCurrent: isCurrentSubPage(isCurrent, projectCategory.name)
+          };
+
+          subPages.push(subPage);
+        }
+
+        var all = {
+          title: 'Tout les projets',
+          url: getProjectsPageUrl(),
+          isCurrent: currentPageIsProjects()
+        };
+
+        subPages.push(all);
+      }
+
+      return subPages;
+    }
+
+    function isCurrentPage(pageName) {
+      return _currentPage === pageName;
+    }
+
+    function isCurrentSubPage(parentIsCurrent, subPageName) {
+      if (!parentIsCurrent) return false;
+
+      return subPageName === _currentNameParam;
+    }
+
+    function currentPageIsProjects() {
+      return _currentPage === viewHelpers.getProjectsPage();
+    }
+
+    function getProjectsPageUrl() {
+      var url = '/';
+
+      return url + viewHelpers.getProjectsPage();
     }
 
     function buildPageUrl(page) {
@@ -169,9 +216,24 @@
     }
 
     function buildProjectCategoryUrl(projectCategory) {
-      var url = '/' + _projectPage + '/' + projectCategory.name;
+      var url = '/' + _projectsPage + '/' + projectCategory.name;
 
       return url;
+    }
+
+    function addError(error) {
+      _errors.push(error);
+    }
+
+    function addErrors(errors) {
+      if (!errors) return;
+      if (errors instanceof Array) {
+        for (var i = 0; i < errors.length; i++) {
+          addError(errors[i]);
+        }
+      } else {
+        addError(errors);
+      }
     }
   }
 

@@ -9,7 +9,7 @@
     }
 
     this.getProjectByName = function(projectName, action,
-      emptyAction, isRequired) {
+      emptyAction) {
       if (_base.isInvalidAction(action)) return;
 
       _base.open(function(client) {

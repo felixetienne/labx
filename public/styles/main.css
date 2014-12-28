@@ -4691,7 +4691,7 @@ button.close {
 
 body {
   background-color: white;
-  background-image: url(/medias/images/bg.png);
+  /*background-image: url(/medias/images/bg.png);*/
   background-repeat: repeat;
   background-position: center;
   background-attachment: fixed; }

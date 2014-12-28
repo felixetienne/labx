@@ -4,7 +4,7 @@
     var _base = new BaseRepository(pg, config);
     var _imageFolder = config.getImageFolder();
 
-    this.getErrors = function(){
+    this.getErrors = function() {
       return _base.getErrors();
     }
 
@@ -112,6 +112,7 @@
       return data;
     }
   }
+
 })(
   require('./BaseRepository'),
   require('../Error'));

@@ -3,7 +3,6 @@
   module.exports = function(context, repositoriesFactory, viewHelpers) {
     var _base = new BasePageService(context, repositoriesFactory,
       viewHelpers, dateFormat);
-    var _projectsRepository = repositoriesFactory.createProjectsRepository();
 
     this.getData = function(successAction, errorAction) {
 
@@ -22,14 +21,15 @@
 
       function getProjectByName() {
         var deferred = q.defer();
+        var repo = repositoriesFactory.createProjectsRepository();
 
-        _projectsRepository.getProjectByName(_base.getCurrentRequest().params
+        repo.getProjectByName(_base.getCurrentRequest().params
           .name,
           function(x) {
             deferred.resolve(x);
           },
           function() {
-            _base.addErrors(_projectsRepository.getErrors());
+            _base.addErrors(repo.getErrors());
             _base.addError(new Error('Projet not found', 404));
             deferred.reject();
           });
@@ -58,8 +58,8 @@
         data.page.title = project.title;
         data.page.description = project.description;
 
-        data.project = {
-          date: project.date ? dateFormat(project.date) : null,
+        data.projectCategory = {
+          date: _base.formatDate(project.date),
           category: project.category_title,
           image: {
             title: project.image_title,
