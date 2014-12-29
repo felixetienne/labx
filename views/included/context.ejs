@@ -1,10 +1,12 @@
 <script type="text/javascript">
   window.currentContext = (function(context){
-    <% if(!meta.hasError){%>
+    <% if(!meta.isErrorPage){%>
 
-      context.version = <%- website.version %>;
-
-      context.projectName = <%- website.title %>;
+      context.project = {
+        title: <%- website.title %>,
+        subtitle: <%- website.subtitle %>,
+        version : <%- website.version %>
+      };
 
     <%}%>
     return context;

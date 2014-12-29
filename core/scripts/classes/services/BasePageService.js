@@ -7,32 +7,57 @@
     var _currentRequest = context.getCurrentRequest();
     var _currentNameParam = _currentRequest.params ? _currentRequest.params
       .name : null;
-    var _pagesRepository = repositoriesFactory.createPagesRepository();
-    var _websitesRepository = repositoriesFactory.createWebsitesRepository();
-    var _projectCategoriesRepository = repositoriesFactory.createProjectCategoriesRepository();
+    var _websitesRepository = null;
+    var _pagesRepository = null;
+    var _projectsRepository = null;
+    var _projectCategoriesRepository = null;
     var _projectsPage = viewHelpers.getProjectsPage();
     var _errors = [];
 
-    this.getProjectCategoriesRepository = function() {
+    function getWebsitesRepository() {
+      if (_websitesRepository === null) {
+        _websitesRepository = repositoriesFactory.createWebsitesRepository();
+      }
+      return _websitesRepository;
+    }
+
+    function getProjectCategoriesRepository() {
+      if (_projectCategoriesRepository === null) {
+        _projectCategoriesRepository = repositoriesFactory.createProjectCategoriesRepository();
+      }
       return _projectCategoriesRepository;
     }
 
+    function getProjectsRepository() {
+      if (_projectsRepository === null) {
+        _projectsRepository = repositoriesFactory.createProjectsRepository();
+      }
+      return _projectsRepository;
+    }
+
+    function getPagesRepository() {
+      if (_pagesRepository === null) {
+        _pagesRepository = repositoriesFactory.createPagesRepository();
+      }
+      return _pagesRepository;
+    }
+
+    this.getWebsitesRepository = getWebsitesRepository;
+
+    this.getProjectCategoriesRepository = getProjectCategoriesRepository;
+
+    this.getProjectsRepository = getProjectsRepository;
+
+    this.getPagesRepository = getPagesRepository;
+
+    this.formatDate = formatDate;
+
+    this.addErrors = addErrors;
+
+    this.addError = addError;
+
     this.getErrors = function() {
       return _errors;
-    }
-
-    this.addErrors = function(errors) {
-      addErrors(errors);
-      return this;
-    }
-
-    this.addError = function(error) {
-      addError(error);
-      return this;
-    }
-
-    this.getProjectsRepository = function() {
-      return _projectsRepository;
     }
 
     this.getCurrentPage = function() {
@@ -45,13 +70,14 @@
 
     this.getWebsiteProperties = function() {
       var deferred = q.defer();
+      var repo = getWebsitesRepository();
 
-      _websitesRepository.getWebsiteProperties(context.getCurrentWebsiteName(),
+      repo.getWebsiteProperties(context.getCurrentWebsiteName(),
         function(x) {
           deferred.resolve(x);
         },
         function() {
-          addErrors(_websitesRepository.getErrors());
+          addErrors(repo.getErrors());
           addError(new Error('Website not found', 404));
           deferred.reject();
         });
@@ -59,29 +85,14 @@
       return deferred.promise;
     }
 
-    this.getPageByName = function() {
-      var deferred = q.defer();
-
-      _pagesRepository.getPageByName(_currentPage, function(x) {
-        deferred.resolve(x);
-      }, function() {
-        addErrors(_pagesRepository.getErrors());
-        addError(new Error('Page "' + _currentPage +
-          '" not found',
-          404));
-        deferred.reject();
-      });
-
-      return deferred.promise;
-    }
-
     this.getMenuPages = function() {
       var deferred = q.defer();
+      var repo = getPagesRepository();
 
-      _pagesRepository.getMenuPages(function(x) {
+      repo.getMenuPages(function(x) {
         deferred.resolve(x);
       }, function() {
-        addErrors(_pagesRepository.getErrors());
+        addErrors(repo.getErrors());
         addError(new Error('Page menu not found', 404));
         deferred.reject();
       });
@@ -91,13 +102,13 @@
 
     this.getMenuProjectCategories = function() {
       var deferred = q.defer();
+      var repo = getProjectCategoriesRepository();
 
-      _projectCategoriesRepository.getMenuProjectCategories(function(x) {
+      repo.getMenuProjectCategories(function(x) {
         deferred.resolve(x);
       }, function() {
-        addErrors(_projectCategoriesRepository.getErrors());
-        addError(new Error('Project category menu not found',
-          404));
+        addErrors(repo.getErrors());
+        addError(new Error('Project category menu not found', 404));
         deferred.reject();
       });
 
@@ -112,14 +123,9 @@
           subtitle: x.website.subtitle || '',
           copyright: x.website.copyright || '',
           version: x.website.version || '',
-          author: x.website.author || ''
-        },
-        page: {
-          docTitle: x.page.doc_title || '',
-          docDescription: x.page.doc_description || '',
-          docKeywords: x.page.doc_keywords || '',
-          title: x.page.title,
-          description: x.page.description
+          author: x.website.author || '',
+          docAuthor: x.website.doc_author || x.website.author || '',
+          docLanguage: x.website.doc_language || ''
         },
         menuPages: getMenuPagesData(x)
       };
@@ -127,8 +133,28 @@
       return data;
     }
 
-    this.formatDate = function(date) {
-      return formatDate(date);
+    this.getDocTitle = function(page, website) {
+      var pageTitle = page.doc_title || page.title || '';
+
+      if (!pageTitle.length) return website.title;
+
+      var titleFormat = website.doc_titleFormat || '';
+
+      if (!titleFormat.length) return pageTitle;
+
+      return titleFormat.replace('{pageTitle}', pageTitle);
+    }
+
+    this.getDocKeywords = function(page, website) {
+      var keywords = page.doc_keywords || page.keywords || '';
+      if (website.doc_keywords) {
+        if (keywords.length) {
+          keywords += ',';
+        }
+        keywords += website.doc_keywords;
+      }
+
+      return keywords;
     }
 
     function formatDate(date) {
@@ -138,51 +164,57 @@
     }
 
     function getMenuPagesData(x) {
-      var pages = [];
+      var menuPages = [];
 
       for (k in x.menuPages) {
         if (!x.menuPages.hasOwnProperty(k)) continue;
-        var page = x.menuPages[k];
-        var isCurrent = isCurrentPage(page.name);
+        var menuPage = x.menuPages[k];
+        var isCurrent = isCurrentPage(menuPage.name);
 
-        pages.push({
-          title: page.title_short,
-          description: page.description_short,
+        menuPages.push({
+          title: menuPage.title_short || menuPage.title || '',
           isCurrent: isCurrent,
-          url: buildPageUrl(page),
-          subMenuPages: getSubMenuPagesData(page.name, isCurrent, x)
+          url: buildPageUrl(menuPage),
+          subMenuPages: getSubMenuPagesData(menuPage.name, isCurrent,
+            x)
         });
       }
 
-      return pages;
+      return menuPages;
     }
 
-    function getSubMenuPagesData(pageName, isCurrent, x) {
-      var subPages = [];
+    function getSubMenuPagesData(menuPageName, isCurrent, x) {
+      var menuPages = [];
 
-      if (pageName === viewHelpers.getProjectsPage()) {
+      if (menuPageName === viewHelpers.getProjectsPage()) {
         for (k in x.menuProjectCategories) {
           if (!x.menuProjectCategories.hasOwnProperty(k)) continue;
           var projectCategory = x.menuProjectCategories[k];
-          var subPage = {
-            title: projectCategory.title,
-            url: buildProjectCategoryUrl(projectCategory),
-            isCurrent: isCurrentSubPage(isCurrent, projectCategory.name)
+          var menuPage = {
+            title: projectCategory.title_short || projectCategory.title ||
+              '',
+            isCurrent: isCurrentSubPage(isCurrent, projectCategory.name),
+            url: buildProjectCategoryUrl(projectCategory)
           };
 
-          subPages.push(subPage);
+          menuPages.push(menuPage);
         }
 
-        var all = {
-          title: 'Tout les projets',
-          url: getProjectsPageUrl(),
-          isCurrent: currentPageIsProjects()
-        };
-
-        subPages.push(all);
+        menuPages.push(getAllProjectsMenuPage());
       }
 
-      return subPages;
+      return menuPages;
+    }
+
+    function getAllProjectsMenuPage() {
+      var currentPageIsProjects = _currentPage === viewHelpers.getProjectsPage();
+      var menuPage = {
+        title: 'Tout les projets',
+        isCurrent: currentPageIsProjects,
+        url: getProjectsPageUrl()
+      };
+
+      return menuPage;
     }
 
     function isCurrentPage(pageName) {
@@ -193,10 +225,6 @@
       if (!parentIsCurrent) return false;
 
       return subPageName === _currentNameParam;
-    }
-
-    function currentPageIsProjects() {
-      return _currentPage === viewHelpers.getProjectsPage();
     }
 
     function getProjectsPageUrl() {

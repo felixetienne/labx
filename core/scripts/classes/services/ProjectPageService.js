@@ -9,7 +9,6 @@
       return q
         .all([
           _base.getWebsiteProperties(),
-          _base.getPageByName(),
           _base.getMenuPages(),
           _base.getMenuProjectCategories(),
           getProjectByName()
@@ -21,10 +20,10 @@
 
       function getProjectByName() {
         var deferred = q.defer();
-        var repo = repositoriesFactory.createProjectsRepository();
+        var request = _base.getCurrentRequest();
+        var repo = _base.getProjectsRepository();
 
-        repo.getProjectByName(_base.getCurrentRequest().params
-          .name,
+        repo.getProjectByName(request.params.name,
           function(x) {
             deferred.resolve(x);
           },
@@ -45,29 +44,45 @@
         errorAction(_base.getErrors(), context);
       }
 
-      function computeData(website, page, menuPages,
+      function computeData(website, menuPages,
         menuProjectCategories, project) {
         var data = _base.getPageData({
           website: website,
-          page: page,
           menuPages: menuPages,
           menuProjectCategories: menuProjectCategories
         });
 
-        data.page.docTitle = project.title;
-        data.page.title = project.title;
-        data.page.description = project.description;
+        data.page = {
+          title: project.title || '',
+          descriptionHtml: project.description_html || '',
+          keywords: getKeywords(project),
+          docTitle: _base.getDocTitle(project, website),
+          docDescription: project.doc_description || project.description_short ||
+            '',
+          docKeywords: _base.getDocKeywords(project, website)
+        };
 
         data.projectCategory = {
           date: _base.formatDate(project.date),
-          category: project.category_title,
+          category: project.category_title || '',
           image: {
-            title: project.image_title,
-            url: project.image_path
+            title: project.image_title || '',
+            url: project.image_path || ''
           }
         };
 
         return data;
+      }
+
+      function getKeywords(project) {
+        var keywords = project.keywords || '';
+        if (project.category_keywords) {
+          if (keywords.length) {
+            keywords += ',';
+          }
+          keywords += project.category_keywords;
+        }
+        return keywords;
       }
     }
   }

@@ -20,6 +20,10 @@
             websites.copyright, \
             websites.version, \
             websites.author, \
+            websites.doc_titleFormat, \
+            websites.doc_author, \
+            websites.doc_keywords, \
+            websites.doc_language, \
 						websites.sorting'
           )
           .from('websites')

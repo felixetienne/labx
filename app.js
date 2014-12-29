@@ -1,6 +1,6 @@
 /**
  * LabX
- * Version 0.1.0
+ * Version 0.1.5
  * Felix-Etienne Tetrault
  * Copyright 2014
  */

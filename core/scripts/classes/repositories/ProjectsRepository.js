@@ -18,11 +18,17 @@
             '\
             projects.id, \
 						projects.title, \
-						projects.description, \
+						projects.description_html, \
+            projects.description_short, \
+            projects.doc_description, \
+            projects.doc_keywords, \
+            projects.doc_title, \
+            projects.keywords, \
 						projects.name, \
             projects.date, \
             projects.sorting, \
             project_categories.title as category_title, \
+            project_categories.keywords as category_keywords, \
             project_categories.sorting as category_sorting'
             // , \
             // images.title as image_title, \

@@ -10,7 +10,6 @@
       return q
         .all([
           _base.getWebsiteProperties(),
-          _base.getPageByName(),
           _base.getMenuPages(),
           _base.getMenuProjectCategories(),
           getProjectsByCategoryName()
@@ -22,10 +21,10 @@
 
       function getProjectsByCategoryName() {
         var deferred = q.defer();
+        var request = _base.getCurrentRequest();
         var repo = _base.getProjectCategoriesRepository();
 
-        repo.getProjectCategoryByName(_base.getCurrentRequest().params
-          .name,
+        repo.getProjectCategoryByName(request.params.name,
           function(x) {
             deferred.resolve(x);
           },
@@ -46,48 +45,53 @@
         errorAction(_base.getErrors(), context);
       }
 
-      function computeData(website, page, menuPages,
-        menuProjectCategories, projectCategory) {
+      function computeData(website, menuPages,
+        menuProjectCategories, projectsCategory) {
         var data = _base.getPageData({
           website: website,
-          page: page,
           menuPages: menuPages,
           menuProjectCategories: menuProjectCategories
         });
 
-        var category = getCategory(projectCategory);
-
-        data.page.docTitle = category.title;
-        data.page.title = category.title;
-        data.page.description = category.description;
+        var category = getCategory(projectsCategory, website);
+        console.log(category);
+        data.page = category.page;
         data.projects = category.projects;
 
         return data;
       }
 
-      function getCategory(projectCategoryResults) {
-        var category = {
+      function getCategory(projectsCategory, website) {
+        var data = {
           projects: []
         };
 
-        for (var i = 0; i < projectCategoryResults.length; i++) {
-          var result = projectCategoryResults[i];
+        for (var i = 0; i < projectsCategory.length; i++) {
+          var category = projectsCategory[i];
           if (i === 0) {
-            category.title = result.title;
-            category.description = result.description;
+            data.page = {
+              title: category.title || '',
+              descriptionHtml: category.description_html || '',
+              keywords: category.keywords || '',
+              docTitle: _base.getDocTitle(category, website),
+              docDescription: category.doc_description ||
+                category.description_short || '',
+              docKeywords: _base.getDocKeywords(category, website)
+            };
           }
 
           var project = {
-            title: result.project_title_short,
-            description: result.project_description_short,
-            date: _base.formatDate(result.project_date),
-            url: buildProjectUrl(result.project_name)
+            title: category.project_title_short ||
+              category.project_title || '',
+            description: category.project_description_short,
+            date: _base.formatDate(category.project_date),
+            url: buildProjectUrl(category.project_name)
           };
 
-          category.projects.push(project);
+          data.projects.push(project);
         }
 
-        return category;
+        return data;
       }
     }
 

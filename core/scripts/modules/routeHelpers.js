@@ -21,7 +21,7 @@
             },
             function(e, c) {
               res.render(viewHelpers.getErrorPage(), {
-                meta: new ModelMetaData(e)
+                meta: new ModelMetaData(e).asErrorPage()
               });
             });
       }

@@ -18,8 +18,14 @@
             '\
             project_categories.id, \
             project_categories.title, \
-            project_categories.description, \
+            project_categories.description_html, \
+            project_categories.description_short, \
+            project_categories.doc_description, \
+            project_categories.doc_keywords, \
+            project_categories.doc_title, \
+            project_categories.keywords, \
             projects.id as project_id, \
+            projects.title as project_title, \
             projects.title_short as project_title_short, \
             projects.description_short as project_description_short, \
             projects.name as project_name, \
@@ -82,6 +88,7 @@
             project_categories.id, \
             project_categories.name, \
             project_categories.title, \
+            project_categories.title_short, \
             project_categories.sorting'
           )
           .from('project_categories')
