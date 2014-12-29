@@ -1,25 +1,25 @@
-(function(q, dateFormat, BasePageService, Error) {
+(function(q, dateFormat, BaseViewService, BaseProjectsViewService, Error) {
 
   module.exports = function(context, repositoriesFactory, viewHelpers) {
-    var _base = new BasePageService(context, repositoriesFactory,
+    var _base = new BaseViewService(context, repositoriesFactory,
       viewHelpers, dateFormat);
-    var _projectPage = viewHelpers.getProjectPage();
+    var _baseProjects = new BaseProjectsViewService(viewHelpers);
 
     this.getData = function(successAction, errorAction) {
 
       return q
         .all([
-          _base.getWebsiteProperties(),
+          _base.getWebsite(),
           _base.getMenuPages(),
           _base.getMenuProjectCategories(),
-          getProjectsByCategoryName()
+          getProjectCategory()
         ])
         .spread(computeData)
         .then(onSuccess)
         .fail(onError)
         .done();
 
-      function getProjectsByCategoryName() {
+      function getProjectCategory() {
         var deferred = q.defer();
         var request = _base.getCurrentRequest();
         var repo = _base.getProjectCategoriesRepository();
@@ -46,28 +46,27 @@
       }
 
       function computeData(website, menuPages,
-        menuProjectCategories, projectsCategory) {
-        var data = _base.getPageData({
+        menuProjectCategories, projectCategory) {
+        var data = _base.getBasicViewData({
           website: website,
           menuPages: menuPages,
           menuProjectCategories: menuProjectCategories
         });
 
-        var category = getCategory(projectsCategory, website);
-        console.log(category);
-        data.page = category.page;
-        data.projects = category.projects;
+        var viewData = getViewData(projectCategory, website);
+        data.page = viewData.page;
+        data.projects = viewData.projects;
 
         return data;
       }
 
-      function getCategory(projectsCategory, website) {
+      function getViewData(projectCategory, website) {
         var data = {
           projects: []
         };
 
-        for (var i = 0; i < projectsCategory.length; i++) {
-          var category = projectsCategory[i];
+        for (var i = 0; i < projectCategory.length; i++) {
+          var category = projectCategory[i];
           if (i === 0) {
             data.page = {
               title: category.title || '',
@@ -85,7 +84,7 @@
               category.project_title || '',
             description: category.project_description_short,
             date: _base.formatDate(category.project_date),
-            url: buildProjectUrl(category.project_name)
+            url: _baseProjects.buildUrl(category.project_name)
           };
 
           data.projects.push(project);
@@ -94,16 +93,11 @@
         return data;
       }
     }
-
-    function buildProjectUrl(projectName) {
-      var url = '/' + _projectPage + '/' + projectName;
-
-      return url;
-    }
   }
 
 })(
   require('q'),
   require('dateformat'),
-  require('./BasePageService'),
+  require('./BaseViewService'),
+  require('./BaseProjectsViewService'),
   require('../Error'));

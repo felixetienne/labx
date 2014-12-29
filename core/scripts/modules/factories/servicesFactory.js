@@ -1,18 +1,25 @@
-(function(SimplePageService, ProjectPageService, ProjectCategoryPageService) {
+(function(SimpleViewService, ProjectViewService, ProjectCategoryViewService,
+  ProjectCategoriesViewService) {
 
   module.exports = (function(mod, repositoriesFactory, viewHelpers) {
 
     mod.createPageService = function(context, argsObj) {
 
-      if (argsObj.isProjectCategoriesPage)
-        return new ProjectCategoryPageService(context,
+      if (argsObj.isProjectCategoryPage)
+        return new ProjectCategoryViewService(context,
           repositoriesFactory, viewHelpers);
 
-      if (argsObj.isProjectDetailsPage)
-        return new ProjectPageService(context, repositoriesFactory,
+      if (argsObj.isProjectPage)
+        return new ProjectViewService(context, repositoriesFactory,
           viewHelpers);
 
-      return new SimplePageService(context, repositoriesFactory,
+      var page = context.getCurrentPage();
+
+      if (page === viewHelpers.getProjectsPage())
+        return new ProjectCategoriesViewService(context,
+          repositoriesFactory, viewHelpers);
+
+      return new SimpleViewService(context, repositoriesFactory,
         viewHelpers);
     };
 
@@ -23,6 +30,7 @@
     require('../viewHelpers'));
 
 })(
-  require('../../classes/services/SimplePageService'),
-  require('../../classes/services/ProjectPageService'),
-  require('../../classes/services/ProjectCategoryPageService'));
+  require('../../classes/services/SimpleViewService'),
+  require('../../classes/services/ProjectViewService'),
+  require('../../classes/services/ProjectCategoryViewService'),
+  require('../../classes/services/ProjectCategoriesViewService'));

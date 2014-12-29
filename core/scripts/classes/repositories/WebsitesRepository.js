@@ -7,7 +7,7 @@
       return _base.getErrors();
     }
 
-    this.getWebsiteProperties = function(websiteName, action, emptyAction) {
+    this.getWebsiteByName = function(websiteName, action, emptyAction) {
 
       if (_base.isInvalidAction(action)) return;
 

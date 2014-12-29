@@ -1,24 +1,24 @@
-(function(q, dateFormat, BasePageService, Error) {
+(function(q, dateFormat, BaseViewService, Error) {
 
   module.exports = function(context, repositoriesFactory, viewHelpers) {
-    var _base = new BasePageService(context, repositoriesFactory,
+    var _base = new BaseViewService(context, repositoriesFactory,
       viewHelpers, dateFormat);
 
     this.getData = function(successAction, errorAction) {
 
       return q
         .all([
-          _base.getWebsiteProperties(),
+          _base.getWebsite(),
           _base.getMenuPages(),
           _base.getMenuProjectCategories(),
-          getProjectByName()
+          getProject()
         ])
         .spread(computeData)
         .then(onSuccess)
         .fail(onError)
         .done();
 
-      function getProjectByName() {
+      function getProject() {
         var deferred = q.defer();
         var request = _base.getCurrentRequest();
         var repo = _base.getProjectsRepository();
@@ -46,11 +46,21 @@
 
       function computeData(website, menuPages,
         menuProjectCategories, project) {
-        var data = _base.getPageData({
+        var data = _base.getBasicViewData({
           website: website,
           menuPages: menuPages,
           menuProjectCategories: menuProjectCategories
         });
+
+        var viewData = getViewData(project, website);
+        data.page = viewData.page;
+        data.project = viewData.project;
+
+        return data;
+      }
+
+      function getViewData(project, website) {
+        var data = {};
 
         data.page = {
           title: project.title || '',
@@ -62,7 +72,7 @@
           docKeywords: _base.getDocKeywords(project, website)
         };
 
-        data.projectCategory = {
+        data.project = {
           date: _base.formatDate(project.date),
           category: project.category_title || '',
           image: {
@@ -90,5 +100,5 @@
 })(
   require('q'),
   require('dateformat'),
-  require('./BasePageService'),
+  require('./BaseViewService'),
   require('../Error'));

@@ -25,12 +25,12 @@
 
   var page = viewHelpers.getProjectsPage();
   app.get('/' + page + '/:name', routeHelpers.getRoute(page, {
-    isProjectCategoriesPage: true
+    isProjectCategoryPage: true
   }));
 
   var page = viewHelpers.getProjectPage();
   app.get('/' + page + '/:name', routeHelpers.getRoute(page, {
-    isProjectDetailsPage: true
+    isProjectPage: true
   }));
 
   app.listen(port, function() {

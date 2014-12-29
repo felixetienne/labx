@@ -50,6 +50,10 @@
 
     this.getPagesRepository = getPagesRepository;
 
+    this.getDocTitle = getDocTitle;
+
+    this.getDocKeywords = getDocKeywords;
+
     this.formatDate = formatDate;
 
     this.addErrors = addErrors;
@@ -68,11 +72,11 @@
       return _currentRequest;
     }
 
-    this.getWebsiteProperties = function() {
+    this.getWebsite = function() {
       var deferred = q.defer();
       var repo = getWebsitesRepository();
 
-      repo.getWebsiteProperties(context.getCurrentWebsiteName(),
+      repo.getWebsiteByName(context.getCurrentWebsiteName(),
         function(x) {
           deferred.resolve(x);
         },
@@ -115,7 +119,22 @@
       return deferred.promise;
     }
 
-    this.getPageData = function(x) {
+    this.getPage = function() {
+      var deferred = q.defer();
+      var repo = getPagesRepository();
+
+      repo.getPageByName(_currentPage, function(x) {
+        deferred.resolve(x);
+      }, function() {
+        addErrors(repo.getErrors());
+        addError(new Error('Page "' + page + '" not found', 404));
+        deferred.reject();
+      });
+
+      return deferred.promise;
+    }
+
+    this.getBasicViewData = function(x) {
       var data = {
         website: {
           date: formatDate(x.website.date || Date.now()),
@@ -133,19 +152,21 @@
       return data;
     }
 
-    this.getDocTitle = function(page, website) {
-      var pageTitle = page.doc_title || page.title || '';
+    this.getStandardPageData = function(page, website) {
+      var data = {
+        title: page.title || '',
+        descriptionHtml: page.description_html || '',
+        keywords: page.keywords || '',
+        docTitle: getDocTitle(page, website),
+        docDescription: page.doc_description || page.description_short ||
+          '',
+        docKeywords: getDocKeywords(page, website)
+      };
 
-      if (!pageTitle.length) return website.title;
-
-      var titleFormat = website.doc_titleFormat || '';
-
-      if (!titleFormat.length) return pageTitle;
-
-      return titleFormat.replace('{pageTitle}', pageTitle);
+      return data;
     }
 
-    this.getDocKeywords = function(page, website) {
+    function getDocKeywords(page, website) {
       var keywords = page.doc_keywords || page.keywords || '';
       if (website.doc_keywords) {
         if (keywords.length) {
@@ -155,6 +176,18 @@
       }
 
       return keywords;
+    }
+
+    function getDocTitle(page, website) {
+      var pageTitle = page.doc_title || page.title || '';
+
+      if (!pageTitle.length) return website.title;
+
+      var titleFormat = website.doc_titleFormat || '';
+
+      if (!titleFormat.length) return pageTitle;
+
+      return titleFormat.replace('{pageTitle}', pageTitle);
     }
 
     function formatDate(date) {
