@@ -87,7 +87,9 @@
           .select(
             '\
             project_categories.id, \
+            project_categories.name, \
             project_categories.title, \
+            project_categories.title_short, \
             project_categories.description_short, \
             projects.id as project_id, \
             projects.title as project_title, \

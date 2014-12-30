@@ -71,8 +71,9 @@
 
           if (category.id !== lastCategoryId) {
             var projectCategory = {
-              title: category.title || '',
+              title: category.title_short || category.title || '',
               description: category.description_short || '',
+              url: _base.buildProjectCategoryUrl(category.name),
               projects: []
             };
 

@@ -14,9 +14,9 @@
           .getData(
             function(x, c) {
               x.meta = new ModelMetaData();
-              console.log('\n\n===== DEBUG =====\n');
-              console.log(x);
-              console.log('\n=================\n\n');
+              // console.log('\n\n===== DEBUG =====\n');
+              // console.log(x);
+              // console.log('\n=================\n\n');
               res.render(getViewPath(c, argsObj), x);
             },
             function(e, c) {
@@ -32,7 +32,7 @@
     function getViewPath(context, argsObj) {
       var page;
 
-      if (argsObj.isProjectsCategoryPage) {
+      if (argsObj.isProjectCategoryPage) {
         page = 'projectCategory';
       } else {
         page = context.getCurrentPage();

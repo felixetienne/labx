@@ -1,0 +1,7 @@
+<h1>Error</h1>
+<% meta.getErrors().forEach(function(error){
+  var code = error.getCode();
+  var message = error.getMessage(); %>
+  <p><%- code %>. <%- message %></p>
+<%})%>
+<a href="/">Retourner à la page d'accueil.</a>

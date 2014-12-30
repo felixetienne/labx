@@ -1,0 +1,31 @@
+<div class="container mod-content mod-content--main">
+  <% include included/header.ejs %>
+  <% include included/standardContent.ejs %>
+  <%
+  var iTotal = projectCategories.length;
+  for(var i=0; i<iTotal; i++){
+    var projectCategory = projectCategories[i]; %>
+    <% if(i===0){%>
+      <ul>
+    <%}%>
+      <li>
+        <a href="<%- projectCategory.url %>"><%- projectCategory.title %><br />
+        <%- projectCategory.description %></a>
+        <%
+        var jTotal = projectCategory.projects.length;
+        for(var j=0; j<jTotal; j++){
+          var project = projectCategory.projects[j]; %>
+          <% if(j===0){%>
+            <ul>
+          <%}%>
+            <li><a href="<%- project.url %>"><%- project.title %></a></li>
+          <% if(j===jTotal-1){%>
+            </ul>
+          <%}%>
+        <%}%>
+      </li>
+    <% if(i===iTotal-1){%>
+      </ul>
+    <%}%>
+  <%}%>
+</div>

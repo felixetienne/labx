@@ -50,6 +50,8 @@
 
     this.getPagesRepository = getPagesRepository;
 
+    this.buildProjectCategoryUrl = buildProjectCategoryUrl;
+
     this.getDocTitle = getDocTitle;
 
     this.getDocKeywords = getDocKeywords;
@@ -227,7 +229,7 @@
             title: projectCategory.title_short || projectCategory.title ||
               '',
             isCurrent: isCurrentSubPage(isCurrent, projectCategory.name),
-            url: buildProjectCategoryUrl(projectCategory)
+            url: buildProjectCategoryUrl(projectCategory.name)
           };
 
           menuPages.push(menuPage);
@@ -276,8 +278,8 @@
       return url + page.name;
     }
 
-    function buildProjectCategoryUrl(projectCategory) {
-      var url = '/' + _projectsPage + '/' + projectCategory.name;
+    function buildProjectCategoryUrl(categoryName) {
+      var url = '/' + _projectsPage + '/' + categoryName;
 
       return url;
     }
