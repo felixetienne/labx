@@ -2,7 +2,6 @@
 
   module.exports = function(pg, bricks, config) {
     var _base = new BaseRepository(pg, config);
-    var _imageFolder = config.getImageFolder();
 
     this.getErrors = function() {
       return _base.getErrors();
@@ -29,30 +28,20 @@
             projects.sorting, \
             project_categories.title as category_title, \
             project_categories.keywords as category_keywords, \
-            project_categories.sorting as category_sorting'
-            // , \
-            // images.title as image_title, \
-            // images.name as image_name, \
-            // images.sorting as image_sorting'
+            project_categories.sorting as category_sorting, \
+            get_project_image_list(projects.id, FALSE) as image_list'
           )
           .from('projects')
-          // .join('images', {
-          //   'projects.id': 'images.id'
-          // })
           .join('project_categories', {
             'projects.category_id': 'project_categories.id'
           })
-          //.where('images.thumbnail', false)
-          //.where('images.active', true)
           .where('projects.active', true)
           .where('project_categories.active', true)
           .where('projects.name', projectName)
-          .orderBy('projects.sorting ASC', 'category_sorting ASC'
-            //, 'image_sorting ASC'
-          )
+          .orderBy('projects.sorting ASC', 'category_sorting ASC')
           .limit(1)
           .toString();
-
+        console.log(query);
         client
           .query(query, function(err, res) {
 
@@ -65,9 +54,13 @@
 
             if (_base.hasResults(res)) {
               var data = res.rows[0];
+              console.log(data.image_list);
+              data.images = _base.extractImages(data.image_list);
 
-              data.image_path = _imageFolder + data.image_name +
-                '.jpg';
+              for (var i = 0; i < data.images.length; i++) {
+                data.images[i].path = _base.buildImagePath(
+                  data.images[i].name);
+              }
 
               action(data);
             } else if (typeof emptyAction === 'function') {

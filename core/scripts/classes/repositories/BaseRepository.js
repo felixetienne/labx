@@ -2,7 +2,16 @@
 
   module.exports = function(pg, config) {
     var _fullDatabaseUrl = config.getDatabaseUrl() + "?ssl=true";
+    var _imageFolder = null;
     var _errors = [];
+
+    function getImageFolder() {
+      if (_imageFolder === null) {
+        _imageFolder = config.getImageFolder();
+      }
+
+      return _imageFolder;
+    }
 
     this.imageManager = new ImageManager();
 
@@ -34,6 +43,43 @@
 
     this.close = function(client) {
       client.end();
+    }
+
+    this.extractImages = function(imageList) {
+      var images = [];
+
+      if (!imageList) return images;
+
+      var imagesParts = imageList.split(';');
+
+      for (var i = 0; i < imagesParts.length; i++) {
+        var imagesPart = imagesParts[i];
+
+        if (!imagesPart) continue;
+
+        var imageParts = imagesPart.split(',');
+        var image = {};
+
+        for (var j = 0; j < imageParts.length; j++) {
+          var part = imageParts[j];
+
+          if (j === 0) {
+            image.name = part;
+          } else if (j === 1) {
+            image.title = part;
+          }
+        }
+
+        images.push(image);
+      }
+
+      return images;
+    }
+
+    this.buildImagePath = function(imageName) {
+      var path = getImageFolder() + imageName + '.jpg';
+
+      return path;
     }
   }
 

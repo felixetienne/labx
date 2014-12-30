@@ -75,10 +75,7 @@
         data.project = {
           date: _base.formatDate(project.date),
           category: project.category_title || '',
-          image: {
-            title: project.image_title || '',
-            url: project.image_path || ''
-          }
+          images: project.images
         };
 
         return data;
