@@ -9,9 +9,12 @@
       .name : null;
     var _websitesRepository = null;
     var _pagesRepository = null;
+    var _eventsRepository = null;
     var _projectsRepository = null;
     var _projectCategoriesRepository = null;
     var _projectsPage = viewHelpers.getProjectsPage();
+    var _eventsPage = viewHelpers.getEventsPage();
+    var _eventPage = viewHelpers.getEventPage();
     var _errors = [];
 
     function getWebsitesRepository() {
@@ -35,6 +38,13 @@
       return _projectsRepository;
     }
 
+    function getEventsRepository() {
+      if (_eventsRepository === null) {
+        _eventsRepository = repositoriesFactory.createEventsRepository();
+      }
+      return _eventsRepository;
+    }
+
     function getPagesRepository() {
       if (_pagesRepository === null) {
         _pagesRepository = repositoriesFactory.createPagesRepository();
@@ -49,6 +59,8 @@
     this.getProjectsRepository = getProjectsRepository;
 
     this.getPagesRepository = getPagesRepository;
+
+    this.getEventsRepository = getEventsRepository;
 
     this.buildProjectCategoryUrl = buildProjectCategoryUrl;
 
@@ -99,7 +111,22 @@
         deferred.resolve(x);
       }, function() {
         addErrors(repo.getErrors());
-        addError(new Error('Page menu not found', 404));
+        //addError(new Error('Page menu not found', 404));
+        deferred.reject();
+      });
+
+      return deferred.promise;
+    }
+
+    this.getMenuEvents = function() {
+      var deferred = q.defer();
+      var repo = getEventsRepository();
+
+      repo.getMenuEvents(function(x) {
+        deferred.resolve(x);
+      }, function() {
+        addErrors(repo.getErrors());
+        //addError(new Error('Event menu not found', 404));
         deferred.reject();
       });
 
@@ -114,7 +141,7 @@
         deferred.resolve(x);
       }, function() {
         addErrors(repo.getErrors());
-        addError(new Error('Project category menu not found', 404));
+        //addError(new Error('Project category menu not found', 404));
         deferred.reject();
       });
 
@@ -210,8 +237,8 @@
           title: menuPage.title_short || menuPage.title || '',
           isCurrent: isCurrent,
           url: buildPageUrl(menuPage),
-          subMenuPages: getSubMenuPagesData(menuPage.name, isCurrent,
-            x)
+          subMenuPages: getSubMenuPagesData(
+            menuPage.name, isCurrent, x)
         });
       }
 
@@ -221,7 +248,24 @@
     function getSubMenuPagesData(menuPageName, isCurrent, x) {
       var menuPages = [];
 
-      if (menuPageName === viewHelpers.getProjectsPage()) {
+      if (menuPageName === _eventsPage) {
+
+        for (k in x.menuEvents) {
+          if (!x.menuEvents.hasOwnProperty(k)) continue;
+          var event = x.menuEvents[k];
+          var menuPage = {
+            title: event.title_short || event.title || '',
+            isCurrent: isCurrentSubPage(isCurrent, event.name),
+            url: buildEventUrl(event.name)
+          };
+
+          menuPages.push(menuPage);
+        }
+
+        menuPages.push(getAllEventsMenuPage());
+
+      } else if (menuPageName === _projectsPage) {
+
         for (k in x.menuProjectCategories) {
           if (!x.menuProjectCategories.hasOwnProperty(k)) continue;
           var projectCategory = x.menuProjectCategories[k];
@@ -241,12 +285,21 @@
       return menuPages;
     }
 
+    function getAllEventsMenuPage() {
+      var menuPage = {
+        title: 'Tout les evenements',
+        isCurrent: _currentPage === _eventsPage,
+        url: '/' + _eventsPage
+      };
+
+      return menuPage;
+    }
+
     function getAllProjectsMenuPage() {
-      var currentPageIsProjects = _currentPage === viewHelpers.getProjectsPage();
       var menuPage = {
         title: 'Tout les projets',
-        isCurrent: currentPageIsProjects,
-        url: getProjectsPageUrl()
+        isCurrent: _currentPage === _projectsPage,
+        url: '/' + _projectsPage
       };
 
       return menuPage;
@@ -262,12 +315,6 @@
       return subPageName === _currentNameParam;
     }
 
-    function getProjectsPageUrl() {
-      var url = '/';
-
-      return url + viewHelpers.getProjectsPage();
-    }
-
     function buildPageUrl(page) {
       if (page.name === viewHelpers.getProjectPage()) return null;
 
@@ -276,6 +323,12 @@
       if (page.name === viewHelpers.getIndexPage()) return url;
 
       return url + page.name;
+    }
+
+    function buildEventUrl(eventName) {
+      var url = '/' + _eventPage + '/' + eventName;
+
+      return url;
     }
 
     function buildProjectCategoryUrl(categoryName) {

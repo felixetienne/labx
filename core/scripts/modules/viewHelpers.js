@@ -8,7 +8,8 @@
     var projects = 'projets';
     var project = 'projet';
     var services = 'services';
-    var events = 'in-progress';
+    var event = 'in-progress';
+    var events = 'in-progress-events';
     var curriculumVitae = 'curriculum-vitae';
 
     mod.getView = function(pageName) {
@@ -25,6 +26,10 @@
         case
         about:
           return 'about';
+
+        case
+        event:
+          return 'event';
 
         case
         events:
@@ -74,6 +79,9 @@
     };
     mod.getServicesPage = function() {
       return services;
+    };
+    mod.getEventPage = function() {
+      return event;
     };
     mod.getEventsPage = function() {
       return events;

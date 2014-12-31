@@ -60,11 +60,6 @@
 
               data.images = _base.extractImages(data.image_list);
 
-              for (var i = 0; i < data.images.length; i++) {
-                data.images[i].path = _base.buildImagePath(
-                  data.images[i].name);
-              }
-
               action(data);
             } else if (typeof emptyAction === 'function') {
               emptyAction();

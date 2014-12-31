@@ -12,25 +12,25 @@
           _base.getMenuPages(),
           _base.getMenuEvents(),
           _base.getMenuProjectCategories(),
-          getProject()
+          getEvent()
         ])
         .spread(computeData)
         .then(onSuccess)
         .fail(onError)
         .done();
 
-      function getProject() {
+      function getEvent() {
         var deferred = q.defer();
         var request = _base.getCurrentRequest();
-        var repo = _base.getProjectsRepository();
-
-        repo.getProjectByName(request.params.name,
+        var repo = _base.getEventsRepository();
+        console.log(request.params.name);
+        repo.getEventByName(request.params.name,
           function(x) {
             deferred.resolve(x);
           },
           function() {
             _base.addErrors(repo.getErrors());
-            _base.addError(new Error('Projet not found', 404));
+            _base.addError(new Error('Event not found', 404));
             deferred.reject();
           });
 
@@ -46,7 +46,7 @@
       }
 
       function computeData(website, menuPages, menuEvents,
-        menuProjectCategories, project) {
+        menuProjectCategories, event) {
         var data = _base.getBasicViewData({
           website: website,
           menuPages: menuPages,
@@ -54,44 +54,32 @@
           menuProjectCategories: menuProjectCategories
         });
 
-        var viewData = getViewData(project, website);
+        var viewData = getViewData(event, website);
         data.page = viewData.page;
-        data.project = viewData.project;
+        data.event = viewData.event;
 
         return data;
       }
 
-      function getViewData(project, website) {
+      function getViewData(event, website) {
         var data = {};
 
         data.page = {
-          title: project.title || '',
-          descriptionHtml: project.description_html || '',
-          keywords: getKeywords(project),
-          docTitle: _base.getDocTitle(project, website),
-          docDescription: project.doc_description || project.description_short ||
+          title: event.title || '',
+          descriptionHtml: event.description_html || '',
+          keywords: event.keywords,
+          docTitle: _base.getDocTitle(event, website),
+          docDescription: event.doc_description || event.description_short ||
             '',
-          docKeywords: _base.getDocKeywords(project, website)
+          docKeywords: _base.getDocKeywords(event, website)
         };
 
-        data.project = {
-          date: _base.formatDate(project.date),
-          category: project.category_title || '',
-          images: project.images
+        data.event = {
+          date: _base.formatDate(event.date),
+          images: event.images
         };
 
         return data;
-      }
-
-      function getKeywords(project) {
-        var keywords = project.keywords || '';
-        if (project.category_keywords) {
-          if (keywords.length) {
-            keywords += ',';
-          }
-          keywords += project.category_keywords;
-        }
-        return keywords;
       }
     }
   }

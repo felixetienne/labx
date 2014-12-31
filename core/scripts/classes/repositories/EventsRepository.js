@@ -24,7 +24,8 @@
             events.doc_title, \
             events.doc_keywords, \
             events.keywords, \
-            events.id'\
+            events.id, \
+            get_event_image_list(events.id, FALSE) as image_list'
           )
           .from('events')
           .where('events.active', true)
@@ -49,8 +50,7 @@
             if (_base.hasResults(res)) {
               var data = res.rows[0];
 
-              data.image_path = _imageFolder + data.image_name +
-                '.jpg';
+              data.images = _base.extractImages(data.image_list);
 
               action(data);
             } else if (typeof emptyAction === 'function') {
@@ -62,8 +62,7 @@
       });
     }
 
-    this.getMenuEvents = function(maxEvents, action,
-      emptyAction) {
+    this.getAllEvents = function(action, emptyAction) {
       if (_base.isInvalidAction(action)) return;
 
       _base.open(function(client) {
@@ -74,15 +73,72 @@
             events.date, \
             events.title, \
             events.title_short, \
+            events.description_short, \
             events.sorting, \
-            events.id'\
+            events.id, \
+            get_event_image_list(events.id, TRUE) as image_list'
           )
           .from('events')
           .where('events.active', true)
-          .where('events.name', eventName)
           .orderBy(
             'events.date DESC',
-            'events.sorting ASC',
+            'events.sorting ASC'
+          )
+          .toString();
+
+        client
+          .query(query, function(err, res) {
+
+            if (err) {
+              _base.close(client);
+              _base.addError(new Error(err, 500));
+              emptyAction();
+              return;
+            }
+
+            if (_base.hasResults(res)) {
+              var data = [];
+
+              res.rows.forEach(function(row) {
+
+                row.images = _base.extractImages(
+                  row.image_list);
+
+                data.push(row);
+              });
+
+              action(data);
+            } else if (typeof emptyAction === 'function') {
+              emptyAction();
+            }
+
+            _base.close(client);
+          });
+      });
+    }
+
+    this.getMenuEvents = function(action,
+      emptyAction) {
+      if (_base.isInvalidAction(action)) return;
+
+      var maxEvents = config.getMaximumEventsInMenu();
+
+      _base.open(function(client) {
+        var query = bricks
+          .select(
+            '\
+            events.name, \
+            events.date, \
+            events.title, \
+            events.title_short, \
+            events.sorting, \
+            events.id'
+          )
+          .from('events')
+          .where('events.active', true)
+          .orderBy(
+            'events.date DESC',
+            'events.sorting ASC'
           );
 
         if (maxEvents) {
@@ -102,10 +158,11 @@
             }
 
             if (_base.hasResults(res)) {
-              var data = res.rows[0];
+              var data = [];
 
-              data.image_path = _imageFolder + data.image_name +
-                '.jpg';
+              res.rows.forEach(function(row) {
+                data.push(row);
+              });
 
               action(data);
             } else if (typeof emptyAction === 'function') {

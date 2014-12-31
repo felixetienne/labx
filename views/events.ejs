@@ -1,4 +1,17 @@
 <div class="container mod-content mod-content--main">
   <% include included/header.ejs %>
   <% include included/standardContent.ejs %>
+  <%
+  for(var i=0; i<events.length; i++){
+    var event = events[i]; %>
+    <article>
+      <h1><%- event.date %> - <%- event.title %></h1>
+      <%
+      for(var i=0; i<event.images.length; i++){
+        var image = event.images[i]; %>
+        <img src="<%- image.path %>" alt="<%- image.title %>" />
+      <%}%>
+      <a href="<%- event.url %>">Lire plus</a>
+    </article>
+  <%}%>
 </div>

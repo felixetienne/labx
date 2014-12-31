@@ -1,4 +1,5 @@
-(function(SimpleViewService, ProjectViewService, ProjectCategoryViewService,
+(function(SimpleViewService, EventViewService, EventsViewService,
+  ProjectViewService, ProjectCategoryViewService,
   ProjectCategoriesViewService) {
 
   module.exports = (function(mod, repositoriesFactory, viewHelpers) {
@@ -13,10 +14,18 @@
         return new ProjectViewService(context, repositoriesFactory,
           viewHelpers);
 
+      if (argsObj.isEventPage)
+        return new EventViewService(context, repositoriesFactory,
+          viewHelpers);
+
       var page = context.getCurrentPage();
 
       if (page === viewHelpers.getProjectsPage())
         return new ProjectCategoriesViewService(context,
+          repositoriesFactory, viewHelpers);
+
+      if (page === viewHelpers.getEventsPage())
+        return new EventsViewService(context,
           repositoriesFactory, viewHelpers);
 
       return new SimpleViewService(context, repositoriesFactory,
@@ -31,6 +40,8 @@
 
 })(
   require('../../classes/services/SimpleViewService'),
+  require('../../classes/services/EventViewService'),
+  require('../../classes/services/EventsViewService'),
   require('../../classes/services/ProjectViewService'),
   require('../../classes/services/ProjectCategoryViewService'),
   require('../../classes/services/ProjectCategoriesViewService'));

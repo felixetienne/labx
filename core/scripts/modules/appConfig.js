@@ -5,6 +5,7 @@
     var _imageFolder = '/medias/images/tmp/';
     var _productionType = 'prod';
     var _developmentType = 'dev';
+    var _maximumEventsInMenu = 10;
     var _type, _databaseUrl, _port;
 
     updateFromEnvFile();
@@ -17,7 +18,9 @@
 
       return this;
     }
-
+    mod.getMaximumEventsInMenu = function() {
+      return _maximumEventsInMenu;
+    }
     mod.getImageFolder = function() {
       return _imageFolder;
     }

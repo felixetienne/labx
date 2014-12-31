@@ -12,25 +12,24 @@
           _base.getMenuPages(),
           _base.getMenuEvents(),
           _base.getMenuProjectCategories(),
-          getProject()
+          _base.getPage(),
+          getEvents()
         ])
         .spread(computeData)
         .then(onSuccess)
         .fail(onError)
         .done();
 
-      function getProject() {
+      function getEvents() {
         var deferred = q.defer();
-        var request = _base.getCurrentRequest();
-        var repo = _base.getProjectsRepository();
+        var repo = _base.getEventsRepository();
 
-        repo.getProjectByName(request.params.name,
-          function(x) {
+        repo.getAllEvents(function(x) {
             deferred.resolve(x);
           },
           function() {
             _base.addErrors(repo.getErrors());
-            _base.addError(new Error('Projet not found', 404));
+            _base.addError(new Error('Events not found', 404));
             deferred.reject();
           });
 
@@ -46,7 +45,7 @@
       }
 
       function computeData(website, menuPages, menuEvents,
-        menuProjectCategories, project) {
+        menuProjectCategories, page, events) {
         var data = _base.getBasicViewData({
           website: website,
           menuPages: menuPages,
@@ -54,44 +53,38 @@
           menuProjectCategories: menuProjectCategories
         });
 
-        var viewData = getViewData(project, website);
+        var viewData = getViewData(page, events, website);
         data.page = viewData.page;
-        data.project = viewData.project;
+        data.events = viewData.events;
 
         return data;
       }
 
-      function getViewData(project, website) {
-        var data = {};
-
-        data.page = {
-          title: project.title || '',
-          descriptionHtml: project.description_html || '',
-          keywords: getKeywords(project),
-          docTitle: _base.getDocTitle(project, website),
-          docDescription: project.doc_description || project.description_short ||
-            '',
-          docKeywords: _base.getDocKeywords(project, website)
+      function getViewData(page, events, website) {
+        var data = {
+          page: _base.getStandardPageData(page, website),
+          events: []
         };
-
-        data.project = {
-          date: _base.formatDate(project.date),
-          category: project.category_title || '',
-          images: project.images
-        };
-
-        return data;
-      }
-
-      function getKeywords(project) {
-        var keywords = project.keywords || '';
-        if (project.category_keywords) {
-          if (keywords.length) {
-            keywords += ',';
-          }
-          keywords += project.category_keywords;
+        var _eventPage = viewHelpers.getEventPage();
+        var builUrl = function(eventName) {
+          var url = '/' + _eventPage + '/' + eventName;
+          return url;
         }
-        return keywords;
+
+        for (var i = 0; i < events.length; i++) {
+          var event = events[i];
+          var eventData = {
+            title: event.title_short || event.title || '',
+            description: event.description_short || '',
+            date: _base.formatDate(event.date),
+            url: builUrl(event.name),
+            images: event.images
+          };
+
+          data.events.push(eventData);
+        }
+
+        return data;
       }
     }
   }

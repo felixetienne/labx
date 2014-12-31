@@ -64,11 +64,6 @@
                 row.project_images = _base.extractImages(
                   row.project_image_list);
 
-                for (var i = 0; i < row.project_images.length; i++) {
-                  row.project_images[i].path = _base.buildImagePath(
-                    row.project_images[i].name);
-                }
-
                 data.push(row);
               });
 
@@ -134,11 +129,6 @@
                 row.project_images = _base.extractImages(
                   row.project_image_list);
 
-                for (var i = 0; i < row.project_images.length; i++) {
-                  row.project_images[i].path = _base.buildImagePath(
-                    row.project_images[i].name);
-                }
-
                 data.push(row);
               });
 
@@ -182,6 +172,7 @@
 
             if (_base.hasResults(res)) {
               var data = [];
+
               res.rows.forEach(function(row) {
                 data.push(row);
               });

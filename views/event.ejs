@@ -1,0 +1,9 @@
+<div class="container mod-content mod-content--main">
+  <% include included/header.ejs %>
+  <% include included/standardContent.ejs %>
+  <%
+  for(var i=0; i< event.images.length; i++){
+    var image = event.images[i]; %>
+    <img src="<%- image.path %>" alt="<%- image.title %>" />
+    <%}%>
+</div>

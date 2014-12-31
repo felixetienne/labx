@@ -1,10 +1,14 @@
-(function(PagesRepository, ProjectsRepository, ProjectCategoriesRepository,
-  WebsitesRepository, ImagesRepository) {
+(function(PagesRepository, EventsRepository, ProjectsRepository,
+  ProjectCategoriesRepository, WebsitesRepository, ImagesRepository) {
 
   module.exports = (function(mod, pg, bricks, config) {
 
     mod.createPagesRepository = function() {
       return new PagesRepository(pg, bricks, config);
+    }
+
+    mod.createEventsRepository = function() {
+      return new EventsRepository(pg, bricks, config);
     }
 
     mod.createProjectsRepository = function() {
@@ -32,6 +36,7 @@
 
 })(
   require('../../classes/repositories/PagesRepository'),
+  require('../../classes/repositories/EventsRepository'),
   require('../../classes/repositories/ProjectsRepository'),
   require('../../classes/repositories/ProjectCategoriesRepository'),
   require('../../classes/repositories/WebsitesRepository'),

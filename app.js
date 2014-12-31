@@ -33,6 +33,11 @@
     isProjectPage: true
   }));
 
+  var page = viewHelpers.getEventPage();
+  app.get('/' + page + '/:name', routeHelpers.getRoute(page, {
+    isEventPage: true
+  }));
+
   app.listen(port, function() {
     console.log("Node app is running at localhost: " + port);
   });

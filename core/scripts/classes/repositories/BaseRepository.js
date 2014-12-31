@@ -2,16 +2,8 @@
 
   module.exports = function(pg, config) {
     var _fullDatabaseUrl = config.getDatabaseUrl() + "?ssl=true";
-    var _imageFolder = null;
+    var _imageFolder = config.getImageFolder();
     var _errors = [];
-
-    function getImageFolder() {
-      if (_imageFolder === null) {
-        _imageFolder = config.getImageFolder();
-      }
-
-      return _imageFolder;
-    }
 
     this.imageManager = new ImageManager();
 
@@ -70,16 +62,13 @@
           }
         }
 
+        image.path = image.name ? _imageFolder + image.name + '.jpg' :
+          null;
+
         images.push(image);
       }
 
       return images;
-    }
-
-    this.buildImagePath = function(imageName) {
-      var path = getImageFolder() + imageName + '.jpg';
-
-      return path;
     }
   }
 

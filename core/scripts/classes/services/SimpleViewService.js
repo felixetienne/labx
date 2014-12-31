@@ -10,6 +10,7 @@
         .all([
           _base.getWebsite(),
           _base.getMenuPages(),
+          _base.getMenuEvents(),
           _base.getMenuProjectCategories(),
           _base.getPage()
         ])
@@ -26,11 +27,12 @@
         errorAction(_base.getErrors(), context);
       }
 
-      function computeData(website, menuPages,
+      function computeData(website, menuPages, menuEvents,
         menuProjectCategories, page) {
         var data = _base.getBasicViewData({
           website: website,
           menuPages: menuPages,
+          menuEvents: menuEvents,
           menuProjectCategories: menuProjectCategories,
         });
 
