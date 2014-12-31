@@ -1,15 +1,16 @@
-(function(q, dateFormat, BaseViewService, Error) {
+(function(q, dateFormat, BaseViewService, BaseProjectsViewService, Error) {
 
   module.exports = function(context, repositoriesFactory, viewHelpers) {
     var _base = new BaseViewService(context, repositoriesFactory,
       viewHelpers, dateFormat);
+    var _baseProject = new BaseProjectsViewService(viewHelpers);
 
     this.getData = function(successAction, errorAction) {
 
       return q
         .all([
           _base.getWebsite(),
-          _base.getMenuPages(),
+          _base.getPages(),
           _base.getMenuEvents(),
           _base.getMenuProjectCategories(),
           getProject()
@@ -45,11 +46,11 @@
         errorAction(_base.getErrors(), context);
       }
 
-      function computeData(website, menuPages, menuEvents,
+      function computeData(website, pages, menuEvents,
         menuProjectCategories, project) {
         var data = _base.getBasicViewData({
           website: website,
-          menuPages: menuPages,
+          pages: pages,
           menuEvents: menuEvents,
           menuProjectCategories: menuProjectCategories
         });
@@ -58,11 +59,17 @@
         data.page = viewData.page;
         data.project = viewData.project;
 
+        for (var i = 0; i < viewData.projectBreadcrumbPages.length; i++) {
+          data.breadcrumbPages.push(viewData.projectBreadcrumbPages[i]);
+        }
+
         return data;
       }
 
       function getViewData(project, website) {
-        var data = {};
+        var data = {
+          projectBreadcrumbPages: []
+        };
 
         data.page = {
           title: project.title || '',
@@ -79,6 +86,20 @@
           category: project.category_title || '',
           images: project.images
         };
+
+        var categoryBreadcrumbPage = {
+          title: project.category_title_short || project.category_title ||
+            '',
+          url: _base.buildProjectCategoryUrl(project.category_name)
+        };
+
+        var projectBreadcrumbPage = {
+          title: project.title_short || project.title || '',
+          url: _baseProject.buildUrl(project.name)
+        };
+
+        data.projectBreadcrumbPages.push(categoryBreadcrumbPage);
+        data.projectBreadcrumbPages.push(projectBreadcrumbPage);
 
         return data;
       }
@@ -100,4 +121,5 @@
   require('q'),
   require('dateformat'),
   require('./BaseViewService'),
+  require('./BaseProjectViewService'),
   require('../Error'));

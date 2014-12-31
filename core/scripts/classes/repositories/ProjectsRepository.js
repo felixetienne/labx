@@ -16,7 +16,9 @@
           .select(
             '\
             projects.id, \
+            projects.name, \
 						projects.title, \
+            projects.title_short, \
 						projects.description_html, \
             projects.description_short, \
             projects.doc_description, \
@@ -26,7 +28,9 @@
 						projects.name, \
             projects.date, \
             projects.sorting, \
+            project_categories.name as category_name, \
             project_categories.title as category_title, \
+            project_categories.title_short as category_title_short, \
             project_categories.keywords as category_keywords, \
             project_categories.sorting as category_sorting, \
             get_project_image_list(projects.id, FALSE) as image_list'

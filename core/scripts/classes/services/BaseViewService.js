@@ -5,16 +5,18 @@
     var _dateFormat = 'dd/mm/yyyy';
     var _currentPage = context.getCurrentPage();
     var _currentRequest = context.getCurrentRequest();
-    var _currentNameParam = _currentRequest.params ? _currentRequest.params
-      .name : null;
+    var _currentNameParam = _currentRequest.params ?
+      _currentRequest.params.name : null;
     var _websitesRepository = null;
     var _pagesRepository = null;
     var _eventsRepository = null;
     var _projectsRepository = null;
     var _projectCategoriesRepository = null;
     var _projectsPage = viewHelpers.getProjectsPage();
+    var _projectPage = viewHelpers.getProjectPage();
     var _eventsPage = viewHelpers.getEventsPage();
     var _eventPage = viewHelpers.getEventPage();
+    var _homePage = viewHelpers.getIndexPage();
     var _errors = [];
 
     function getWebsitesRepository() {
@@ -103,11 +105,11 @@
       return deferred.promise;
     }
 
-    this.getMenuPages = function() {
+    this.getPages = function() {
       var deferred = q.defer();
       var repo = getPagesRepository();
 
-      repo.getMenuPages(function(x) {
+      repo.getAllPages(function(x) {
         deferred.resolve(x);
       }, function() {
         addErrors(repo.getErrors());
@@ -164,7 +166,10 @@
     }
 
     this.getBasicViewData = function(x) {
+      var navigationData = getNavigationData(x);
       var data = {
+        menuPages: navigationData.menuPages,
+        breadcrumbPages: navigationData.breadcrumbPages,
         website: {
           date: formatDate(x.website.date || Date.now()),
           title: x.website.title || '',
@@ -174,8 +179,7 @@
           author: x.website.author || '',
           docAuthor: x.website.doc_author || x.website.author || '',
           docLanguage: x.website.doc_language || ''
-        },
-        menuPages: getMenuPagesData(x)
+        }
       };
 
       return data;
@@ -225,70 +229,157 @@
       return dateFormat(date, _dateFormat);
     }
 
-    function getMenuPagesData(x) {
-      var menuPages = [];
+    function getNavigationData(x) {
+      var data = {
+        menuPages: [],
+        breadcrumbPages: []
+      };
 
-      for (k in x.menuPages) {
-        if (!x.menuPages.hasOwnProperty(k)) continue;
-        var menuPage = x.menuPages[k];
-        var isCurrent = isCurrentPage(menuPage.name);
+      for (k in x.pages) {
+        if (!x.pages.hasOwnProperty(k)) continue;
+        var page = x.pages[k];
+        var isCurrent = isCurrentPage(page.name);
+        var isHome = isHomePage(page.name);
+        var title = page.title_short || page.title || '';
+        var url = buildPageUrl(page);
 
-        menuPages.push({
-          title: menuPage.title_short || menuPage.title || '',
-          isCurrent: isCurrent,
-          url: buildPageUrl(menuPage),
-          subMenuPages: getSubMenuPagesData(
-            menuPage.name, isCurrent, x)
-        });
+        if (isHome || isCurrent) {
+          var breadcrumbPage = {};
+
+          if (page.name === _eventPage) {
+            var eventsPage = selectPage(_eventsPage, x.pages);
+
+            if (!eventsPage) addError(
+              new Error('Events page does not exists.', 500));
+
+            breadcrumbPage.title = eventsPage.title_short ||
+              eventsPage.title || '';
+            breadcrumbPage.url = buildPageUrl(eventsPage);
+
+          } else if (page.name === _projectPage) {
+            var projectsPage = selectPage(_projectsPage, x.pages);
+
+            if (!projectsPage) addError(
+              new Error('Projects page does not exists.', 500));
+
+            breadcrumbPage.title = projectsPage.title_short ||
+              projectsPage.title || '';
+            breadcrumbPage.url = buildPageUrl(projectsPage);
+
+          } else {
+            breadcrumbPage.title = title;
+            breadcrumbPage.url = url;
+          }
+
+          data.breadcrumbPages.push(breadcrumbPage);
+        }
+
+        var subNavigationData = getSubNavigationData(
+          page.name, isCurrent, x);
+
+        if (page.menu) {
+          var menuPage = {
+            url: url,
+            title: title,
+            isCurrent: isCurrent,
+            subMenuPages: subNavigationData.menuPages
+          };
+
+          data.menuPages.push(menuPage);
+        }
+
+        for (var j = 0; j < subNavigationData.breadcrumbPages.length; j++) {
+          data.breadcrumbPages.push(subNavigationData.breadcrumbPages[j]);
+        }
       }
 
-      return menuPages;
+      return data;
     }
 
-    function getSubMenuPagesData(menuPageName, isCurrent, x) {
-      var menuPages = [];
+    function getSubNavigationData(pageName, parentIsCurrent, x) {
+      var data = {
+        menuPages: [],
+        breadcrumbPages: []
+      };
 
-      if (menuPageName === _eventsPage) {
+      if (pageName === _eventsPage) {
 
         for (k in x.menuEvents) {
           if (!x.menuEvents.hasOwnProperty(k)) continue;
           var event = x.menuEvents[k];
+          var isCurrent = isCurrentSubPage(parentIsCurrent, event.name);
+          var title = event.title_short ||
+            event.title || '';
+          var url = buildEventUrl(event.name)
+
+          if (isCurrent) {
+            var breadcrumbPage = {
+              url: url,
+              title: title
+            };
+
+            data.breadcrumbPages.push(breadcrumbPage);
+          }
+
           var menuPage = {
-            title: event.title_short || event.title || '',
-            isCurrent: isCurrentSubPage(isCurrent, event.name),
-            url: buildEventUrl(event.name)
+            url: url,
+            title: title,
+            isCurrent: isCurrent
           };
 
-          menuPages.push(menuPage);
+          data.menuPages.push(menuPage);
         }
 
-        menuPages.push(getAllEventsMenuPage());
+        data.menuPages.push(getAllEventsMenuPage());
 
-      } else if (menuPageName === _projectsPage) {
+      } else if (pageName === _projectsPage) {
 
         for (k in x.menuProjectCategories) {
           if (!x.menuProjectCategories.hasOwnProperty(k)) continue;
           var projectCategory = x.menuProjectCategories[k];
+          var isCurrent = isCurrentSubPage(
+            parentIsCurrent, projectCategory.name);
+          var title = projectCategory.title_short ||
+            projectCategory.title || '';
+          var url = buildProjectCategoryUrl(projectCategory.name);
+
+          if (isCurrent) {
+            var breadcrumbPage = {
+              url: url,
+              title: title
+            };
+
+            data.breadcrumbPages.push(breadcrumbPage);
+          }
+
           var menuPage = {
-            title: projectCategory.title_short || projectCategory.title ||
-              '',
-            isCurrent: isCurrentSubPage(isCurrent, projectCategory.name),
-            url: buildProjectCategoryUrl(projectCategory.name)
+            url: url,
+            title: title,
+            isCurrent: isCurrent
           };
 
-          menuPages.push(menuPage);
+          data.menuPages.push(menuPage);
         }
 
-        menuPages.push(getAllProjectsMenuPage());
+        data.menuPages.push(getAllProjectsMenuPage());
       }
 
-      return menuPages;
+      return data;
+    }
+
+    function selectPage(pageName, pages) {
+      for (var i = 0; i < pages.length; i++) {
+        var page = pages[i];
+        if (page.name === pageName) return page;
+      }
+
+      return null;
     }
 
     function getAllEventsMenuPage() {
       var menuPage = {
         title: 'Tout les evenements',
-        isCurrent: _currentPage === _eventsPage,
+        isCurrent: false,
         url: '/' + _eventsPage
       };
 
@@ -298,31 +389,44 @@
     function getAllProjectsMenuPage() {
       var menuPage = {
         title: 'Tout les projets',
-        isCurrent: _currentPage === _projectsPage,
+        isCurrent: false,
         url: '/' + _projectsPage
       };
 
       return menuPage;
     }
 
+    function isHomePage(pageName) {
+      return _homePage === pageName;
+    }
+
     function isCurrentPage(pageName) {
+      if (_currentPage === _eventPage)
+        return pageName === _eventsPage;
+
+      if (_currentPage === _projectPage)
+        return pageName === _projectsPage;
+
       return _currentPage === pageName;
     }
 
-    function isCurrentSubPage(parentIsCurrent, subPageName) {
+    function isCurrentSubPage(parentIsCurrent, pageName) {
       if (!parentIsCurrent) return false;
 
-      return subPageName === _currentNameParam;
+      return pageName === _currentNameParam;
     }
 
     function buildPageUrl(page) {
-      if (page.name === viewHelpers.getProjectPage()) return null;
+      if (page.name === _projectPage ||
+        page.name === _eventPage) return null;
 
       var url = '/';
 
-      if (page.name === viewHelpers.getIndexPage()) return url;
+      if (isHomePage(page.name)) return url;
 
-      return url + page.name;
+      url += page.name;
+
+      return url;
     }
 
     function buildEventUrl(eventName) {

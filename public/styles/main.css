@@ -1,6 +1,6 @@
 @font-face {
   font-family: SpecialFont;
-  src: url("/medias/fonts/frenchy.ttf"); }
+  src: url("/medias/fonts/TravelingTypewriter.ttf"); }
 
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 html {
@@ -4691,7 +4691,6 @@ button.close {
 
 body {
   background-color: white;
-  /*background-image: url(/medias/images/bg.png);*/
   background-repeat: repeat;
   background-position: center;
   background-attachment: fixed; }
@@ -4702,3 +4701,9 @@ body {
 .mod-content.mod-content--main {
   background-color: white;
   border: 1px black solid; }
+
+.mod-navbar > li > a.active {
+  color: white; }
+.mod-navbar .dropdown-menu .active {
+  color: black;
+  text-decoration: underline; }

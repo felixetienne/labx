@@ -9,7 +9,7 @@
       return q
         .all([
           _base.getWebsite(),
-          _base.getMenuPages(),
+          _base.getPages(),
           _base.getMenuEvents(),
           _base.getMenuProjectCategories(),
           getEvent()
@@ -23,7 +23,7 @@
         var deferred = q.defer();
         var request = _base.getCurrentRequest();
         var repo = _base.getEventsRepository();
-        console.log(request.params.name);
+
         repo.getEventByName(request.params.name,
           function(x) {
             deferred.resolve(x);
@@ -45,11 +45,11 @@
         errorAction(_base.getErrors(), context);
       }
 
-      function computeData(website, menuPages, menuEvents,
+      function computeData(website, pages, menuEvents,
         menuProjectCategories, event) {
         var data = _base.getBasicViewData({
           website: website,
-          menuPages: menuPages,
+          pages: pages,
           menuEvents: menuEvents,
           menuProjectCategories: menuProjectCategories
         });

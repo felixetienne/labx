@@ -1,16 +1,16 @@
-(function(q, dateFormat, BaseViewService, BaseProjectsViewService, Error) {
+(function(q, dateFormat, BaseViewService, BaseProjectViewService, Error) {
 
   module.exports = function(context, repositoriesFactory, viewHelpers) {
     var _base = new BaseViewService(context, repositoriesFactory,
       viewHelpers, dateFormat);
-    var _baseProjects = new BaseProjectsViewService(viewHelpers);
+    var _baseProject = new BaseProjectViewService(viewHelpers);
 
     this.getData = function(successAction, errorAction) {
 
       return q
         .all([
           _base.getWebsite(),
-          _base.getMenuPages(),
+          _base.getPages(),
           _base.getMenuEvents(),
           _base.getMenuProjectCategories(),
           getProjectCategory()
@@ -46,11 +46,11 @@
         errorAction(_base.getErrors(), context);
       }
 
-      function computeData(website, menuPages, menuEvents,
+      function computeData(website, pages, menuEvents,
         menuProjectCategories, projectCategory) {
         var data = _base.getBasicViewData({
           website: website,
-          menuPages: menuPages,
+          pages: pages,
           menuEvents: menuEvents,
           menuProjectCategories: menuProjectCategories
         });
@@ -86,7 +86,7 @@
               category.project_title || '',
             description: category.project_description_short,
             date: _base.formatDate(category.project_date),
-            url: _baseProjects.buildUrl(category.project_name),
+            url: _baseProject.buildUrl(category.project_name),
             images: category.project_images
           };
 
@@ -102,5 +102,5 @@
   require('q'),
   require('dateformat'),
   require('./BaseViewService'),
-  require('./BaseProjectsViewService'),
+  require('./BaseProjectViewService'),
   require('../Error'));

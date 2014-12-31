@@ -9,7 +9,7 @@
       return q
         .all([
           _base.getWebsite(),
-          _base.getMenuPages(),
+          _base.getPages(),
           _base.getMenuEvents(),
           _base.getMenuProjectCategories(),
           _base.getPage(),
@@ -44,11 +44,11 @@
         errorAction(_base.getErrors(), context);
       }
 
-      function computeData(website, menuPages, menuEvents,
+      function computeData(website, pages, menuEvents,
         menuProjectCategories, page, events) {
         var data = _base.getBasicViewData({
           website: website,
-          menuPages: menuPages,
+          pages: pages,
           menuEvents: menuEvents,
           menuProjectCategories: menuProjectCategories
         });

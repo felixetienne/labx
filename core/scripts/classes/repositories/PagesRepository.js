@@ -55,7 +55,7 @@
       });
     }
 
-    this.getMenuPages = function(action, emptyAction) {
+    this.getAllPages = function(action, emptyAction) {
 
       if (_base.isInvalidAction(action)) return;
 
@@ -66,11 +66,11 @@
             pages.title, \
 						pages.title_short, \
             pages.name, \
+            pages.menu, \
 						pages.sorting'
           )
           .from('pages')
           .where('pages.active', true)
-          .where('pages.menu', true)
           .orderBy('pages.sorting ASC')
           .toString();
 
