@@ -30,25 +30,19 @@
             projects.description_short as project_description_short, \
             projects.name as project_name, \
             projects.date as project_date, \
-            projects.sorting as project_sorting' //, \
-            //images.title as image_title, \
-            //images.name as image_name, \
-            //images.shorting as image_sorting'
+            projects.sorting as project_sorting, \
+            get_project_image_list(projects.id, TRUE) as project_image_list'
           )
           .from('project_categories')
           .leftJoin('projects', {
             'project_categories.id': 'projects.category_id'
           })
-          // .join('images', {
-          //   'projects.id': 'images.id_project'
-          // })
-          //.where('images.thumbnail', true)
-          //.where('images.active', true)
           .where('project_categories.name', projectCategoryName)
           .where('project_categories.active', true)
           .where('projects.active', true)
-          .orderBy('project_categories.sorting ASC',
-            'project_sorting ASC' //, 'image_sorting ASC'
+          .orderBy(
+            'project_categories.sorting ASC',
+            'project_sorting ASC'
           )
           .toString();
 
@@ -63,8 +57,18 @@
             }
 
             if (_base.hasResults(res)) {
-              var data = new Array();
+              var data = [];
+
               res.rows.forEach(function(row) {
+
+                row.project_images = _base.extractImages(
+                  row.project_image_list);
+
+                for (var i = 0; i < row.project_images.length; i++) {
+                  row.project_images[i].path = _base.buildImagePath(
+                    row.project_images[i].name);
+                }
+
                 data.push(row);
               });
 
@@ -97,24 +101,18 @@
             projects.description_short as project_description_short, \
             projects.name as project_name, \
             projects.date as project_date, \
-            projects.sorting as project_sorting' //, \
-            //images.title as image_title, \
-            //images.name as image_name, \
-            //images.shorting as image_sorting'
+            projects.sorting as project_sorting, \
+            get_project_image_list(projects.id, TRUE) as project_image_list'
           )
           .from('project_categories')
           .leftJoin('projects', {
             'project_categories.id': 'projects.category_id'
           })
-          // .join('images', {
-          //   'projects.id': 'images.id_project'
-          // })
-          //.where('images.thumbnail', true)
-          //.where('images.active', true)
           .where('project_categories.active', true)
           .where('projects.active', true)
-          .orderBy('project_categories.sorting ASC',
-            'project_sorting ASC' //, 'image_sorting ASC'
+          .orderBy(
+            'project_categories.sorting ASC',
+            'project_sorting ASC'
           )
           .toString();
 
@@ -129,8 +127,18 @@
             }
 
             if (_base.hasResults(res)) {
-              var data = new Array();
+              var data = [];
+
               res.rows.forEach(function(row) {
+
+                row.project_images = _base.extractImages(
+                  row.project_image_list);
+
+                for (var i = 0; i < row.project_images.length; i++) {
+                  row.project_images[i].path = _base.buildImagePath(
+                    row.project_images[i].name);
+                }
+
                 data.push(row);
               });
 
@@ -173,7 +181,7 @@
             }
 
             if (_base.hasResults(res)) {
-              var data = new Array();
+              var data = [];
               res.rows.forEach(function(row) {
                 data.push(row);
               });

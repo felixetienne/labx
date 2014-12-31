@@ -45,6 +45,7 @@
 
             if (_base.hasResults(res)) {
               var data = res.rows[0];
+              
               action(data);
             } else if (typeof emptyAction === 'function') {
               emptyAction();

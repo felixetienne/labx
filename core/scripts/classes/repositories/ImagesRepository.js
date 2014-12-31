@@ -70,8 +70,9 @@
         var last = idsList.count() - 1;
 
         idsList.do(function(x, i) {
-          query += (i === 0 ? ' AND (' : ' OR ') + 'images.id = ' +
-            x;
+          query += (
+            i === 0 ? ' AND (' : ' OR '
+          ) + 'images.id = ' + x;
           if (i === last) query += ')';
         });
 

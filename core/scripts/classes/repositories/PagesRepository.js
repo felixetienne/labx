@@ -44,6 +44,7 @@
 
             if (_base.hasResults(res)) {
               var data = res.rows[0];
+
               action(data);
             } else if (typeof emptyAction === 'function') {
               emptyAction();
@@ -84,7 +85,7 @@
             }
 
             if (_base.hasResults(res)) {
-              var data = new Array();
+              var data = [];
 
               res.rows.forEach(function(row) {
                 data.push(row);

@@ -38,10 +38,13 @@
           .where('projects.active', true)
           .where('project_categories.active', true)
           .where('projects.name', projectName)
-          .orderBy('projects.sorting ASC', 'category_sorting ASC')
+          .orderBy(
+            'projects.sorting ASC',
+            'category_sorting ASC'
+          )
           .limit(1)
           .toString();
-        console.log(query);
+
         client
           .query(query, function(err, res) {
 
@@ -54,7 +57,7 @@
 
             if (_base.hasResults(res)) {
               var data = res.rows[0];
-              console.log(data.image_list);
+
               data.images = _base.extractImages(data.image_list);
 
               for (var i = 0; i < data.images.length; i++) {

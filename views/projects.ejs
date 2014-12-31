@@ -18,7 +18,14 @@
           <% if(j===0){%>
             <ul>
           <%}%>
-            <li><a href="<%- project.url %>"><%- project.title %></a></li>
+            <li>
+              <a href="<%- project.url %>"><%- project.title %></a>
+              <%
+              for(var k=0; k< project.images.length; k++){
+                var image = project.images[k]; %>
+                <img src="<%- image.path %>" alt="<%- image.title %>" />
+                <%}%>
+            </li>
           <% if(j===jTotal-1){%>
             </ul>
           <%}%>

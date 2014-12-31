@@ -84,7 +84,8 @@
               category.project_title || '',
             description: category.project_description_short,
             date: _base.formatDate(category.project_date),
-            url: _baseProjects.buildUrl(category.project_name)
+            url: _baseProjects.buildUrl(category.project_name),
+            images: category.project_images
           };
 
           data.projects.push(project);

@@ -25,21 +25,13 @@
             events.doc_keywords, \
             events.keywords, \
             events.id'\
-            // , \
-            // images.title as image_title, \
-            // images.name as image_name, \
-            // images.sorting as image_sorting'
           )
           .from('events')
-          // .join('images', {
-          //   'projects.id': 'images.id'
-          // })
-          //.where('images.thumbnail', false)
-          //.where('images.active', true)
           .where('events.active', true)
           .where('events.name', eventName)
-          .orderBy('events.date DESC', 'events.sorting ASC'
-            //, 'image_sorting ASC'
+          .orderBy(
+            'events.date DESC',
+            'events.sorting ASC'
           )
           .limit(1)
           .toString();
@@ -84,21 +76,13 @@
             events.title_short, \
             events.sorting, \
             events.id'\
-            // , \
-            // images.title as image_title, \
-            // images.name as image_name, \
-            // images.sorting as image_sorting'
           )
           .from('events')
-          // .join('images', {
-          //   'events.id': 'images.id'
-          // })
-          //.where('images.thumbnail', false)
-          //.where('images.active', true)
           .where('events.active', true)
           .where('events.name', eventName)
-          .orderBy('events.date DESC', 'events.sorting ASC',
-            //, 'image_sorting ASC'
+          .orderBy(
+            'events.date DESC',
+            'events.sorting ASC',
           );
 
         if (maxEvents) {
