@@ -41,18 +41,22 @@
     }
 
     this.extractMedias = function(mediaList, areImages) {
+      var delimiters = {
+        media: '|',
+        property: '^'
+      };
       var medias = [];
 
       if (!mediaList) return medias;
 
-      var mediasParts = mediaList.split(';');
+      var mediasParts = mediaList.split(delimiters.media);
 
       for (var i = 0; i < mediasParts.length; i++) {
         var mediasPart = mediasParts[i];
 
         if (!mediasPart) continue;
 
-        var mediaParts = mediasPart.split('|');
+        var mediaParts = mediasPart.split(delimiters.property);
         var media = {};
 
         for (var j = 0; j < mediaParts.length; j++) {
