@@ -2,7 +2,6 @@
 
   module.exports = function(pg, bricks, config) {
     var _base = new BaseRepository(pg, config);
-    var _imageFolder = config.getImageFolder();
 
     this.getErrors = function() {
       return _base.getErrors();
@@ -23,6 +22,7 @@
           )
           .from('images')
           .where('images.active', true)
+          .where(bricks.isNotNull('images.content'))
           .orderBy('images.sorting ASC')
           .toString();
 
@@ -59,12 +59,13 @@
           );
 
         if (includeRawData) {
-          query = query.select('images.image as raw');
+          query = query.select('images.content');
         }
 
         query = query
           .from('images')
           .where('images.active', true)
+          .where(bricks.isNotNull('images.content'))
           .toString();
 
         var last = idsList.count() - 1;
@@ -103,11 +104,11 @@
       var data = [];
 
       for (var i = 0; i < res.rowCount; i++) {
-        var obj = res.rows[i];
+        var image = res.rows[i];
 
-        obj.path = _imageFolder + obj.name + '.jpg';
+        image.path = _base.buildImagePath(image);
 
-        data.push(obj);
+        data.push(image);
       }
 
       return data;

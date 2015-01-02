@@ -61,8 +61,8 @@
 
               res.rows.forEach(function(row) {
 
-                row.project_images = _base.extractImages(
-                  row.project_image_list);
+                row.project_images = _base.extractMedias(
+                  row.project_image_list, true);
 
                 data.push(row);
               });
@@ -126,8 +126,8 @@
 
               res.rows.forEach(function(row) {
 
-                row.project_images = _base.extractImages(
-                  row.project_image_list);
+                row.project_images = _base.extractMedias(
+                  row.project_image_list, true);
 
                 data.push(row);
               });

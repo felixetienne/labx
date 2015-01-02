@@ -3,9 +3,12 @@
   module.exports = function(pg, config) {
     var _fullDatabaseUrl = config.getDatabaseUrl() + "?ssl=true";
     var _imageFolder = config.getImageFolder();
+    var _imageExtension = 'jpg';
     var _errors = [];
 
     this.imageManager = new ImageManager();
+
+    this.buildImagePath = buildImagePath;
 
     this.isInvalidAction = function(action) {
       if (!action) throw "[ERROR:Dal:getAll] 'action' parameter is null.";
@@ -37,38 +40,67 @@
       client.end();
     }
 
-    this.extractImages = function(imageList) {
-      var images = [];
+    this.extractMedias = function(mediaList, areImages) {
+      var medias = [];
 
-      if (!imageList) return images;
+      if (!mediaList) return medias;
 
-      var imagesParts = imageList.split(';');
+      var mediasParts = mediaList.split(';');
 
-      for (var i = 0; i < imagesParts.length; i++) {
-        var imagesPart = imagesParts[i];
+      for (var i = 0; i < mediasParts.length; i++) {
+        var mediasPart = mediasParts[i];
 
-        if (!imagesPart) continue;
+        if (!mediasPart) continue;
 
-        var imageParts = imagesPart.split(',');
-        var image = {};
+        var mediaParts = mediasPart.split('|');
+        var media = {};
 
-        for (var j = 0; j < imageParts.length; j++) {
-          var part = imageParts[j];
+        for (var j = 0; j < mediaParts.length; j++) {
+          var mediaPart = mediaParts[j];
 
-          if (j === 0) {
-            image.name = part;
-          } else if (j === 1) {
-            image.title = part;
+          if (areImages) {
+            mapImageProperty(media, j, mediaPart);
+          } else {
+            mapMediaProperty(media, j, mediaPart);
           }
         }
 
-        image.path = image.name ? _imageFolder + image.name + '.jpg' :
-          null;
+        if (areImages) {
+          media.path = buildImagePath(media);
+        }
 
-        images.push(image);
+        medias.push(media);
       }
 
-      return images;
+      return medias;
+    }
+
+    function mapImageProperty(image, index, property) {
+      if (index === 0) {
+        image.name = property;
+      } else if (index === 1) {
+        image.title = property;
+      }
+    }
+
+    function mapMediaProperty(media, index, property) {
+      if (index === 0) {
+        media.content = property;
+      } else if (index === 1) {
+        media.title = property;
+      } else if (index === 2) {
+        media.typeName = property;
+      } else if (index === 3) {
+        media.typeTitle = property;
+      }
+    }
+
+    function buildImagePath(image) {
+      if (!image.name) return null;
+
+      var path = _imageFolder + image.name + '.' + _imageExtension;
+
+      return path;
     }
   }
 

@@ -33,7 +33,8 @@
             project_categories.title_short as category_title_short, \
             project_categories.keywords as category_keywords, \
             project_categories.sorting as category_sorting, \
-            get_project_image_list(projects.id, FALSE) as image_list'
+            get_project_image_list(projects.id, FALSE) as image_list, \
+            get_project_media_list(projects.id) as media_list'
           )
           .from('projects')
           .join('project_categories', {
@@ -62,7 +63,10 @@
             if (_base.hasResults(res)) {
               var data = res.rows[0];
 
-              data.images = _base.extractImages(data.image_list);
+              data.images = _base.extractMedias(
+                data.image_list, true);
+              data.medias = _base.extractMedias(
+                data.media_list, false);
 
               action(data);
             } else if (typeof emptyAction === 'function') {

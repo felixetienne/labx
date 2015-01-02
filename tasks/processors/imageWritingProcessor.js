@@ -45,7 +45,7 @@
         _repo.getByIds(ids, true, function(data) {
 
           data.forEach(function(x) {
-            _imageManager.write(x.path, x.raw);
+            _imageManager.write(x.path, x.content);
           });
 
         }, null);

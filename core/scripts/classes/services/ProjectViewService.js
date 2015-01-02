@@ -84,7 +84,8 @@
         data.project = {
           date: _base.formatDate(project.date),
           category: project.category_title || '',
-          images: project.images
+          images: project.images,
+          medias: project.medias
         };
 
         var categoryBreadcrumbPage = {

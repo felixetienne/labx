@@ -50,7 +50,8 @@
             if (_base.hasResults(res)) {
               var data = res.rows[0];
 
-              data.images = _base.extractImages(data.image_list);
+              data.images = _base.extractMedias(data.image_list,
+                true);
 
               action(data);
             } else if (typeof emptyAction === 'function') {
