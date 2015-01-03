@@ -87,7 +87,7 @@ $headings-color:          inherit !default;
 //** Load fonts from this directory.
 
 // [converter] Asset helpers such as Sprockets and Node.js Mincer do not resolve relative paths
-$icon-font-path: if($bootstrap-sass-asset-helper, "bootstrap/", "../fonts/bootstrap/") !default;
+$icon-font-path: if($bootstrap-sass-asset-helper, "bootstrap/", "/medias/frameworks/bootstrap/fonts/") !default;
 
 //** File name for all font files.
 $icon-font-name:          "glyphicons-halflings-regular" !default;
@@ -791,11 +791,11 @@ $badge-border-radius:         10px !default;
 $breadcrumb-padding-vertical:   8px !default;
 $breadcrumb-padding-horizontal: 15px !default;
 //** Breadcrumb background color
-$breadcrumb-bg:                 #f5f5f5 !default;
+$breadcrumb-bg:                 transparent !default;
 //** Breadcrumb text color
-$breadcrumb-color:              #ccc !default;
+$breadcrumb-color:              #772222 !default;
 //** Text color of current page in the breadcrumb
-$breadcrumb-active-color:       $gray-light !default;
+$breadcrumb-active-color:       #772222 !default;
 //** Textual separator for between breadcrumb elements
 $breadcrumb-separator:          "/" !default;
 

@@ -1,6 +1,6 @@
 (function() {
 
-  module.exports = (function(mod) {
+  module.exports = (function(mod, layoutHelpers) {
     var index = '';
     var error = 'error';
     var contact = 'joindre';
@@ -104,8 +104,37 @@
       return names;
     }
 
+    mod.getLayout = function(pageName) {
+      var layouts = layoutHelpers.getLayouts();
+      var layout;
+
+      switch (pageName) {
+        //case error:
+        //case index:
+        case contact:
+        case about:
+        case project:
+        case projects:
+        case services:
+        case event:
+        case events:
+        case curriculumVitae:
+          {
+            layout = layouts.rightAsides;
+            break;
+          }
+        default:
+          {
+            layout = layouts.fullContent;
+            break;
+          }
+      }
+
+      return layout;
+    }
+
     return mod;
 
-  })({});
+  })({}, require('./layoutHelpers'));
 
 })();

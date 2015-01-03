@@ -1,6 +1,6 @@
 <script type="text/javascript">
   window.currentContext = (function(context){
-    <% if(!meta.isErrorPage){%>
+    <% if(!meta.isErrorPage()){%>
       context.project = {
         title: '<%- website.title %>',
         subtitle: '<%- website.subtitle %>',

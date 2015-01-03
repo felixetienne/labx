@@ -10,16 +10,38 @@
     <![endif]-->
 
     <!-- styles -->
+    <link rel="icon" href="/medias/images/favicon.ico" />
     <link href="/styles/main.css" rel="stylesheet" />
     <script type="text/javascript" src="/scripts/libraries/jquery-min.2.1.1.js"></script>
   </head>
   <body>
     <% include included/context.ejs %>
-    <% if(!meta.isErrorPage){%>
+    <% if(!meta.isErrorPage()){%>
       <% include included/navigation.ejs %>
-    <%}%>
-    <div class="jumbotron">
-      <%- body %>
+      <% include included/breadcrumb.ejs %>
+    <% } %>
+    <div class="mod-page">
+      <% include included/header.ejs %>
+      <div class="container">
+        <% if(meta.isRightAsidesLayout()){%>
+          <div class="row">
+            <div class="col-md-9">
+              <div class="mp--main-content">
+                <%- body %>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="mp--asides">
+                <% include included/asides.ejs %>
+              </div>
+            </div>
+          </div>
+        <%}else{%>
+          <div class="mp--main-content">
+            <%- body %>
+          </div>
+        <%}%>
+      </div>
     </div>
     <% include included/footer.ejs %>
     <script type="text/javascript" src="/scripts/frameworks/bootstrap.js"></script>

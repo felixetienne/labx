@@ -1,15 +1,12 @@
-<div class="container mod-content mod-content--main">
-  <% include included/header.ejs %>
-  <% include included/standardContent.ejs %>
-  <%
-  for(var i=0; i<project.images.length; i++){
-    var image = project.images[i]; %>
-    <img src="<%- image.path %>" alt="<%- image.title %>" />
-  <%}%>
-  <%
-  for(var i=0; i<project.medias.length; i++){
-    var media = project.medias[i]; %>
-    <h2><%- media.typeTitle %></h2>
-    <%- media.content %>
-  <%}%>
-</div>
+<% include included/standardContent.ejs %>
+<%
+for(var i=0; i<project.images.length; i++){
+  var image = project.images[i]; %>
+  <img src="<%- image.path %>" alt="<%- image.title %>" />
+<%}%>
+<%
+for(var i=0; i<project.medias.length; i++){
+  var media = project.medias[i]; %>
+  <h2><%- media.typeTitle %></h2>
+  <%- media.content %>
+<%}%>

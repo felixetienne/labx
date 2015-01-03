@@ -1,7 +1,9 @@
-<footer>
-  <% if(meta.isErrorPage) {%>
-    <p>Tout droits réservé. &copy; 2015</p>
-  <%} else {%>
-    <p><%- website.author %> | <%- website.copyright %></p>
-  <%}%>
+<footer class="mod-footer">
+  <div class="container">
+    <% if(meta.isErrorPage()) {%>
+      <p>Tout droits réservé. &copy; 2015</p>
+    <%} else {%>
+      <p><%- website.author %> | <%- website.copyright %></p>
+    <%}%>
+  </div>
 </footer>

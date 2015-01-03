@@ -193,8 +193,8 @@ td, th {
 
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url('../fonts/bootstrap/glyphicons-halflings-regular.eot');
-  src: url('../fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/bootstrap/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/bootstrap/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg'); }
+  src: url('/medias/frameworks/bootstrap/fonts/glyphicons-halflings-regular.eot');
+  src: url('/medias/frameworks/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('/medias/frameworks/bootstrap/fonts/glyphicons-halflings-regular.woff') format('woff'), url('/medias/frameworks/bootstrap/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('/medias/frameworks/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg'); }
 
 .glyphicon {
   position: relative;
@@ -3226,16 +3226,16 @@ tbody.collapse.in {
   padding: 8px 15px;
   margin-bottom: 20px;
   list-style: none;
-  background-color: #f5f5f5;
+  background-color: transparent;
   border-radius: 4px; }
   .breadcrumb > li {
     display: inline-block; }
     .breadcrumb > li + li:before {
       content: "/\00a0";
       padding: 0 5px;
-      color: #ccc; }
+      color: #772222; }
   .breadcrumb > .active {
-    color: #777777; }
+    color: #772222; }
 
 .pagination {
   display: inline-block;
@@ -4690,20 +4690,27 @@ button.close {
     display: none !important; } }
 
 body {
-  background-color: white;
+  background-color: #e7e7e7;
+  background-image: url(/medias/images/bg.jpg);
   background-repeat: repeat;
-  background-position: center;
-  background-attachment: fixed; }
+  background-size: 100%;
+  background-attachment: fixed;
+  padding-top: 60px; }
 
-.jumbotron {
-  background-color: transparent; }
-
-.mod-content.mod-content--main {
+.mod-page .mp--main-content, .mod-page .mp--aside {
   background-color: white;
-  border: 1px black solid; }
+  border: 1px black solid;
+  padding: 0 20px 20px 20px;
+  margin-bottom: 20px; }
 
-.mod-navbar > li > a.active {
+.mod-main-navigation .mn--logo img {
+  height: 100%; }
+.mod-main-navigation .mn--navbar > li > a.active {
   color: white; }
-.mod-navbar .dropdown-menu .active {
+.mod-main-navigation .mn--navbar .dropdown-menu .active {
   color: black;
   text-decoration: underline; }
+
+.mod-breadcrumb a {
+  color: #772222;
+  font-weight: bold; }

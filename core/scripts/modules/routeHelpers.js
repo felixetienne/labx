@@ -1,4 +1,4 @@
-(function(Context, ModelMetaData, Error) {
+(function(Context, ViewMetaData, Error) {
 
   module.exports = (function(mod, servicesFactory, viewHelpers) {
 
@@ -13,7 +13,7 @@
           .createPageService(context, argsObj)
           .getData(
             function(x, c) {
-              x.meta = new ModelMetaData();
+              x.meta = new ViewMetaData().setLayout(getViewLayout(c));
               // console.log('\n\n===== DEBUG =====\n');
               // console.log(x);
               // console.log('\n=================\n\n');
@@ -21,12 +21,18 @@
             },
             function(e, c) {
               res.render(viewHelpers.getErrorPage(), {
-                meta: new ModelMetaData(e).asErrorPage()
+                meta: new ViewMetaData(e).asErrorPage()
               });
             });
       }
 
       return f;
+    }
+
+    function getViewLayout(context) {
+      var layout = viewHelpers.getLayout(context.getCurrentPage());
+
+      return layout;
     }
 
     function getViewPath(context, argsObj) {
@@ -45,9 +51,10 @@
 
   })({},
     require('./factories/servicesFactory'),
-    require('./viewHelpers'));
+    require('./viewHelpers'),
+    require('./layoutHelpers'));
 
 })(
   require('../classes/Context'),
-  require('../classes/ModelMetaData'),
+  require('../classes/ViewMetaData'),
   require('../classes/Error'));

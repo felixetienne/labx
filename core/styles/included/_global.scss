@@ -1,31 +1,49 @@
 body{
-    background-color: white;
-    //background-image: url(/medias/images/bg.png);
+    background-color: #e7e7e7;
+    background-image: url(/medias/images/bg.jpg);
     background-repeat: repeat;
-    background-position: center;
+    background-size: 100%;
     background-attachment: fixed;
+    padding-top: 60px;
 }
 
-.jumbotron{
-  background-color: transparent;
+.mod-page {
+  .mp--main-content, .mp--aside{
+    background-color: white;
+    border: 1px black solid;
+    padding: 0 20px 20px 20px;
+    margin-bottom: 20px;
+  }
+  .mp--asides{
+
+  }
 }
 
-.mod-content.mod-content--main {
-  background-color: white;
-  border: 1px black solid;
-}
-
-.mod-navbar{
-  & > li{
-    & > a.active{
-      color: white;
+.mod-main-navigation{
+  .mn--logo{
+    img{
+      height: 100%;
     }
   }
-  
-  .dropdown-menu{
-    .active{
-      color: black;
-      text-decoration: underline;
+  .mn--navbar{
+    & > li{
+      & > a.active{
+        color: white;
+      }
+    }
+
+    .dropdown-menu{
+      .active{
+        color: black;
+        text-decoration: underline;
+      }
     }
   }
+}
+
+.mod-breadcrumb{
+  a{
+      color: $breadcrumb-active-color;
+      font-weight: bold;
+    }
 }
