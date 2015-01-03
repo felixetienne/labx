@@ -191,6 +191,7 @@
         footerPages: navigationData.footerPages,
         breadcrumbPages: navigationData.breadcrumbPages,
         lastEvents: navigationData.lastEvents,
+        imageBanners: getImageBannersData(x),
         website: {
           date: formatDate(x.website.date || Date.now()),
           title: x.website.title || '',
@@ -200,8 +201,7 @@
           author: x.website.author || '',
           docAuthor: x.website.doc_author || x.website.author || '',
           docLanguage: x.website.doc_language || ''
-        },
-        imageBanners: getImageBannersData(x)
+        }
       };
 
       return data;
@@ -223,9 +223,14 @@
 
     function getImageBannersData(x) {
       var data = [];
+
+      if (!x.imageBanners) return data;
+
       for (var i = 0; i < x.imageBanners.length; i++) {
         var imageBanner = imageBanners[i];
-        var imageBannerData = {};
+        var imageBannerData = {
+          test: 'TODO'
+        };
 
         data.push(imageBannerData);
       }
@@ -337,6 +342,10 @@
         for (var j = 0; j < subNavigationData.breadcrumbPages.length; j++) {
           data.breadcrumbPages.push(subNavigationData.breadcrumbPages[j]);
         }
+
+        for (var j = 0; j < subNavigationData.lastEvents.length; j++) {
+          data.lastEvents.push(subNavigationData.lastEvents[j]);
+        }
       }
 
       return data;
@@ -345,7 +354,8 @@
     function getSubNavigationData(pageName, parentIsCurrent, x) {
       var data = {
         menuPages: [],
-        breadcrumbPages: []
+        breadcrumbPages: [],
+        lastEvents: []
       };
 
       if (pageName === _eventsPage) {
@@ -365,6 +375,15 @@
             };
 
             data.breadcrumbPages.push(breadcrumbPage);
+
+          } else {
+            var lastEvent = {
+              url: url,
+              title: title,
+              date: formatDate(event.date)
+            };
+
+            data.lastEvents.push(lastEvent);
           }
 
           var menuPage = {
