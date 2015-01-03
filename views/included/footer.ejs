@@ -1,4 +1,31 @@
 <footer class="mod-footer">
+  <nav class="mf--navigation" role="navigation">
+    <h1 class="sr-only">Navigation secondaire</h1>
+    <ul>
+      <% for(var i=0; i<footerPages.length; i++) {
+        var p = footerPages[i];
+        var totalSubPages = p.subMenuPages.length;
+        var linkClasses = p.isCurrent ? 'active' : '';
+        %>
+        <li>
+          <a href="<%- p.url %>"<%- p.isCurrent ? ' class="active"' : '' %>><%- p.title %></a>
+          <%
+          for(var j=0; j<totalSubPages; j++){
+            var sp = p.subMenuPages[j];%>
+            <% if(j===0){%>
+              <ul>
+            <%}%>
+              <li>
+                <a href="<%- sp.url %>"<%- sp.isCurrent ? ' class="active"' : '' %>><%- sp.title %></a>
+              </li>
+            <% if(j===totalSubPages-1){%>
+              </ul>
+            <%}%>
+          <%}%>
+        </li>
+      <%}%>
+    </ul>
+  </nav>
   <div class="container">
     <% if(meta.isErrorPage()) {%>
       <p>Tout droits réservé. &copy; 2015</p>

@@ -1,13 +1,14 @@
 (function(q, Error) {
 
-  module.exports = function(context, repositoriesFactory, viewHelpers,
-    dateFormat) {
+  module.exports = function(
+    context, repositoriesFactory, viewHelpers, dateFormat) {
     var _dateFormat = 'dd/mm/yyyy';
     var _currentPage = context.getCurrentPage();
     var _currentRequest = context.getCurrentRequest();
     var _currentNameParam = _currentRequest.params ?
       _currentRequest.params.name : null;
     var _websitesRepository = null;
+    var _imagesRepository = null;
     var _pagesRepository = null;
     var _eventsRepository = null;
     var _projectsRepository = null;
@@ -24,6 +25,13 @@
         _websitesRepository = repositoriesFactory.createWebsitesRepository();
       }
       return _websitesRepository;
+    }
+
+    function getImagesRepository() {
+      if (_imagesRepository === null) {
+        _imagesRepository = repositoriesFactory.createImagesRepository();
+      }
+      return _imagesRepository;
     }
 
     function getProjectCategoriesRepository() {
@@ -55,25 +63,16 @@
     }
 
     this.getWebsitesRepository = getWebsitesRepository;
-
+    this.getImagesRepository = getImagesRepository;
     this.getProjectCategoriesRepository = getProjectCategoriesRepository;
-
     this.getProjectsRepository = getProjectsRepository;
-
     this.getPagesRepository = getPagesRepository;
-
     this.getEventsRepository = getEventsRepository;
-
     this.buildProjectCategoryUrl = buildProjectCategoryUrl;
-
     this.getDocTitle = getDocTitle;
-
     this.getDocKeywords = getDocKeywords;
-
     this.formatDate = formatDate;
-
     this.addErrors = addErrors;
-
     this.addError = addError;
 
     this.getErrors = function() {
@@ -165,11 +164,33 @@
       return deferred.promise;
     }
 
+    this.getImageBanners = function() {
+      var deferred = q.defer();
+
+      if (viewHelpers.hasBanners(_currentPage)) {
+        var repo = getImagesRepository();
+
+        repo.getBanners(function(x) {
+          deferred.resolve(x);
+        }, function() {
+          addErrors(repo.getErrors());
+          //addError(new Error('Banner "' + page + '" not found', 404));
+          deferred.reject();
+        });
+      } else {
+        deferred.resolve([]);
+      }
+
+      return deferred.promise;
+    }
+
     this.getBasicViewData = function(x) {
       var navigationData = getNavigationData(x);
       var data = {
         menuPages: navigationData.menuPages,
+        footerPages: navigationData.footerPages,
         breadcrumbPages: navigationData.breadcrumbPages,
+        lastEvents: navigationData.lastEvents,
         website: {
           date: formatDate(x.website.date || Date.now()),
           title: x.website.title || '',
@@ -179,7 +200,8 @@
           author: x.website.author || '',
           docAuthor: x.website.doc_author || x.website.author || '',
           docLanguage: x.website.doc_language || ''
-        }
+        },
+        imageBanners: getImageBannersData(x)
       };
 
       return data;
@@ -195,6 +217,18 @@
           '',
         docKeywords: getDocKeywords(page, website)
       };
+
+      return data;
+    }
+
+    function getImageBannersData(x) {
+      var data = [];
+      for (var i = 0; i < x.imageBanners.length; i++) {
+        var imageBanner = imageBanners[i];
+        var imageBannerData = {};
+
+        data.push(imageBannerData);
+      }
 
       return data;
     }
@@ -232,7 +266,9 @@
     function getNavigationData(x) {
       var data = {
         menuPages: [],
-        breadcrumbPages: []
+        footerPages: [],
+        breadcrumbPages: [],
+        lastEvents: []
       };
 
       for (k in x.pages) {
@@ -249,8 +285,8 @@
           if (page.name === _eventPage) {
             var eventsPage = selectPage(_eventsPage, x.pages);
 
-            if (!eventsPage) addError(
-              new Error('Events page does not exists.', 500));
+            if (!eventsPage)
+              addError(new Error('Events page does not exists.', 500));
 
             breadcrumbPage.title = eventsPage.title_short ||
               eventsPage.title || '';
@@ -259,8 +295,8 @@
           } else if (page.name === _projectPage) {
             var projectsPage = selectPage(_projectsPage, x.pages);
 
-            if (!projectsPage) addError(
-              new Error('Projects page does not exists.', 500));
+            if (!projectsPage)
+              addError(new Error('Projects page does not exists.', 500));
 
             breadcrumbPage.title = projectsPage.title_short ||
               projectsPage.title || '';
@@ -271,13 +307,17 @@
             breadcrumbPage.url = url;
           }
 
-          data.breadcrumbPages.push(breadcrumbPage);
+          if (isHome) {
+            data.breadcrumbPages.unshift(breadcrumbPage);
+          } else {
+            data.breadcrumbPages.push(breadcrumbPage);
+          }
         }
 
         var subNavigationData = getSubNavigationData(
           page.name, isCurrent, x);
 
-        if (page.menu) {
+        if (page.menu || page.footer) {
           var menuPage = {
             url: url,
             title: title,
@@ -285,7 +325,13 @@
             subMenuPages: subNavigationData.menuPages
           };
 
-          data.menuPages.push(menuPage);
+          if (page.menu) {
+            data.menuPages.push(menuPage);
+          }
+
+          if (page.footer) {
+            data.footerPages.push(menuPage);
+          }
         }
 
         for (var j = 0; j < subNavigationData.breadcrumbPages.length; j++) {
@@ -352,13 +398,13 @@
             data.breadcrumbPages.push(breadcrumbPage);
           }
 
-          var menuPage = {
+          var page = {
             url: url,
             title: title,
             isCurrent: isCurrent
           };
 
-          data.menuPages.push(menuPage);
+          data.menuPages.push(page);
         }
 
         data.menuPages.push(getAllProjectsMenuPage());

@@ -67,6 +67,7 @@
 						pages.title_short, \
             pages.name, \
             pages.menu, \
+            pages.footer, \
 						pages.sorting'
           )
           .from('pages')

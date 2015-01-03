@@ -96,6 +96,7 @@
             projects.description_short as project_description_short, \
             projects.name as project_name, \
             projects.date as project_date, \
+            projects.featured as project_featured, \
             projects.sorting as project_sorting, \
             get_project_image_list(projects.id, TRUE) as project_image_list'
           )

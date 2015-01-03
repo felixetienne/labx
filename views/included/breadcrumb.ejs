@@ -1,20 +1,22 @@
-<nav class="mod-breadcrumb container">
-  <h1 class="sr-only">Fil d'ariane</h1>
-  <%
-  for(var i=0; i<breadcrumbPages.length; i++){
-    var breadcrumbPage = breadcrumbPages[i]; %>
-    <%if(i===0){%>
-      <ul class="breadcrumb">
+<% if(breadcrumbPages.length > 1){%>
+  <nav class="mod-breadcrumb container">
+    <h1 class="sr-only">Fil d'ariane</h1>
+    <%
+    for(var i=0; i<breadcrumbPages.length; i++){
+      var breadcrumbPage = breadcrumbPages[i]; %>
+      <%if(i===0){%>
+        <ul class="breadcrumb">
+      <%}%>
+      <%if(i < breadcrumbPages.length - 1){%>
+        <li>
+          <a href="<%- breadcrumbPage.url %>"><%- breadcrumbPage.title %></a>
+        </li>
+      <%}else{%>
+        <li class="active"><%- breadcrumbPage.title %></li>
+      <%}%>
+      <%if(i===breadcrumbPages.length-1){%>
+        </ul>
+      <%}%>
     <%}%>
-    <%if(i < breadcrumbPages.length - 1){%>
-      <li>
-        <a href="<%- breadcrumbPage.url %>"><%- breadcrumbPage.title %></a>
-      </li>
-    <%}else{%>
-      <li class="active"><%- breadcrumbPage.title %></li>
-    <%}%>
-    <%if(i===breadcrumbPages.length-1){%>
-      </ul>
-    <%}%>
-  <%}%>
-</nav>
+  </nav>
+<%}%>

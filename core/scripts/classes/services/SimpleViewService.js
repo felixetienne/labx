@@ -12,6 +12,7 @@
           _base.getPages(),
           _base.getMenuEvents(),
           _base.getMenuProjectCategories(),
+          _base.getImageBanners(),
           _base.getPage()
         ])
         .spread(computeData)
@@ -28,12 +29,13 @@
       }
 
       function computeData(website, pages, menuEvents,
-        menuProjectCategories, page) {
+        menuProjectCategories, imageBanners, page) {
         var data = _base.getBasicViewData({
           website: website,
           pages: pages,
           menuEvents: menuEvents,
           menuProjectCategories: menuProjectCategories,
+          imageBanners: imageBanners
         });
 
         var viewData = getViewData(page, website);

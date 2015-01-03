@@ -13,6 +13,7 @@
           _base.getPages(),
           _base.getMenuEvents(),
           _base.getMenuProjectCategories(),
+          _base.getImageBanners(),
           _base.getPage(),
           getProjectCategories()
         ])
@@ -46,12 +47,13 @@
       }
 
       function computeData(website, pages, menuEvents,
-        menuProjectCategories, page, projectCategories) {
+        menuProjectCategories, imageBanners, page, projectCategories) {
         var data = _base.getBasicViewData({
           website: website,
           pages: pages,
           menuEvents: menuEvents,
-          menuProjectCategories: menuProjectCategories
+          menuProjectCategories: menuProjectCategories,
+          imageBanners: imageBanners
         });
 
         var viewData = getViewData(page, projectCategories, website);
