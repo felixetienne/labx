@@ -77,7 +77,7 @@
       });
     }
 
-    this.getFeaturedProjects = function(action,
+    this.getFeaturedProjects = function(excludedProjectName, action,
       emptyAction) {
       if (_base.isInvalidAction(action)) return;
 
@@ -103,12 +103,19 @@
           .where('featured_projects.active', true)
           .where('projects.active', true)
           .where('project_categories.active', true)
-          .orderBy(
-            'featured_projects.sorting ASC',
-            'project_sorting ASC',
-            'project_category_sorting ASC'
-          )
           .toString();
+
+        if (excludedProjectName) {
+          query +=
+            " AND projects.name <> '" + excludedProjectName + "'";
+        }
+
+        query +=
+          '\
+          ORDER BY \
+          featured_projects.sorting ASC, \
+          project_sorting ASC, \
+          project_category_sorting ASC';
 
         client
           .query(query, function(err, res) {

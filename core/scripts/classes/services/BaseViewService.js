@@ -160,8 +160,10 @@
 
       if (viewHelpers.hasFeaturedProjects(_currentPage)) {
         var repo = getProjectsRepository();
+        var exludedProjectName = _currentPage === _projectPage ?
+          _currentName : null;
 
-        repo.getFeaturedProjects(function(x) {
+        repo.getFeaturedProjects(exludedProjectName, function(x) {
           deferred.resolve(x);
         }, function() {
           addErrors(repo.getErrors());
@@ -452,8 +454,7 @@
 
             data.breadcrumbPages.push(breadcrumbPage);
 
-          } else if (_currentPage !== _eventsPage &&
-            data.lastEvents.length < _maximumLastEvents) {
+          } else if (data.lastEvents.length < _maximumLastEvents) {
             var lastEvent = {
               url: url,
               title: title,
