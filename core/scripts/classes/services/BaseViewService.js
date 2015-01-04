@@ -199,7 +199,8 @@
           copyright: x.website.copyright || '',
           version: x.website.version || '',
           author: x.website.author || '',
-          docAuthor: x.website.doc_author || x.website.author || '',
+          docAuthor: x.website.doc_author ||
+            x.website.author || '',
           docLanguage: x.website.doc_language || ''
         }
       };
@@ -213,8 +214,8 @@
         descriptionHtml: page.description_html || '',
         keywords: page.keywords || '',
         docTitle: getDocTitle(page, website),
-        docDescription: page.doc_description || page.description_short ||
-          '',
+        docDescription: page.doc_description ||
+          page.description_short || '',
         docKeywords: getDocKeywords(page, website)
       };
 
@@ -227,11 +228,12 @@
       if (!x.imageBanners) return data;
 
       for (var i = 0; i < x.imageBanners.length; i++) {
-        var imageBanner = imageBanners[i];
+        var imageBanner = x.imageBanners[i];
         var imageBannerData = {
-          test: 'TODO'
+
         };
 
+        console.log(imageBanner);
         data.push(imageBannerData);
       }
 

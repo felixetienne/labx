@@ -14,9 +14,9 @@
           .getData(
             function(x, c) {
               x.meta = new ViewMetaData().setLayout(getViewLayout(c));
-              console.log('\n\n===== DEBUG =====\n');
-              console.log(x);
-              console.log('\n=================\n\n');
+              // console.log('\n\n===== DEBUG =====\n');
+              // console.log(x);
+              // console.log('\n=================\n\n');
               res.render(getViewPath(c, argsObj), x);
             },
             function(e, c) {
