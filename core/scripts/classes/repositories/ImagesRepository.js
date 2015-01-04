@@ -24,7 +24,6 @@
           projects.description_short as project_description_short, \
           projects.name as project_name, \
           projects.date as project_date, \
-          projects.featured as project_featured, \
           projects.sorting as project_sorting, \
           project_categories.id as project_category_id, \
           project_categories.name as project_category_name, \

@@ -230,10 +230,17 @@
       for (var i = 0; i < x.imageBanners.length; i++) {
         var imageBanner = x.imageBanners[i];
         var imageBannerData = {
-
+          imagePath: imageBanner.path,
+          imageTitle: imageBanner.title,
+          contentTitle: imageBanner.project_title ||
+            imageBanner.project_title || '',
+          contentSubtitle: imageBanner.project_category_title_short ||
+            imageBanner.project_category_title || '',
+          contentDescription: imageBanner.project_description_short ||
+            '',
+          contentDate: formatDate(imageBanner.project_date)
         };
 
-        console.log(imageBanner);
         data.push(imageBannerData);
       }
 
