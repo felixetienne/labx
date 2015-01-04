@@ -1,7 +1,7 @@
 (function(BaseRepository, Error) {
 
-  module.exports = function(pg, bricks, config) {
-    var _base = new BaseRepository(pg, config);
+  module.exports = function(config, pg, bricks) {
+    var _base = new BaseRepository(config, pg);
 
     this.getErrors = function() {
       return _base.getErrors();
@@ -16,19 +16,24 @@
             '\
           banner_images.sorting, \
           images.name, \
-          images.title, \
           images.sorting as image_sorting, \
           projects.id as project_id, \
           projects.title as project_title, \
           projects.title_short as project_title_short, \
           projects.description_short as project_description_short, \
           projects.name as project_name, \
-          projects.date as project_date, \
           projects.sorting as project_sorting, \
           project_categories.id as project_category_id, \
           project_categories.name as project_category_name, \
           project_categories.title as project_category_title, \
-          project_categories.title_short as project_category_title_short'
+          project_categories.title_short as project_category_title_short, \
+          events.id as event_id, \
+          events.name as event_name, \
+          events.title as event_title, \
+          events.title_short as event_title_short, \
+          events.description_short as event_description_short, \
+          events.date as event_date, \
+          events.sorting as event_sorting'
           )
           .from('banner_images')
           .innerJoin('images', {
@@ -43,6 +48,12 @@
           .leftJoin('project_categories', {
             'project_categories.id': 'projects.category_id'
           })
+          .leftJoin('event_images', {
+            'event_images.image_id': 'images.id'
+          })
+          .leftJoin('events', {
+            'events.id': 'event_images.event_id'
+          })
           .where('images.active', true)
           .toString();
 
@@ -52,12 +63,18 @@
           (projects.active = TRUE AND project_categories.active = TRUE)\
            OR \
           (projects.active IS NULL AND project_categories.active IS NULL)\
+           OR \
+          events.active = TRUE\
+           OR \
+          events.active IS NULL\
         )\
         ORDER BY \
         banner_images.sorting ASC, \
         image_sorting ASC, \
         project_sorting ASC, \
-        project_categories.sorting ASC';
+        project_categories.sorting ASC, \
+        event_date DESC, \
+        event_sorting ASC';
 
         client
           .query(query, function(err, res) {

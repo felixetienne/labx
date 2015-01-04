@@ -1,7 +1,7 @@
 (function(BaseRepository, Error) {
 
-  module.exports = function(pg, bricks, config) {
-    var _base = new BaseRepository(pg, config);
+  module.exports = function(config, pg, bricks) {
+    var _base = new BaseRepository(config, pg);
     var _imageFolder = config.getImageFolder();
 
     this.getErrors = function() {
@@ -118,11 +118,9 @@
       });
     }
 
-    this.getMenuEvents = function(action,
+    this.getMenuEvents = function(maximumEvents, action,
       emptyAction) {
       if (_base.isInvalidAction(action)) return;
-
-      var maxEvents = config.getMaximumEventsInMenu();
 
       _base.open(function(client) {
         var query = bricks
@@ -142,8 +140,8 @@
             'events.sorting ASC'
           );
 
-        if (maxEvents) {
-          query = query.limit(maxEvents);
+        if (maximumEvents) {
+          query = query.limit(maximumEvents);
         }
 
         query = query.toString();

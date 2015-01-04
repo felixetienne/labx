@@ -1,0 +1,15 @@
+<div class="mod-banners">
+  <%
+  for(var i=0; i<imageBanners.length; i++){
+    var banner = imageBanners[i];%>
+    <div class="mb--container"; style="background-image: url(<%- banner.imagePath %>); width: 600px; height: 400px;">
+      <% if(banner.title){%>
+        <h1><%- banner.title %></h1>
+        <h2><%- banner.subtitle %></h2>
+        <h3><%- banner.date %></h3>
+        <p><%- banner.description %></p>
+        <a href="<%- banner.url %>">Lire plus</a>
+      <%}%>
+    </div>
+  <%}%>
+</div>

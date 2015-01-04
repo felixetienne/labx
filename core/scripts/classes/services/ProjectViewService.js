@@ -1,9 +1,8 @@
-(function(q, dateFormat, BaseViewService, BaseProjectsViewService, Error) {
+(function(q, dateFormat, BaseViewService, Error) {
 
-  module.exports = function(context, repositoriesFactory, viewHelpers) {
-    var _base = new BaseViewService(context, repositoriesFactory,
+  module.exports = function(context, config, repositoriesFactory, viewHelpers) {
+    var _base = new BaseViewService(context, config, repositoriesFactory,
       viewHelpers, dateFormat);
-    var _baseProject = new BaseProjectsViewService(viewHelpers);
 
     this.getData = function(successAction, errorAction) {
 
@@ -98,7 +97,7 @@
 
         var projectBreadcrumbPage = {
           title: project.title_short || project.title || '',
-          url: _baseProject.buildUrl(project.name)
+          url: _base.buildProjectUrl(project.name)
         };
 
         data.projectBreadcrumbPages.push(categoryBreadcrumbPage);
@@ -124,5 +123,4 @@
   require('q'),
   require('dateformat'),
   require('./BaseViewService'),
-  require('./BaseProjectViewService'),
   require('../Error'));

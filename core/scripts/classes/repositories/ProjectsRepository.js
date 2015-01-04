@@ -1,7 +1,7 @@
 (function(BaseRepository, Error) {
 
-  module.exports = function(pg, bricks, config) {
-    var _base = new BaseRepository(pg, config);
+  module.exports = function(config, pg, bricks) {
+    var _base = new BaseRepository(config, pg);
 
     this.getErrors = function() {
       return _base.getErrors();

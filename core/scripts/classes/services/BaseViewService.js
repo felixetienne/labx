@@ -1,11 +1,14 @@
-(function(q, Error) {
+(function(q, Cache, Error) {
 
   module.exports = function(
-    context, repositoriesFactory, viewHelpers, dateFormat) {
+    context, config, repositoriesFactory, viewHelpers, dateFormat) {
+    var _cache = new Cache();
     var _dateFormat = 'dd/mm/yyyy';
+    var _maximumLastEvents = config.getMaximumLastEvents();
+    var _maximumEventsInMenu = config.getMaximumEventsInMenu();
     var _currentPage = context.getCurrentPage();
     var _currentRequest = context.getCurrentRequest();
-    var _currentNameParam = _currentRequest.params ?
+    var _currentName = _currentRequest.params ?
       _currentRequest.params.name : null;
     var _websitesRepository = null;
     var _imagesRepository = null;
@@ -69,6 +72,7 @@
     this.getPagesRepository = getPagesRepository;
     this.getEventsRepository = getEventsRepository;
     this.buildProjectCategoryUrl = buildProjectCategoryUrl;
+    this.buildProjectUrl = buildProjectUrl;
     this.getDocTitle = getDocTitle;
     this.getDocKeywords = getDocKeywords;
     this.formatDate = formatDate;
@@ -122,8 +126,10 @@
     this.getMenuEvents = function() {
       var deferred = q.defer();
       var repo = getEventsRepository();
+      var maximum = _maximumEventsInMenu > _maximumLastEvents ?
+        _maximumEventsInMenu : _maximumLastEvents;
 
-      repo.getMenuEvents(function(x) {
+      repo.getMenuEvents(maximum, function(x) {
         deferred.resolve(x);
       }, function() {
         addErrors(repo.getErrors());
@@ -202,6 +208,10 @@
           docAuthor: x.website.doc_author ||
             x.website.author || '',
           docLanguage: x.website.doc_language || ''
+        },
+        context: {
+          currentPage: _currentPage,
+          currentName: _currentName
         }
       };
 
@@ -223,28 +233,44 @@
     }
 
     function getImageBannersData(x) {
-      var data = [];
+      var imageBannersData = [];
 
       if (!x.imageBanners) return data;
 
       for (var i = 0; i < x.imageBanners.length; i++) {
-        var imageBanner = x.imageBanners[i];
-        var imageBannerData = {
-          imagePath: imageBanner.path,
-          imageTitle: imageBanner.title,
-          contentTitle: imageBanner.project_title ||
-            imageBanner.project_title || '',
-          contentSubtitle: imageBanner.project_category_title_short ||
-            imageBanner.project_category_title || '',
-          contentDescription: imageBanner.project_description_short ||
-            '',
-          contentDate: formatDate(imageBanner.project_date)
+        var banner = x.imageBanners[i];
+        var data = {
+          imagePath: banner.path
         };
 
-        data.push(imageBannerData);
+        if (banner.event_name) {
+
+          data.title = banner.event_title_short ||
+            banner.event_title || '';
+          data.subtitle = formatDate(banner.event_date);
+          data.description = banner.event_description_short || '';
+          data.url = buildEventUrl(banner.event_name);
+
+        } else if (banner.project_name) {
+
+          data.title = banner.project_title_short ||
+            banner.project_title || '';
+          data.subtitle = banner.project_category_title_short ||
+            banner.project_category_title || '';
+          data.description = banner.project_description_short ||
+            '';
+          data.url = buildProjectUrl(banner.project_name);
+
+        } else {
+
+          data.title = data.subtitle = data.description =
+            data.date = data.url = null;
+        }
+
+        imageBannersData.push(data);
       }
 
-      return data;
+      return imageBannersData;
     }
 
     function getDocKeywords(page, website) {
@@ -385,7 +411,8 @@
 
             data.breadcrumbPages.push(breadcrumbPage);
 
-          } else {
+          } else if (_currentPage !== _eventsPage &&
+            data.lastEvents.length < _maximumLastEvents) {
             var lastEvent = {
               url: url,
               title: title,
@@ -395,13 +422,15 @@
             data.lastEvents.push(lastEvent);
           }
 
-          var menuPage = {
-            url: url,
-            title: title,
-            isCurrent: isCurrent
-          };
+          if (data.menuPages.length < _maximumEventsInMenu) {
+            var menuPage = {
+              url: url,
+              title: title,
+              isCurrent: isCurrent
+            };
 
-          data.menuPages.push(menuPage);
+            data.menuPages.push(menuPage);
+          }
         }
 
         data.menuPages.push(getAllEventsMenuPage());
@@ -487,7 +516,7 @@
     function isCurrentSubPage(parentIsCurrent, pageName) {
       if (!parentIsCurrent) return false;
 
-      return pageName === _currentNameParam;
+      return pageName === _currentName;
     }
 
     function buildPageUrl(page) {
@@ -505,6 +534,12 @@
 
     function buildEventUrl(eventName) {
       var url = '/' + _eventPage + '/' + eventName;
+
+      return url;
+    }
+
+    function buildProjectUrl(projectName) {
+      var url = '/' + _projectPage + '/' + projectName;
 
       return url;
     }
@@ -533,4 +568,5 @@
 
 })(
   require('q'),
+  require('node-cache'),
   require('../Error'));

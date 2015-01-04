@@ -1,38 +1,38 @@
 (function(PagesRepository, EventsRepository, ProjectsRepository,
   ProjectCategoriesRepository, WebsitesRepository, ImagesRepository) {
 
-  module.exports = (function(mod, pg, bricks, config) {
+  module.exports = (function(mod, config, pg, bricks) {
 
     mod.createPagesRepository = function() {
-      return new PagesRepository(pg, bricks, config);
+      return new PagesRepository(config, pg, bricks);
     }
 
     mod.createEventsRepository = function() {
-      return new EventsRepository(pg, bricks, config);
+      return new EventsRepository(config, pg, bricks);
     }
 
     mod.createProjectsRepository = function() {
-      return new ProjectsRepository(pg, bricks, config);
+      return new ProjectsRepository(config, pg, bricks);
     }
 
     mod.createProjectCategoriesRepository = function() {
-      return new ProjectCategoriesRepository(pg, bricks, config);
+      return new ProjectCategoriesRepository(config, pg, bricks);
     }
 
     mod.createWebsitesRepository = function() {
-      return new WebsitesRepository(pg, bricks, config);
+      return new WebsitesRepository(config, pg, bricks);
     }
 
     mod.createImagesRepository = function() {
-      return new ImagesRepository(pg, bricks, config);
+      return new ImagesRepository(config, pg, bricks);
     }
 
     return mod;
 
   })({},
+    require('../appConfig'),
     require('pg'),
-    require('sql-bricks-postgres'),
-    require('../appConfig'));
+    require('sql-bricks-postgres'));
 
 })(
   require('../../classes/repositories/PagesRepository'),

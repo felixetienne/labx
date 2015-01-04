@@ -1,6 +1,6 @@
 (function(ImageManager) {
 
-  module.exports = function(pg, config) {
+  module.exports = function(config, pg) {
     var _fullDatabaseUrl = config.getDatabaseUrl() + "?ssl=true";
     var _imageFolder = config.getImageFolder();
     var _imageExtension = 'jpg';

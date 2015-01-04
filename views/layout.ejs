@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="<%- meta.isErrorPage ? 'fr' : website.docLanguage %>">
+<%
+var isErrorPage = meta.isErrorPage();
+%>
+<html lang="<%- isErrorPage ? 'fr' : website.docLanguage %>">
   <head>
     <% include included/head.ejs %>
     <meta charset="utf-8" />
@@ -16,12 +19,13 @@
   </head>
   <body>
     <% include included/context.ejs %>
-    <% if(!meta.isErrorPage()){%>
+    <% if(!isErrorPage){%>
       <% include included/navigation.ejs %>
-      <% include included/breadcrumb.ejs %>
     <%}%>
     <div class="mod-page">
-      <% include included/header.ejs %>
+      <% if(!isErrorPage){%>
+        <% include included/header.ejs %>
+      <%}%>
       <div class="container">
         <% if(meta.isRightAsidesLayout()){%>
           <div class="row">

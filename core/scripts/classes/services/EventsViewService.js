@@ -1,7 +1,7 @@
 (function(q, dateFormat, BaseViewService, Error) {
 
-  module.exports = function(context, repositoriesFactory, viewHelpers) {
-    var _base = new BaseViewService(context, repositoriesFactory,
+  module.exports = function(context, config, repositoriesFactory, viewHelpers) {
+    var _base = new BaseViewService(context, config, repositoriesFactory,
       viewHelpers, dateFormat);
 
     this.getData = function(successAction, errorAction) {

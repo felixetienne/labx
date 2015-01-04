@@ -1,9 +1,8 @@
-(function(q, dateFormat, BaseViewService, BaseProjectViewService, Error) {
+(function(q, dateFormat, BaseViewService, Error) {
 
-  module.exports = function(context, repositoriesFactory, viewHelpers) {
-    var _base = new BaseViewService(context, repositoriesFactory,
+  module.exports = function(context, config, repositoriesFactory, viewHelpers) {
+    var _base = new BaseViewService(context, config, repositoriesFactory,
       viewHelpers, dateFormat);
-    var _baseProject = new BaseProjectViewService(viewHelpers);
 
     this.getData = function(successAction, errorAction) {
 
@@ -88,7 +87,7 @@
               category.project_title || '',
             description: category.project_description_short,
             date: _base.formatDate(category.project_date),
-            url: _baseProject.buildUrl(category.project_name),
+            url: _base.buildProjectUrl(category.project_name),
             images: category.project_images
           };
 
@@ -104,5 +103,4 @@
   require('q'),
   require('dateformat'),
   require('./BaseViewService'),
-  require('./BaseProjectViewService'),
   require('../Error'));

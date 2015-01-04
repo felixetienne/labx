@@ -6,6 +6,7 @@
     var _productionType = 'prod';
     var _developmentType = 'dev';
     var _maximumEventsInMenu = 10;
+    var _maximumLastEvents = 3;
     var _type, _databaseUrl, _port;
 
     updateFromEnvFile();
@@ -20,6 +21,9 @@
     }
     mod.getMaximumEventsInMenu = function() {
       return _maximumEventsInMenu;
+    }
+    mod.getMaximumLastEvents = function() {
+      return _maximumLastEvents;
     }
     mod.getImageFolder = function() {
       return _imageFolder;

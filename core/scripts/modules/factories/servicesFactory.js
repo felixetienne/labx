@@ -2,40 +2,41 @@
   ProjectViewService, ProjectCategoryViewService,
   ProjectCategoriesViewService) {
 
-  module.exports = (function(mod, repositoriesFactory, viewHelpers) {
+  module.exports = (function(mod, repositoriesFactory, config, viewHelpers) {
 
     mod.createPageService = function(context, argsObj) {
 
       if (argsObj.isProjectCategoryPage)
-        return new ProjectCategoryViewService(context,
+        return new ProjectCategoryViewService(context, config,
           repositoriesFactory, viewHelpers);
 
       if (argsObj.isProjectPage)
-        return new ProjectViewService(context, repositoriesFactory,
-          viewHelpers);
+        return new ProjectViewService(context, config,
+          repositoriesFactory, viewHelpers);
 
       if (argsObj.isEventPage)
-        return new EventViewService(context, repositoriesFactory,
-          viewHelpers);
+        return new EventViewService(context, config,
+          repositoriesFactory, viewHelpers);
 
       var page = context.getCurrentPage();
 
       if (page === viewHelpers.getProjectsPage())
         return new ProjectCategoriesViewService(context,
-          repositoriesFactory, viewHelpers);
+          config, repositoriesFactory, viewHelpers);
 
       if (page === viewHelpers.getEventsPage())
         return new EventsViewService(context,
-          repositoriesFactory, viewHelpers);
+          config, repositoriesFactory, viewHelpers);
 
-      return new SimpleViewService(context, repositoriesFactory,
-        viewHelpers);
+      return new SimpleViewService(context, config,
+        repositoriesFactory, viewHelpers);
     };
 
     return mod;
 
   })({},
     require('./repositoriesFactory'),
+    require('../appConfig'),
     require('../viewHelpers'));
 
 })(

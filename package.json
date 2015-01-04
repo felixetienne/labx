@@ -13,6 +13,7 @@
     "express-ejs-layouts": "^1.1.0",
     "include-all": "^0.1.6",
     "jshint-stylish": "^1.0.0",
+    "node-cache": "^1.0.3",
     "pg": "^3.6.3",
     "q": "^1.1.2",
     "sql-bricks-postgres": "^0.3.0",

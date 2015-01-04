@@ -1,0 +1,14 @@
+<% if(lastEvents.length){%>
+  <aside class="mp--aside mod-last-events">
+    <h1>Dernier événements</h1>
+    <ul>
+      <%
+      for(var i = 0; i<lastEvents.length; i++){
+        var event = lastEvents[i]; %>
+        <li>
+          <a href="<%- event.url %>"><%- event.date %> - <%- event.title %></a>
+        </li>
+      <%}%>
+    </ul>
+  </aside>
+<%}%>
