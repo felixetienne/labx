@@ -1,0 +1,14 @@
+<% if(featuredProjects.length){%>
+  <aside class="mp--aside mod-last-events">
+    <h1>Projets vedettes</h1>
+    <ul>
+      <%
+      for(var i = 0; i<featuredProjects.length; i++){
+        var project = featuredProjects[i]; %>
+        <li>
+          <a href="<%- project.url %>"><%- project.title %> - <%- project.description %></a>
+        </li>
+      <%}%>
+    </ul>
+  </aside>
+<%}%>

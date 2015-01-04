@@ -155,17 +155,22 @@
       return deferred.promise;
     }
 
-    this.getPage = function() {
+    this.getFeaturedProjects = function() {
       var deferred = q.defer();
-      var repo = getPagesRepository();
 
-      repo.getPageByName(_currentPage, function(x) {
-        deferred.resolve(x);
-      }, function() {
-        addErrors(repo.getErrors());
-        addError(new Error('Page "' + page + '" not found', 404));
-        deferred.reject();
-      });
+      if (viewHelpers.hasFeaturedProjects(_currentPage)) {
+        var repo = getProjectsRepository();
+
+        repo.getFeaturedProjects(function(x) {
+          deferred.resolve(x);
+        }, function() {
+          addErrors(repo.getErrors());
+          //addError(new Error('Project category menu not found', 404));
+          deferred.reject();
+        });
+      } else {
+        deferred.resolve([]);
+      }
 
       return deferred.promise;
     }
@@ -190,6 +195,21 @@
       return deferred.promise;
     }
 
+    this.getPage = function() {
+      var deferred = q.defer();
+      var repo = getPagesRepository();
+
+      repo.getPageByName(_currentPage, function(x) {
+        deferred.resolve(x);
+      }, function() {
+        addErrors(repo.getErrors());
+        addError(new Error('Page "' + page + '" not found', 404));
+        deferred.reject();
+      });
+
+      return deferred.promise;
+    }
+
     this.getBasicViewData = function(x) {
       var navigationData = getNavigationData(x);
       var data = {
@@ -197,6 +217,7 @@
         footerPages: navigationData.footerPages,
         breadcrumbPages: navigationData.breadcrumbPages,
         lastEvents: navigationData.lastEvents,
+        featuredProjects: getFeaturedProjectsData(x),
         imageBanners: getImageBannersData(x),
         website: {
           date: formatDate(x.website.date || Date.now()),
@@ -232,10 +253,30 @@
       return data;
     }
 
+    function getFeaturedProjectsData(x) {
+      var featuredProjectsData = [];
+
+      if (!x.featuredProjects) return featuredProjectsData;
+
+      for (var i = 0; i < x.featuredProjects.length; i++) {
+        var project = x.featuredProjects[i];
+
+        var data = {
+          title: project.title_short || project.title || '',
+          description: project.description_short || '',
+          url: buildProjectUrl(project.name)
+        };
+
+        featuredProjectsData.push(data);
+      }
+
+      return featuredProjectsData;
+    }
+
     function getImageBannersData(x) {
       var imageBannersData = [];
 
-      if (!x.imageBanners) return data;
+      if (!x.imageBanners) return imageBannersData;
 
       for (var i = 0; i < x.imageBanners.length; i++) {
         var banner = x.imageBanners[i];

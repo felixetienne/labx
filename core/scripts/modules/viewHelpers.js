@@ -12,18 +12,57 @@
     var events = 'in-progress-events';
     var curriculumVitae = 'curriculum-vitae';
 
+
+    mod.getLayout = function(pageName) {
+      var layouts = layoutHelpers.getLayouts();
+
+      switch (pageName) {
+        //case error:
+        case index:
+        case contact:
+        case about:
+        case project:
+        case projects:
+        case services:
+        case event:
+        case events:
+        case curriculumVitae:
+          return layouts.rightAsides;
+        default:
+          return layouts.fullContent;
+      }
+    }
+
+    mod.hasFeaturedProjects = function(pageName) {
+      switch (pageName) {
+        //case error:
+        //case curriculumVitae:
+        //case services:
+        //case projects:
+        case project:
+        case event:
+        case events:
+        case index:
+        case contact:
+        case about:
+          return true;
+        default:
+          return false;
+      }
+    }
+
     mod.hasBanners = function(pageName) {
       switch (pageName) {
         //case error:
         //case project:
         //case projects:
-        //case services:
         //case event:
         //case events:
-        //case curriculumVitae:
         case index:
         case contact:
         case about:
+        case services:
+        case curriculumVitae:
           return true;
         default:
           return false;
@@ -111,26 +150,6 @@
       names.push(events);
 
       return names;
-    }
-
-    mod.getLayout = function(pageName) {
-      var layouts = layoutHelpers.getLayouts();
-
-      switch (pageName) {
-        //case error:
-        //case index:
-        case contact:
-        case about:
-        case project:
-        case projects:
-        case services:
-        case event:
-        case events:
-        case curriculumVitae:
-          return layouts.rightAsides;
-        default:
-          return layouts.fullContent;
-      }
     }
 
     return mod;

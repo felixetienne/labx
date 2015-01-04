@@ -54,6 +54,7 @@
           .leftJoin('events', {
             'events.id': 'event_images.event_id'
           })
+          .where('banner_images.active', true)
           .where('images.active', true)
           .toString();
 

@@ -25,7 +25,6 @@
             projects.doc_keywords, \
             projects.doc_title, \
             projects.keywords, \
-						projects.name, \
             projects.date, \
             projects.sorting, \
             project_categories.name as category_name, \
@@ -67,6 +66,66 @@
                 data.image_list, true);
               data.medias = _base.extractMedias(
                 data.media_list, false);
+
+              action(data);
+            } else if (typeof emptyAction === 'function') {
+              emptyAction();
+            }
+
+            _base.close(client);
+          });
+      });
+    }
+
+    this.getFeaturedProjects = function(action,
+      emptyAction) {
+      if (_base.isInvalidAction(action)) return;
+
+      _base.open(function(client) {
+        var query = bricks
+          .select(
+            '\
+            projects.id, \
+            projects.name, \
+            projects.title, \
+            projects.title_short, \
+            projects.description_short, \
+            projects.sorting as project_sorting, \
+            project_categories.sorting as project_category_sorting'
+          )
+          .from('featured_projects')
+          .leftJoin('projects', {
+            'projects.id': 'featured_projects.project_id'
+          })
+          .leftJoin('project_categories', {
+            'projects.category_id': 'project_categories.id'
+          })
+          .where('featured_projects.active', true)
+          .where('projects.active', true)
+          .where('project_categories.active', true)
+          .orderBy(
+            'featured_projects.sorting ASC',
+            'project_sorting ASC',
+            'project_category_sorting ASC'
+          )
+          .toString();
+
+        client
+          .query(query, function(err, res) {
+
+            if (err) {
+              _base.close(client);
+              _base.addError(new Error(err, 500));
+              emptyAction();
+              return;
+            }
+
+            if (_base.hasResults(res)) {
+              var data = [];
+
+              res.rows.forEach(function(row) {
+                data.push(row);
+              });
 
               action(data);
             } else if (typeof emptyAction === 'function') {
