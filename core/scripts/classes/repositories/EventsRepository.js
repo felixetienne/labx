@@ -102,7 +102,7 @@
 
               res.rows.forEach(function(row) {
 
-                row.images = _base.extractImages(
+                row.images = _base.extractMedias(
                   row.image_list);
 
                 data.push(row);
