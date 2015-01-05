@@ -3,7 +3,6 @@
   if (!global.staticAppConfig) {
 
     global.staticAppConfig = (function(mod) {
-
       var _imageFolder = '/medias/images/tmp/';
       var _productionType = 'prod';
       var _developmentType = 'dev';
@@ -21,7 +20,7 @@
         stdTTL: 15, // seconds (ex.: 90)
         checkperiod: 30 // seconds (ex.: 120)
       };
-      console.log(_type);
+
       mod.setEnvFile = function(filePath) {
 
         throw 'Not implemented exeption.';
@@ -29,6 +28,9 @@
         updateFromEnvFile();
 
         return this;
+      }
+      mod.getWebsiteNames = function() {
+        return _websiteNames;
       }
       mod.getDateFormat = function() {
         return _dateFormat;

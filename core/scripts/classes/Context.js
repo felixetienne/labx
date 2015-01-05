@@ -1,7 +1,7 @@
-(function() {
+(function(config) {
 
   module.exports = function() {
-    var _currentWebsiteName = 'labx';
+    var _currentWebsiteName = null;
     var _currentRequest = null;
     var _currentPage = null;
     var _currentView = null;
@@ -10,7 +10,10 @@
     this.getCurrentWebsiteName = function() {
       return _currentWebsiteName;
     }
-
+    this.setCurrentWebsiteName = function(value) {
+      _currentWebsiteName = value;
+      return this;
+    }
     this.getCurrentRequest = function() {
       return _currentRequest;
     }
@@ -44,4 +47,4 @@
     }
   }
 
-})();
+})(require('../modules/appConfig'));

@@ -5,11 +5,14 @@
  * Copyright 2014
  */
 
-(function(express, ejs, expressLayouts, imageWritingProcessor, routeHelpers,
-  viewHelpers, config, cache) {
+(function(express, ejs, expressLayouts, dateFormat,
+  imageWritingProcessor, routeHelpers, viewHelpers, config) {
   var app = express();
   var port = config.getCurrentPort();
   var root = __dirname;
+
+  console.log('Initialized application "LabX" at ' +
+    dateFormat(Date.now()) + '.');
 
   app.use(expressLayouts);
   app.use(express.static(root + '/public'));
@@ -50,6 +53,7 @@
   require('express'),
   require('ejs'),
   require('express-ejs-layouts'),
+  require('dateformat'),
   require('./tasks/processors/imageWritingProcessor'),
   require('./core/scripts/modules/routeHelpers'),
   require('./core/scripts/modules/viewHelpers'),

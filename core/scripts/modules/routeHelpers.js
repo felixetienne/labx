@@ -2,14 +2,16 @@
 
   if (!global.staticRouteHelpers) {
 
-    global.staticRouteHelpers = (function(mod, servicesFactory, viewHelpers,
-      layoutHelpers,
+    global.staticRouteHelpers = (function(mod, servicesFactory,
+      websiteHelpers, viewHelpers, layoutHelpers,
       Context, ViewMetaData, Error) {
 
       mod.getRoute = function(pageName, argsObj) {
         var argsObj = argsObj || {};
+        var website = websiteHelpers.getWebsiteName('main');
         var f = function(req, res) {
           var context = new Context()
+            .setCurrentWebsiteName(website)
             .setCurrentRequest(req)
             .setCurrentPage(pageName);
 
@@ -69,6 +71,7 @@
 
     })({},
       require('./factories/servicesFactory'),
+      require('./websiteHelpers'),
       require('./viewHelpers'),
       require('./layoutHelpers'),
       require('../classes/Context'),
