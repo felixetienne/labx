@@ -4714,3 +4714,20 @@ body {
 .mod-breadcrumb a {
   color: #772222;
   font-weight: bold; }
+
+.mod-block {
+  display: block; }
+
+.mod-header-banners {
+  margin-bottom: 20px;
+  border: 1px solid black; }
+  .mod-header-banners .item {
+    background: #333;
+    background-size: 100%;
+    text-align: center;
+    height: 300px !important; }
+    .mod-header-banners .item h1, .mod-header-banners .item h2, .mod-header-banners .item h3, .mod-header-banners .item p {
+      display: inline-block;
+      padding: 4px 8px;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.67); }

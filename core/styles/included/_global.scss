@@ -47,3 +47,29 @@ body{
       font-weight: bold;
     }
 }
+
+.mod-block{
+  display: block;
+}
+
+.mod-header-banners{
+  margin-bottom: 20px;
+  border: 1px solid black;
+  .item{
+    background: #333;
+    background-size: 100%;
+    text-align: center;
+    height: 300px !important;
+    h1, h2, h3, p{
+      display: inline-block;
+      padding: 4px 8px;
+      color: white;
+      background-color: rgba(0,0,0, 0.67);
+      }
+  }
+  .carousel{
+  }
+  .carousel-inner{
+
+  }
+}

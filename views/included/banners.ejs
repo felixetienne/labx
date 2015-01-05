@@ -1,15 +1,46 @@
-<div class="mod-banners">
-  <%
-  for(var i=0; i<imageBanners.length; i++){
-    var banner = imageBanners[i];%>
-    <div class="mb--container"; style="background-image: url(<%- banner.imagePath %>); width: 600px; height: 400px;">
-      <% if(banner.title){%>
-        <h1><%- banner.title %></h1>
-        <h2><%- banner.subtitle %></h2>
-        <h3><%- banner.date %></h3>
-        <p><%- banner.description %></p>
-        <a href="<%- banner.url %>">Lire plus</a>
+<% if(imageBanners && imageBanners.length){%>
+  <div id="HeaderCarousel" class="mod-header-banners carousel slide" data-interval="4000" data-ride="carousel">
+    <!-- Carousel indicators -->
+    <ol class="carousel-indicators">
+      <%
+      for(var i=0; i<imageBanners.length; i++){%>
+        <li data-target="#HeaderCarousel" data-slide-to="<%- i %>"<%- i===0 ? ' class="active"' : '' %>></li>
+      <%}%>
+    </ol>
+    <!-- Carousel items -->
+    <div class="carousel-inner">
+      <%
+      for(var i=0; i<imageBanners.length; i++){
+        var banner = imageBanners[i];
+        var cssClass = i===0 ? ' active' : ''; %>
+        <div class="item<%- cssClass %>" style="background-image: url(<%- banner.imagePath %>);">
+          <% if(banner.title){%>
+            <h1><%- banner.title %></h1>
+          <%}%>
+          <% if(banner.subtitle || banner.description || banner.url){%>
+            <div class="carousel-caption">
+              <%if(banner.subtitle){%>
+                <h2><%- banner.subtitle %></h2>
+              <%}%>
+              <%if(banner.description){%>
+                <span class="mod-block"></span>
+                <p><%- banner.description %></p>
+              <%}%>
+              <%if(banner.url){%>
+                <span class="mod-block"></span>
+                <a href="<%- banner.url %>">Lire plus</a>
+              <%}%>
+            </div>
+          <%}%>
+        </div>
       <%}%>
     </div>
-  <%}%>
-</div>
+    <!-- Carousel nav -->
+    <a class="carousel-control left" href="#HeaderCarousel" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+    </a>
+    <a class="carousel-control right" href="#HeaderCarousel" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+    </a>
+  </div>
+<%}%>

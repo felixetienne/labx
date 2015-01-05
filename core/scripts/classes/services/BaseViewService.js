@@ -296,10 +296,10 @@
 
         } else if (banner.project_name) {
 
-          data.title = banner.project_title_short ||
-            banner.project_title || '';
-          data.subtitle = banner.project_category_title_short ||
+          data.title = banner.project_category_title_short ||
             banner.project_category_title || '';
+          data.subtitle = banner.project_title_short ||
+            banner.project_title || '';
           data.description = banner.project_description_short ||
             '';
           data.url = buildProjectUrl(banner.project_name);
