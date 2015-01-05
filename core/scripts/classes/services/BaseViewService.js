@@ -1,9 +1,7 @@
-(function(q, Cache, Error) {
+(function(q, dateFormat, repositoriesFactory, config, cache, viewHelpers, Error) {
 
-  module.exports = function(
-    context, config, repositoriesFactory, viewHelpers, dateFormat) {
-    var _cache = new Cache();
-    var _dateFormat = 'dd/mm/yyyy';
+  module.exports = function(context) {
+    var _dateFormat = config.getDateFormat();
     var _maximumLastEvents = config.getMaximumLastEvents();
     var _maximumEventsInMenu = config.getMaximumEventsInMenu();
     var _currentPage = context.getCurrentPage();
@@ -65,6 +63,48 @@
       return _pagesRepository;
     }
 
+    function getFromCache(key, callback) {
+      cache.get(key, function(err, val) {
+        var value;
+
+        if (err) {
+          addError(new Error(err, 500));
+          value = null;
+        } else if (isNullOrEmptyObject(val)) {
+          value = null;
+        } else {
+          value = val;
+        }
+
+        callback(value);
+      });
+    }
+
+    function addToCache(key, value, callback) {
+
+      cache.set(key, value, function(err, success) {
+        if (err) {
+          addError(new Error(err, 500));
+        } else if (!success) {
+          addError(new Error(
+            'Un probleme est survenue lors de la mise en cache.',
+            500));
+        }
+
+        callback();
+      });
+    }
+
+    function isNullOrEmptyObject(obj) {
+      if (!obj) return true;
+      for (k in obj) {
+        if (obj.hasOwnProperty(k)) return false;
+      }
+      return true;
+    }
+
+    this.addToCache = addToCache;
+    this.getFromCache = getFromCache;
     this.getWebsitesRepository = getWebsitesRepository;
     this.getImagesRepository = getImagesRepository;
     this.getProjectCategoriesRepository = getProjectCategoriesRepository;
@@ -93,17 +133,27 @@
 
     this.getWebsite = function() {
       var deferred = q.defer();
-      var repo = getWebsitesRepository();
+      var cacheKey = 'website';
 
-      repo.getWebsiteByName(context.getCurrentWebsiteName(),
-        function(x) {
-          deferred.resolve(x);
-        },
-        function() {
-          addErrors(repo.getErrors());
-          addError(new Error('Website not found', 404));
-          deferred.reject();
-        });
+      getFromCache(cacheKey, function(value) {
+        if (value !== null) {
+          deferred.resolve(value.website);
+          return;
+        }
+        var repo = getWebsitesRepository();
+
+        repo.getWebsiteByName(context.getCurrentWebsiteName(),
+          function(x) {
+            addToCache(cacheKey, x, function() {
+              deferred.resolve(x);
+            });
+          },
+          function() {
+            addErrors(repo.getErrors());
+            addError(new Error('Website not found', 404));
+            deferred.reject();
+          });
+      });
 
       return deferred.promise;
     }
@@ -610,5 +660,9 @@
 
 })(
   require('q'),
-  require('node-cache'),
+  require('dateformat'),
+  require('../../modules/factories/repositoriesFactory'),
+  require('../../modules/appConfig'),
+  require('../../modules/appCache'),
+  require('../../modules/viewHelpers'),
   require('../Error'));

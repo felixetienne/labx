@@ -1,7 +1,7 @@
-(function(BaseRepository, Error) {
+(function(bricks, BaseRepository, Error) {
 
-  module.exports = function(config, pg, bricks) {
-    var _base = new BaseRepository(config, pg);
+  module.exports = function() {
+    var _base = new BaseRepository();
 
     this.getErrors = function() {
       return _base.getErrors();
@@ -146,5 +146,6 @@
   }
 
 })(
+  require('sql-bricks-postgres'),
   require('./BaseRepository'),
   require('../Error'));

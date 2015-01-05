@@ -1,7 +1,6 @@
 (function() {
 
   module.exports = function() {
-
     var _currentWebsiteName = 'labx';
     var _currentRequest = null;
     var _currentPage = null;

@@ -1,6 +1,6 @@
-(function(ImageManager) {
+(function(pg, config, ImageManager) {
 
-  module.exports = function(config, pg) {
+  module.exports = function() {
     var _fullDatabaseUrl = config.getDatabaseUrl() + "?ssl=true";
     var _imageFolder = config.getImageFolder();
     var _imageExtension = 'jpg';
@@ -26,6 +26,10 @@
         if (!client) throw "[ERROR:dal:pages:getAll] the parameter 'client' is null";
         callback(client);
       });
+    }
+
+    this.getConfig = function() {
+      return config;
     }
 
     this.getErrors = function() {
@@ -108,4 +112,7 @@
     }
   }
 
-})(require('../ImageManager'));
+})(
+  require('pg'),
+  require('../../modules/appConfig'),
+  require('../ImageManager'));

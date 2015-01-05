@@ -1,8 +1,8 @@
-(function(BaseRepository, Error) {
+(function(bricks, BaseRepository, Error) {
 
-  module.exports = function(config, pg, bricks) {
-    var _base = new BaseRepository(config, pg);
-    var _imageFolder = config.getImageFolder();
+  module.exports = function() {
+    var _base = new BaseRepository();
+    var _imageFolder = _base.getConfig().getImageFolder();
 
     this.getErrors = function() {
       return _base.getErrors();
@@ -96,7 +96,6 @@
             projects.description_short as project_description_short, \
             projects.name as project_name, \
             projects.date as project_date, \
-            projects.featured as project_featured, \
             projects.sorting as project_sorting, \
             get_project_image_list(projects.id, TRUE) as project_image_list'
           )
@@ -190,5 +189,6 @@
   }
 
 })(
+  require('sql-bricks-postgres'),
   require('./BaseRepository'),
   require('../Error'));

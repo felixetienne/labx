@@ -9,6 +9,9 @@
     this.getCode = function() {
       return _code;
     }
+    this.print = function() {
+      console.error('[' + _code + '] ' + _message);
+    }
   }
 
 })();

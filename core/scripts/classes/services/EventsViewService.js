@@ -1,8 +1,7 @@
-(function(q, dateFormat, BaseViewService, Error) {
+(function(q, viewHelpers, BaseViewService, Error) {
 
-  module.exports = function(context, config, repositoriesFactory, viewHelpers) {
-    var _base = new BaseViewService(context, config, repositoriesFactory,
-      viewHelpers, dateFormat);
+  module.exports = function(context) {
+    var _base = new BaseViewService(context);
 
     this.getData = function(successAction, errorAction) {
 
@@ -39,21 +38,22 @@
       }
 
       function onSuccess(data) {
-        successAction(data, context);
+        successAction(data, context, _base.getErrors());
       }
 
       function onError() {
-        errorAction(_base.getErrors(), context);
+        errorAction(context, _base.getErrors());
       }
 
       function computeData(website, pages, menuEvents,
-        menuProjectCategories, featuredProjects, imageBanners, page, events) {
+        menuProjectCategories, featuredProjects, imageBanners, page,
+        events) {
         var data = _base.getBasicViewData({
           website: website,
           pages: pages,
           menuEvents: menuEvents,
           menuProjectCategories: menuProjectCategories,
-          featuredProjects: featuredProjects, 
+          featuredProjects: featuredProjects,
           imageBanners: imageBanners
         });
 
@@ -95,6 +95,6 @@
 
 })(
   require('q'),
-  require('dateformat'),
+  require('../../modules/viewHelpers'),
   require('./BaseViewService'),
   require('../Error'));

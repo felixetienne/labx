@@ -1,8 +1,7 @@
-(function(q, dateFormat, BaseViewService, Error) {
+(function(q, BaseViewService, Error) {
 
-  module.exports = function(context, config, repositoriesFactory, viewHelpers) {
-    var _base = new BaseViewService(context, config, repositoriesFactory,
-      viewHelpers, dateFormat);
+  module.exports = function(context) {
+    var _base = new BaseViewService(context);
 
     this.getData = function(successAction, errorAction) {
 
@@ -22,11 +21,11 @@
         .done();
 
       function onSuccess(data) {
-        successAction(data, context);
+        successAction(data, context, _base.getErrors());
       }
 
       function onError() {
-        errorAction(_base.getErrors(), context);
+        errorAction(context, _base.getErrors());
       }
 
       function computeData(website, pages, menuEvents,
@@ -57,6 +56,5 @@
   }
 
 })(require('q'),
-  require('dateformat'),
   require('./BaseViewService'),
   require('../Error'));

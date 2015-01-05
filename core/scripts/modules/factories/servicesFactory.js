@@ -1,48 +1,46 @@
-(function(SimpleViewService, EventViewService, EventsViewService,
-  ProjectViewService, ProjectCategoryViewService,
-  ProjectCategoriesViewService) {
+(function() {
 
-  module.exports = (function(mod, repositoriesFactory, config, viewHelpers) {
+  if (!global.staticServicesFactory) {
 
-    mod.createPageService = function(context, argsObj) {
+    global.staticServicesFactory = (function(mod, viewHelpers,
+      SimpleViewService,
+      EventViewService, EventsViewService, ProjectViewService,
+      ProjectCategoryViewService, ProjectCategoriesViewService) {
 
-      if (argsObj.isProjectCategoryPage)
-        return new ProjectCategoryViewService(context, config,
-          repositoriesFactory, viewHelpers);
+      mod.createPageService = function(context, argsObj) {
 
-      if (argsObj.isProjectPage)
-        return new ProjectViewService(context, config,
-          repositoriesFactory, viewHelpers);
+        if (argsObj.isProjectCategoryPage)
+          return new ProjectCategoryViewService(context);
 
-      if (argsObj.isEventPage)
-        return new EventViewService(context, config,
-          repositoriesFactory, viewHelpers);
+        if (argsObj.isProjectPage)
+          return new ProjectViewService(context);
 
-      var page = context.getCurrentPage();
+        if (argsObj.isEventPage)
+          return new EventViewService(context);
 
-      if (page === viewHelpers.getProjectsPage())
-        return new ProjectCategoriesViewService(context,
-          config, repositoriesFactory, viewHelpers);
+        var page = context.getCurrentPage();
 
-      if (page === viewHelpers.getEventsPage())
-        return new EventsViewService(context,
-          config, repositoriesFactory, viewHelpers);
+        if (page === viewHelpers.getProjectsPage())
+          return new ProjectCategoriesViewService(context);
 
-      return new SimpleViewService(context, config,
-        repositoriesFactory, viewHelpers);
-    };
+        if (page === viewHelpers.getEventsPage())
+          return new EventsViewService(context);
 
-    return mod;
+        return new SimpleViewService(context);
+      };
 
-  })({},
-    require('./repositoriesFactory'),
-    require('../appConfig'),
-    require('../viewHelpers'));
+      return mod;
 
-})(
-  require('../../classes/services/SimpleViewService'),
-  require('../../classes/services/EventViewService'),
-  require('../../classes/services/EventsViewService'),
-  require('../../classes/services/ProjectViewService'),
-  require('../../classes/services/ProjectCategoryViewService'),
-  require('../../classes/services/ProjectCategoriesViewService'));
+    })({},
+      require('../viewHelpers'),
+      require('../../classes/services/SimpleViewService'),
+      require('../../classes/services/EventViewService'),
+      require('../../classes/services/EventsViewService'),
+      require('../../classes/services/ProjectViewService'),
+      require('../../classes/services/ProjectCategoryViewService'),
+      require('../../classes/services/ProjectCategoriesViewService'));
+  }
+
+  module.exports = global.staticServicesFactory;
+
+})();

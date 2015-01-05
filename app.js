@@ -6,9 +6,9 @@
  */
 
 (function(express, ejs, expressLayouts, imageWritingProcessor, routeHelpers,
-  viewHelpers, appConfig) {
+  viewHelpers, config, cache) {
   var app = express();
-  var port = appConfig.getCurrentPort();
+  var port = config.getCurrentPort();
   var root = __dirname;
 
   app.use(expressLayouts);
@@ -53,4 +53,5 @@
   require('./tasks/processors/imageWritingProcessor'),
   require('./core/scripts/modules/routeHelpers'),
   require('./core/scripts/modules/viewHelpers'),
-  require('./core/scripts/modules/appConfig'));
+  require('./core/scripts/modules/appConfig'),
+  require('./core/scripts/modules/appCache'));
