@@ -137,9 +137,10 @@
 
       getFromCache(cacheKey, function(value) {
         if (value !== null) {
-          deferred.resolve(value.website);
+          deferred.resolve(value[cacheKey]);
           return;
         }
+
         var repo = getWebsitesRepository();
 
         repo.getWebsiteByName(context.getCurrentWebsiteName(),
@@ -160,14 +161,26 @@
 
     this.getPages = function() {
       var deferred = q.defer();
-      var repo = getPagesRepository();
+      var cacheKey = 'pages';
 
-      repo.getAllPages(function(x) {
-        deferred.resolve(x);
-      }, function() {
-        addErrors(repo.getErrors());
-        //addError(new Error('Page menu not found', 404));
-        deferred.reject();
+      getFromCache(cacheKey, function(value) {
+        if (value !== null) {
+          deferred.resolve(value[cacheKey]);
+          return;
+        }
+
+        var repo = getPagesRepository();
+
+        repo.getAllPages(function(x) {
+            addToCache(cacheKey, x, function() {
+              deferred.resolve(x);
+            });
+          },
+          function() {
+            addErrors(repo.getErrors());
+            //addError(new Error('Page menu not found', 404));
+            deferred.reject();
+          });
       });
 
       return deferred.promise;
@@ -175,16 +188,27 @@
 
     this.getMenuEvents = function() {
       var deferred = q.defer();
-      var repo = getEventsRepository();
-      var maximum = _maximumEventsInMenu > _maximumLastEvents ?
-        _maximumEventsInMenu : _maximumLastEvents;
+      var cacheKey = 'menuEvents';
 
-      repo.getMenuEvents(maximum, function(x) {
-        deferred.resolve(x);
-      }, function() {
-        addErrors(repo.getErrors());
-        //addError(new Error('Event menu not found', 404));
-        deferred.reject();
+      getFromCache(cacheKey, function(value) {
+        if (value !== null) {
+          deferred.resolve(value[cacheKey]);
+          return;
+        }
+
+        var repo = getEventsRepository();
+        var maximum = _maximumEventsInMenu > _maximumLastEvents ?
+          _maximumEventsInMenu : _maximumLastEvents;
+
+        repo.getMenuEvents(maximum, function(x) {
+          addToCache(cacheKey, x, function() {
+            deferred.resolve(x);
+          });
+        }, function() {
+          addErrors(repo.getErrors());
+          //addError(new Error('Event menu not found', 404));
+          deferred.reject();
+        });
       });
 
       return deferred.promise;
@@ -192,14 +216,25 @@
 
     this.getMenuProjectCategories = function() {
       var deferred = q.defer();
-      var repo = getProjectCategoriesRepository();
+      var cacheKey = 'menuProjectCategories';
 
-      repo.getMenuProjectCategories(function(x) {
-        deferred.resolve(x);
-      }, function() {
-        addErrors(repo.getErrors());
-        //addError(new Error('Project category menu not found', 404));
-        deferred.reject();
+      getFromCache(cacheKey, function(value) {
+        if (value !== null) {
+          deferred.resolve(value[cacheKey]);
+          return;
+        }
+
+        var repo = getProjectCategoriesRepository();
+
+        repo.getMenuProjectCategories(function(x) {
+          addToCache(cacheKey, x, function() {
+            deferred.resolve(x);
+          });
+        }, function() {
+          addErrors(repo.getErrors());
+          //addError(new Error('Project category menu not found', 404));
+          deferred.reject();
+        });
       });
 
       return deferred.promise;
@@ -220,8 +255,6 @@
           //addError(new Error('Project category menu not found', 404));
           deferred.reject();
         });
-      } else {
-        deferred.resolve([]);
       }
 
       return deferred.promise;
@@ -249,14 +282,25 @@
 
     this.getPage = function() {
       var deferred = q.defer();
-      var repo = getPagesRepository();
+      var cacheKey = 'page_' + _currentPage;
 
-      repo.getPageByName(_currentPage, function(x) {
-        deferred.resolve(x);
-      }, function() {
-        addErrors(repo.getErrors());
-        addError(new Error('Page "' + page + '" not found', 404));
-        deferred.reject();
+      getFromCache(cacheKey, function(value) {
+        if (value !== null) {
+          deferred.resolve(value[cacheKey]);
+          return;
+        }
+
+        var repo = getPagesRepository();
+
+        repo.getPageByName(_currentPage, function(x) {
+          addToCache(cacheKey, x, function() {
+            deferred.resolve(x);
+          });
+        }, function() {
+          addErrors(repo.getErrors());
+          addError(new Error('Page "' + page + '" not found', 404));
+          deferred.reject();
+        });
       });
 
       return deferred.promise;

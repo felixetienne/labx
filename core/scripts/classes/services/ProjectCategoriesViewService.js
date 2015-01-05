@@ -1,4 +1,4 @@
-(function(q, BaseViewService, Error) {
+(function(q, cache, BaseViewService, Error) {
 
   module.exports = function(context) {
     var _base = new BaseViewService(context);
@@ -23,16 +23,27 @@
 
       function getProjectCategories() {
         var deferred = q.defer();
-        var repo = _base.getProjectCategoriesRepository();
+        var cacheKey = 'projectCategories';
 
-        repo.getAllProjectCategories(function(x) {
-            deferred.resolve(x);
-          },
-          function() {
-            _base.addErrors(repo.getErrors());
-            _base.addError(new Error('Projets not found', 404));
-            deferred.reject();
-          });
+        _base.getFromCache(cacheKey, function(value) {
+          if (value !== null) {
+            deferred.resolve(value[cacheKey]);
+            return;
+          }
+
+          var repo = _base.getProjectCategoriesRepository();
+
+          repo.getAllProjectCategories(function(x) {
+              _base.addToCache(cacheKey, x, function() {
+                deferred.resolve(x);
+              });
+            },
+            function() {
+              _base.addErrors(repo.getErrors());
+              _base.addError(new Error('Projets not found', 404));
+              deferred.reject();
+            });
+        });
 
         return deferred.promise;
       }
@@ -107,5 +118,6 @@
 
 })(
   require('q'),
+  require('../../modules/appCache'),
   require('./BaseViewService'),
   require('../Error'));

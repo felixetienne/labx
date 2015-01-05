@@ -3,9 +3,9 @@
   if (!global.staticServicesFactory) {
 
     global.staticServicesFactory = (function(mod, viewHelpers,
-      SimpleViewService,
-      EventViewService, EventsViewService, ProjectViewService,
-      ProjectCategoryViewService, ProjectCategoriesViewService) {
+      SimpleViewService, EventViewService, EventsViewService,
+      ProjectViewService, ProjectCategoryViewService,
+      ProjectCategoriesViewService) {
 
       mod.createPageService = function(context, argsObj) {
 

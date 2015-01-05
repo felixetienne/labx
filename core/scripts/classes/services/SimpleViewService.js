@@ -1,4 +1,4 @@
-(function(q, BaseViewService, Error) {
+(function(q, cache, BaseViewService, Error) {
 
   module.exports = function(context) {
     var _base = new BaseViewService(context);
@@ -56,5 +56,6 @@
   }
 
 })(require('q'),
+  require('../../modules/appCache'),
   require('./BaseViewService'),
   require('../Error'));

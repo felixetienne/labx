@@ -14,14 +14,14 @@
 
       updateFromEnvFile();
 
-      var _cacheSettings = currentTypeIsProduction ? {
-        stdTTL: 90, // seconds (ex.: 90)
-        checkperiod: 120 // seconds (ex.: 120)
+      var _cacheSettings = currentTypeIsProduction() ? {
+        stdTTL: 120, // seconds (ex.: 90)
+        checkperiod: 300 // seconds (ex.: 120)
       } : {
-        stdTTL: 30, // seconds (ex.: 90)
+        stdTTL: 15, // seconds (ex.: 90)
         checkperiod: 30 // seconds (ex.: 120)
       };
-
+      console.log(_type);
       mod.setEnvFile = function(filePath) {
 
         throw 'Not implemented exeption.';

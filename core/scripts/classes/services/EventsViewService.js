@@ -1,4 +1,4 @@
-(function(q, viewHelpers, BaseViewService, Error) {
+(function(q, cache, viewHelpers, BaseViewService, Error) {
 
   module.exports = function(context) {
     var _base = new BaseViewService(context);
@@ -23,16 +23,27 @@
 
       function getEvents() {
         var deferred = q.defer();
-        var repo = _base.getEventsRepository();
+        var cacheKey = 'events';
 
-        repo.getAllEvents(function(x) {
-            deferred.resolve(x);
-          },
-          function() {
-            _base.addErrors(repo.getErrors());
-            _base.addError(new Error('Events not found', 404));
-            deferred.reject();
-          });
+        _base.getFromCache(cacheKey, function(value) {
+          if (value !== null) {
+            deferred.resolve(value[cacheKey]);
+            return;
+          }
+
+          var repo = _base.getEventsRepository();
+
+          repo.getAllEvents(function(x) {
+            _base.addToCache(cacheKey, x, function() {
+                deferred.resolve(x);
+              });
+            },
+            function() {
+              _base.addErrors(repo.getErrors());
+              _base.addError(new Error('Events not found', 404));
+              deferred.reject();
+            });
+        });
 
         return deferred.promise;
       }
@@ -95,6 +106,7 @@
 
 })(
   require('q'),
+  require('../../modules/appCache'),
   require('../../modules/viewHelpers'),
   require('./BaseViewService'),
   require('../Error'));

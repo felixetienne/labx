@@ -19,37 +19,37 @@
         var layouts = layoutHelpers.getLayouts();
 
         switch (pageName) {
-          //case error:
-          case index:
-          case contact:
-          case about:
-          case project:
-          case projects:
-          case services:
-          case event:
-          case events:
-          case curriculumVitae:
-            return layouts.rightAsides;
-          default:
+          // case index:
+          // case contact:
+          // case about:
+          // case project:
+          // case projects:
+          // case services:
+          // case event:
+          // case events:
+          // case curriculumVitae:
+          case error:
             return layouts.fullContent;
+          default:
+            return layouts.rightAsides;
         }
       }
 
       mod.hasFeaturedProjects = function(pageName) {
         switch (pageName) {
-          //case error:
-          //case curriculumVitae:
-          //case services:
-          //case projects:
-          case project:
-          case event:
-          case events:
-          case index:
-          case contact:
-          case about:
-            return true;
-          default:
+          // case curriculumVitae:
+          // case services:
+          // case projects:
+          // case project:
+          // case event:
+          // case events:
+          // case index:
+          // case contact:
+          // case about:
+          case error:
             return false;
+          default:
+            return true;
         }
       }
 
