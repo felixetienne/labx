@@ -17,7 +17,7 @@
         stdTTL: 120, // seconds (ex.: 90)
         checkperiod: 300 // seconds (ex.: 120)
       } : {
-        stdTTL: 15, // seconds (ex.: 90)
+        stdTTL: 12, // seconds (ex.: 90)
         checkperiod: 30 // seconds (ex.: 120)
       };
 

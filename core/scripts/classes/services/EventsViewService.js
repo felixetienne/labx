@@ -34,7 +34,7 @@
           var repo = _base.getEventsRepository();
 
           repo.getAllEvents(function(x) {
-            _base.addToCache(cacheKey, x, function() {
+              _base.addToCache(cacheKey, x, function() {
                 deferred.resolve(x);
               });
             },

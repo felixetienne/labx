@@ -70,7 +70,7 @@
         if (err) {
           addError(new Error(err, 500));
           value = null;
-        } else if (isNullOrEmptyObject(val)) {
+        } else if (!val.hasOwnProperty(key)) {
           value = null;
         } else {
           value = val;
@@ -93,14 +93,6 @@
 
         callback();
       });
-    }
-
-    function isNullOrEmptyObject(obj) {
-      if (!obj) return true;
-      for (k in obj) {
-        if (obj.hasOwnProperty(k)) return false;
-      }
-      return true;
     }
 
     this.addToCache = addToCache;
