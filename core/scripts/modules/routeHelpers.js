@@ -13,11 +13,17 @@
           .createPageService(context, argsObj)
           .getData(
             function(x, c) {
-              x.meta = new ViewMetaData().setLayout(getViewLayout(c));
+              var view = getViewPath(c, argsObj);
+              var layout = getViewLayout(c);
+              x.meta = new ViewMetaData().setLayout(layout);
+              // DEBUG ///////////////////////////////////////
               // console.log('\n\n===== DEBUG =====\n');
+              // console.log(
+              //   'View: ' + view + ' ("' + layout + '" layout).\n');
               // console.log(x);
               // console.log('\n=================\n\n');
-              res.render(getViewPath(c, argsObj), x);
+              ////////////////////////////////////////////////
+              res.render(view, x);
             },
             function(e, c) {
               res.render(viewHelpers.getErrorPage(), {
