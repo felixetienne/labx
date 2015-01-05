@@ -22,7 +22,7 @@
 
       function getProjectCategory() {
         var deferred = q.defer();
-        var cacheKey = 'projectCategory';
+        var cacheKey = 'projectCategory' + _base.getCacheKeyPageSuffix();
 
         _base.getFromCache(cacheKey, function(value) {
           if (value !== null) {

@@ -22,7 +22,7 @@
 
       function getEvent() {
         var deferred = q.defer();
-        var cacheKey = 'event';
+        var cacheKey = 'event' + _base.getCacheKeyPageSuffix();
 
         _base.getFromCache(cacheKey, function(value) {
           if (value !== null) {

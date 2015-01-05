@@ -7,7 +7,7 @@
     var _currentPage = context.getCurrentPage();
     var _currentRequest = context.getCurrentRequest();
     var _currentName = _currentRequest.params ?
-      _currentRequest.params.name : null;
+      _currentRequest.params.name || null : null;
     var _websitesRepository = null;
     var _imagesRepository = null;
     var _pagesRepository = null;
@@ -105,6 +105,7 @@
 
     this.addToCache = addToCache;
     this.getFromCache = getFromCache;
+    this.getCacheKeyPageSuffix = getCacheKeyPageSuffix;
     this.getWebsitesRepository = getWebsitesRepository;
     this.getImagesRepository = getImagesRepository;
     this.getProjectCategoriesRepository = getProjectCategoriesRepository;
@@ -154,6 +155,32 @@
             addError(new Error('Website not found', 404));
             deferred.reject();
           });
+      });
+
+      return deferred.promise;
+    }
+
+    this.getPage = function() {
+      var deferred = q.defer();
+      var cacheKey = 'page_' + _currentPage + getCacheKeyPageSuffix();
+
+      getFromCache(cacheKey, function(value) {
+        if (value !== null) {
+          deferred.resolve(value[cacheKey]);
+          return;
+        }
+
+        var repo = getPagesRepository();
+
+        repo.getPageByName(_currentPage, function(x) {
+          addToCache(cacheKey, x, function() {
+            deferred.resolve(x);
+          });
+        }, function() {
+          addErrors(repo.getErrors());
+          addError(new Error('Page "' + page + '" not found', 404));
+          deferred.reject();
+        });
       });
 
       return deferred.promise;
@@ -280,32 +307,6 @@
       return deferred.promise;
     }
 
-    this.getPage = function() {
-      var deferred = q.defer();
-      var cacheKey = 'page_' + _currentPage;
-
-      getFromCache(cacheKey, function(value) {
-        if (value !== null) {
-          deferred.resolve(value[cacheKey]);
-          return;
-        }
-
-        var repo = getPagesRepository();
-
-        repo.getPageByName(_currentPage, function(x) {
-          addToCache(cacheKey, x, function() {
-            deferred.resolve(x);
-          });
-        }, function() {
-          addErrors(repo.getErrors());
-          addError(new Error('Page "' + page + '" not found', 404));
-          deferred.reject();
-        });
-      });
-
-      return deferred.promise;
-    }
-
     this.getBasicViewData = function(x) {
       var navigationData = getNavigationData(x);
       var data = {
@@ -347,6 +348,12 @@
       };
 
       return data;
+    }
+
+    function getCacheKeyPageSuffix() {
+      var suffix = _currentName ? '_' + _currentName : '';
+
+      return suffix;
     }
 
     function getFeaturedProjectsData(x) {

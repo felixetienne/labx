@@ -22,7 +22,7 @@
 
       function getProject() {
         var deferred = q.defer();
-        var cacheKey = 'project';
+        var cacheKey = 'project' + _base.getCacheKeyPageSuffix();
 
         _base.getFromCache(cacheKey, function(value) {
           if (value !== null) {
