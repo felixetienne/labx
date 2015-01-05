@@ -25,6 +25,7 @@ $brand-info:            #5bc0de !default;
 $brand-warning:         #f0ad4e !default;
 $brand-danger:          #d9534f !default;
 
+$hot:                   #772222;
 
 //== Scaffolding
 //
@@ -793,9 +794,9 @@ $breadcrumb-padding-horizontal: 15px !default;
 //** Breadcrumb background color
 $breadcrumb-bg:                 transparent !default;
 //** Breadcrumb text color
-$breadcrumb-color:              #772222 !default;
+$breadcrumb-color:              $hot !default;
 //** Text color of current page in the breadcrumb
-$breadcrumb-active-color:       #772222 !default;
+$breadcrumb-active-color:       $hot !default;
 //** Textual separator for between breadcrumb elements
 $breadcrumb-separator:          "/" !default;
 

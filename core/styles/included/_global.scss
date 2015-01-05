@@ -8,8 +8,14 @@ body{
 }
 
 .mod-page {
+  .mp--main-content{
+    hr{
+      border-color: $gray-light;
+      margin: 0 10%;
+    }
+  }
   .mp--main-content, .mp--aside{
-    background-color: white;
+    background-color: rgba(255,255,255, 0.55);
     border: 1px black solid;
     padding: 0 20px 20px 20px;
     margin-bottom: 20px;
@@ -67,9 +73,26 @@ body{
       background-color: rgba(0,0,0, 0.67);
       }
   }
-  .carousel{
-  }
-  .carousel-inner{
+}
 
+.mod-footer{
+  .mf--links{
+    padding-left: 0;
+    padding-right: 0;
+    li{
+      display: inline-block;
+      a{
+        color: $hot;
+      }
+      &:before{
+        display: inline-block;
+        content: '|';
+      }
+      &:first-child:before{
+        display: none;
+      }
+    }
+  }
+  .mf--copyright{
   }
 }

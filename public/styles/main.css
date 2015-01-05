@@ -4697,8 +4697,11 @@ body {
   background-attachment: fixed;
   padding-top: 60px; }
 
+.mod-page .mp--main-content hr {
+  border-color: #777777;
+  margin: 0 10%; }
 .mod-page .mp--main-content, .mod-page .mp--aside {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.55);
   border: 1px black solid;
   padding: 0 20px 20px 20px;
   margin-bottom: 20px; }
@@ -4731,3 +4734,16 @@ body {
       padding: 4px 8px;
       color: white;
       background-color: rgba(0, 0, 0, 0.67); }
+
+.mod-footer .mf--links {
+  padding-left: 0;
+  padding-right: 0; }
+  .mod-footer .mf--links li {
+    display: inline-block; }
+    .mod-footer .mf--links li a {
+      color: #772222; }
+    .mod-footer .mf--links li:before {
+      display: inline-block;
+      content: '|'; }
+    .mod-footer .mf--links li:first-child:before {
+      display: none; }
