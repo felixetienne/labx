@@ -66,38 +66,38 @@
     }
 
     function getFromCache(key, callback) {
-      callback(null);
-      // cache.get(key, function(err, val) {
-      //   var value;
-      //
-      //   if (err) {
-      //     addError(new Error(err, 500));
-      //     value = null;
-      //   } else if (val.hasOwnProperty(key)) {
-      //     value = val[key];
-      //     console.log('in cache...');
-      //   } else {
-      //     value = null;
-      //     console.log('not in cache...');
-      //   }
-      //
-      //   callback(value);
-      // });
+      //callback(null);
+      cache.get(key, function(err, val) {
+        var value;
+
+        if (err) {
+          addError(new Error(err, 500));
+          value = null;
+        } else if (val.hasOwnProperty(key)) {
+          value = val[key];
+          //console.log('in cache...');
+        } else {
+          value = null;
+          //console.log('not in cache...');
+        }
+
+        callback(value);
+      });
     }
 
     function addToCache(key, value, callback) {
-      callback();
-      // cache.set(key, value, function(err, success) {
-      //   if (err) {
-      //     addError(new Error(err, 500));
-      //   } else if (!success) {
-      //     addError(new Error(
-      //       'Un probleme est survenue lors de la mise en cache (clé: ' +
-      //       key + ').', 500));
-      //   }
-      //   console.log('put in cache: ' + key);
-      //   callback();
-      // });
+      //callback();
+      cache.set(key, value, function(err, success) {
+        if (err) {
+          addError(new Error(err, 500));
+        } else if (!success) {
+          addError(new Error(
+            'Un probleme est survenue lors de la mise en cache (clé: ' +
+            key + ').', 500));
+        }
+        //console.log('put in cache: ' + key);
+        callback();
+      });
     }
 
     this.pg = pg;
