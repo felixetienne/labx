@@ -140,7 +140,7 @@
         return curriculumVitae;
       };
 
-      mod.getStaticPages = function() {
+      mod.getStandardPages = function() {
         var names = [];
 
         names.push(index);

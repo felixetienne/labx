@@ -27,7 +27,7 @@
 
         _base.getFromCache(cacheKey, function(value) {
           if (value !== null) {
-            deferred.resolve(value[cacheKey]);
+            deferred.resolve(value);
             return;
           }
 

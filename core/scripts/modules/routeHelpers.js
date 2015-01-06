@@ -6,14 +6,14 @@
       websiteHelpers, viewHelpers, layoutHelpers,
       Context, ViewMetaData, Error) {
 
-      mod.getRoute = function(pageName, argsObj) {
+      mod.getRouteCallback = function(pageName, argsObj) {
         var argsObj = argsObj || {};
-        var website = websiteHelpers.getWebsiteName('main');
-        var f = function(req, res) {
+        var websiteName = websiteHelpers.getWebsiteName('main');
+        var callback = function(req, res) {
           var context = new Context()
-            .setCurrentWebsiteName(website)
             .setCurrentRequest(req)
-            .setCurrentPage(pageName);
+            .setCurrentPage(pageName)
+            .setCurrentWebsite(websiteName);
 
           servicesFactory
             .createPageService(context, argsObj)
@@ -33,14 +33,15 @@
                 res.render(view, x);
               },
               function(c, e) {
+                var view = viewHelpers.getErrorPage();
                 logErrors(e);
-                res.render(viewHelpers.getErrorPage(), {
+                res.render(view, {
                   meta: new ViewMetaData(e).asErrorPage()
                 });
               });
         }
 
-        return f;
+        return callback;
       }
 
       function logErrors(errors) {

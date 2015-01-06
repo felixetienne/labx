@@ -1,19 +1,20 @@
 (function(config) {
 
   module.exports = function() {
-    var _currentWebsiteName = null;
+    var _currentWebsite = null;
     var _currentRequest = null;
     var _currentPage = null;
     var _currentView = null;
     var _errorView = null;
 
-    this.getCurrentWebsiteName = function() {
-      return _currentWebsiteName;
+    this.getCurrentWebsite = function() {
+      return _currentWebsite;
     }
-    this.setCurrentWebsiteName = function(value) {
-      _currentWebsiteName = value;
+    this.setCurrentWebsite = function(value) {
+      _currentWebsite = value;
       return this;
     }
+
     this.getCurrentRequest = function() {
       return _currentRequest;
     }

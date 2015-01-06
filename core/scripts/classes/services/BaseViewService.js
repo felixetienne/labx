@@ -64,35 +64,38 @@
     }
 
     function getFromCache(key, callback) {
-      cache.get(key, function(err, val) {
-        var value;
-
-        if (err) {
-          addError(new Error(err, 500));
-          value = null;
-        } else if (!val.hasOwnProperty(key)) {
-          value = null;
-        } else {
-          value = val;
-        }
-
-        callback(value);
-      });
+      callback(null);
+      // cache.get(key, function(err, val) {
+      //   var value;
+      //
+      //   if (err) {
+      //     addError(new Error(err, 500));
+      //     value = null;
+      //   } else if (val.hasOwnProperty(key)) {
+      //     value = val[key];
+      //     console.log('in cache...');
+      //   } else {
+      //     value = null;
+      //     console.log('not in cache...');
+      //   }
+      //
+      //   callback(value);
+      // });
     }
 
     function addToCache(key, value, callback) {
-
-      cache.set(key, value, function(err, success) {
-        if (err) {
-          addError(new Error(err, 500));
-        } else if (!success) {
-          addError(new Error(
-            'Un probleme est survenue lors de la mise en cache.',
-            500));
-        }
-
-        callback();
-      });
+      callback();
+      // cache.set(key, value, function(err, success) {
+      //   if (err) {
+      //     addError(new Error(err, 500));
+      //   } else if (!success) {
+      //     addError(new Error(
+      //       'Un probleme est survenue lors de la mise en cache (clé: ' +
+      //       key + ').', 500));
+      //   }
+      //   console.log('put in cache: ' + key);
+      //   callback();
+      // });
     }
 
     this.addToCache = addToCache;
@@ -130,13 +133,13 @@
 
       getFromCache(cacheKey, function(value) {
         if (value !== null) {
-          deferred.resolve(value[cacheKey]);
+          deferred.resolve(value);
           return;
         }
 
         var repo = getWebsitesRepository();
 
-        repo.getWebsiteByName(context.getCurrentWebsiteName(),
+        repo.getWebsiteByName(context.getCurrentWebsite(),
           function(x) {
             addToCache(cacheKey, x, function() {
               deferred.resolve(x);
@@ -154,11 +157,12 @@
 
     this.getPage = function() {
       var deferred = q.defer();
-      var cacheKey = 'page_' + _currentPage + getCacheKeyPageSuffix();
+      var cacheKey = 'page' + (_currentPage ? '_' + _currentPage : '') +
+        getCacheKeyPageSuffix();
 
       getFromCache(cacheKey, function(value) {
         if (value !== null) {
-          deferred.resolve(value[cacheKey]);
+          deferred.resolve(value);
           return;
         }
 
@@ -184,7 +188,7 @@
 
       getFromCache(cacheKey, function(value) {
         if (value !== null) {
-          deferred.resolve(value[cacheKey]);
+          deferred.resolve(value);
           return;
         }
 
@@ -211,7 +215,7 @@
 
       getFromCache(cacheKey, function(value) {
         if (value !== null) {
-          deferred.resolve(value[cacheKey]);
+          deferred.resolve(value);
           return;
         }
 
@@ -239,7 +243,7 @@
 
       getFromCache(cacheKey, function(value) {
         if (value !== null) {
-          deferred.resolve(value[cacheKey]);
+          deferred.resolve(value);
           return;
         }
 

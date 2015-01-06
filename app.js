@@ -20,24 +20,24 @@
   app.set('view engine', 'ejs');
   app.set('layout', 'layout');
 
-  var pages = viewHelpers.getStaticPages();
+  var pages = viewHelpers.getStandardPages();
   for (var i = 0; i < pages.length; i++) {
     var p = pages[i];
-    app.get('/' + p, routeHelpers.getRoute(p));
+    app.get('/' + p, routeHelpers.getRouteCallback(p));
   }
 
   var page = viewHelpers.getProjectsPage();
-  app.get('/' + page + '/:name', routeHelpers.getRoute(page, {
+  app.get('/' + page + '/:name', routeHelpers.getRouteCallback(page, {
     isProjectCategoryPage: true
   }));
 
   var page = viewHelpers.getProjectPage();
-  app.get('/' + page + '/:name', routeHelpers.getRoute(page, {
+  app.get('/' + page + '/:name', routeHelpers.getRouteCallback(page, {
     isProjectPage: true
   }));
 
   var page = viewHelpers.getEventPage();
-  app.get('/' + page + '/:name', routeHelpers.getRoute(page, {
+  app.get('/' + page + '/:name', routeHelpers.getRouteCallback(page, {
     isEventPage: true
   }));
 
