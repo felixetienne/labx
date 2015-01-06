@@ -5,23 +5,30 @@
 
     this.getData = function(successAction, errorAction) {
 
-      return q
-        .all([
-          _base.getWebsite(),
-          _base.getPages(),
-          _base.getMenuEvents(),
-          _base.getMenuProjectCategories(),
-          _base.getFeaturedProjects(),
-          _base.getImageBanners(),
-          _base.getPage(),
-          getEvents()
-        ])
-        .spread(computeData)
-        .then(onSuccess)
-        .fail(onError)
-        .done();
+      _base.pg.connect(_base.getDatabaseUrl(), function(err, client) {
+        if (err || !client) console.error(
+          '[ERROR:pg:connect] Error: ' + err + ', client: ' +
+          client + '.');
 
-      function getEvents() {
+        q.all([
+            _base.getWebsite(client),
+            _base.getPages(client),
+            _base.getMenuEvents(client),
+            _base.getMenuProjectCategories(client),
+            _base.getFeaturedProjects(client),
+            _base.getImageBanners(client),
+            _base.getPage(client),
+            getEvents(client)
+          ])
+          .spread(computeData)
+          .then(onSuccess)
+          .fail(onError)
+          .done(function() {
+            client.end();
+          });
+      });
+
+      function getEvents(client) {
         var deferred = q.defer();
         var cacheKey = 'events';
 
@@ -33,7 +40,7 @@
 
           var repo = _base.getEventsRepository();
 
-          repo.getAllEvents(function(x) {
+          repo.getAllEvents(client, function(x) {
               _base.addToCache(cacheKey, x, function() {
                 deferred.resolve(x);
               });

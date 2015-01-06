@@ -8,14 +8,15 @@
       return _base.getErrors();
     }
 
-    this.getProjectCategoryByName = function(projectCategoryName, action,
+    this.getProjectCategoryByName = function(client, projectCategoryName,
+      action,
       emptyAction) {
       if (_base.isInvalidAction(action)) return;
 
-      _base.open(function(client) {
-        var query = bricks
-          .select(
-            '\
+      //_base.open(function(client) {
+      var query = bricks
+        .select(
+          '\
             project_categories.id, \
             project_categories.title, \
             project_categories.description_html, \
@@ -32,59 +33,59 @@
             projects.date as project_date, \
             projects.sorting as project_sorting, \
             get_project_image_list(projects.id, TRUE) as project_image_list'
-          )
-          .from('project_categories')
-          .leftJoin('projects', {
-            'project_categories.id': 'projects.category_id'
-          })
-          .where('project_categories.name', projectCategoryName)
-          .where('project_categories.active', true)
-          .where('projects.active', true)
-          .orderBy(
-            'project_categories.sorting ASC',
-            'project_sorting ASC'
-          )
-          .toString();
+        )
+        .from('project_categories')
+        .leftJoin('projects', {
+          'project_categories.id': 'projects.category_id'
+        })
+        .where('project_categories.name', projectCategoryName)
+        .where('project_categories.active', true)
+        .where('projects.active', true)
+        .orderBy(
+          'project_categories.sorting ASC',
+          'project_sorting ASC'
+        )
+        .toString();
 
-        client
-          .query(query, function(err, res) {
+      client
+        .query(query, function(err, res) {
 
-            if (err) {
-              _base.close(client);
-              _base.addError(new Error(err, 500));
-              emptyAction();
-              return;
-            }
-
-            if (_base.hasResults(res)) {
-              var data = [];
-
-              res.rows.forEach(function(row) {
-
-                row.project_images = _base.extractMedias(
-                  row.project_image_list, true);
-
-                data.push(row);
-              });
-
-              action(data);
-            } else if (typeof emptyAction === 'function') {
-              emptyAction();
-            }
-
+          if (err) {
             _base.close(client);
-          });
-      });
+            _base.addError(new Error(err, 500));
+            emptyAction();
+            return;
+          }
+
+          if (_base.hasResults(res)) {
+            var data = [];
+
+            res.rows.forEach(function(row) {
+
+              row.project_images = _base.extractMedias(
+                row.project_image_list, true);
+
+              data.push(row);
+            });
+
+            action(data);
+          } else if (typeof emptyAction === 'function') {
+            emptyAction();
+          }
+
+          //_base.close(client);
+        });
+      //});
     }
 
-    this.getAllProjectCategories = function(action,
+    this.getAllProjectCategories = function(client, action,
       emptyAction) {
       if (_base.isInvalidAction(action)) return;
 
-      _base.open(function(client) {
-        var query = bricks
-          .select(
-            '\
+      //_base.open(function(client) {
+      var query = bricks
+        .select(
+          '\
             project_categories.id, \
             project_categories.name, \
             project_categories.title, \
@@ -98,93 +99,93 @@
             projects.date as project_date, \
             projects.sorting as project_sorting, \
             get_project_image_list(projects.id, TRUE) as project_image_list'
-          )
-          .from('project_categories')
-          .leftJoin('projects', {
-            'project_categories.id': 'projects.category_id'
-          })
-          .where('project_categories.active', true)
-          .where('projects.active', true)
-          .orderBy(
-            'project_categories.sorting ASC',
-            'project_sorting ASC'
-          )
-          .toString();
+        )
+        .from('project_categories')
+        .leftJoin('projects', {
+          'project_categories.id': 'projects.category_id'
+        })
+        .where('project_categories.active', true)
+        .where('projects.active', true)
+        .orderBy(
+          'project_categories.sorting ASC',
+          'project_sorting ASC'
+        )
+        .toString();
 
-        client
-          .query(query, function(err, res) {
+      client
+        .query(query, function(err, res) {
 
-            if (err) {
-              _base.close(client);
-              _base.addError(new Error(err, 500));
-              emptyAction();
-              return;
-            }
-
-            if (_base.hasResults(res)) {
-              var data = [];
-
-              res.rows.forEach(function(row) {
-
-                row.project_images = _base.extractMedias(
-                  row.project_image_list, true);
-
-                data.push(row);
-              });
-
-              action(data);
-            } else if (typeof emptyAction === 'function') {
-              emptyAction();
-            }
-
+          if (err) {
             _base.close(client);
-          });
-      });
+            _base.addError(new Error(err, 500));
+            emptyAction();
+            return;
+          }
+
+          if (_base.hasResults(res)) {
+            var data = [];
+
+            res.rows.forEach(function(row) {
+
+              row.project_images = _base.extractMedias(
+                row.project_image_list, true);
+
+              data.push(row);
+            });
+
+            action(data);
+          } else if (typeof emptyAction === 'function') {
+            emptyAction();
+          }
+
+          //_base.close(client);
+        });
+      //});
     }
 
-    this.getMenuProjectCategories = function(action, emptyAction) {
+    this.getMenuProjectCategories = function(client, action, emptyAction) {
       if (_base.isInvalidAction(action)) return;
 
-      _base.open(function(client) {
-        var query = bricks
-          .select(
-            '\
+      //_base.open(function(client) {
+      var query = bricks
+        .select(
+          '\
             project_categories.id, \
             project_categories.name, \
             project_categories.title, \
             project_categories.title_short, \
             project_categories.sorting'
-          )
-          .from('project_categories')
-          .where('project_categories.active', true)
-          .orderBy('project_categories.sorting ASC')
-          .toString();
+        )
+        .from('project_categories')
+        .where('project_categories.active', true)
+        .orderBy('project_categories.sorting ASC')
+        .toString();
 
-        client
-          .query(query, function(err, res) {
+      client
+        .query(query, function(err, res) {
 
-            if (err) {
-              _base.close(client);
-              _base.addError(new Error(err, 500));
-              emptyAction();
-              return;
-            }
-
-            if (_base.hasResults(res)) {
-              var data = [];
-
-              res.rows.forEach(function(row) {
-                data.push(row);
-              });
-
-              action(data);
-            } else if (typeof emptyAction === 'function') {
-              emptyAction();
-            }
-
+          if (err) {
             _base.close(client);
-          });
-      });
+            _base.addError(new Error(err, 500));
+            emptyAction();
+            return;
+          }
+
+          if (_base.hasResults(res)) {
+            var data = [];
+
+            res.rows.forEach(function(row) {
+              data.push(row);
+            });
+
+            action(data);
+          } else if (typeof emptyAction === 'function') {
+            emptyAction();
+          }
+
+          //_base.close(client);
+        });
+      //});
     }
   }
 

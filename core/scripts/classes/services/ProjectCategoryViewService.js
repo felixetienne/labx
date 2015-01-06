@@ -5,22 +5,30 @@
 
     this.getData = function(successAction, errorAction) {
 
+      _base.pg.connect(_base.getDatabaseUrl(), function(err, client) {
+        if (err || !client) console.error(
+          '[ERROR:pg:connect] Error: ' + err + ', client: ' +
+          client + '.');
+
       return q
         .all([
-          _base.getWebsite(),
-          _base.getPages(),
-          _base.getMenuEvents(),
-          _base.getMenuProjectCategories(),
-          _base.getFeaturedProjects(),
-          _base.getImageBanners(),
-          getProjectCategory()
+          _base.getWebsite(client),
+          _base.getPages(client),
+          _base.getMenuEvents(client),
+          _base.getMenuProjectCategories(client),
+          _base.getFeaturedProjects(client),
+          _base.getImageBanners(client),
+          getProjectCategory(client)
         ])
         .spread(computeData)
         .then(onSuccess)
         .fail(onError)
-        .done();
+        .done(function() {
+          client.end();
+        });
+      });
 
-      function getProjectCategory() {
+      function getProjectCategory(client) {
         var deferred = q.defer();
         var cacheKey = 'projectCategory' + _base.getCacheKeyPageSuffix();
 
@@ -33,7 +41,7 @@
           var request = _base.getCurrentRequest();
           var repo = _base.getProjectCategoriesRepository();
 
-          repo.getProjectCategoryByName(request.params.name,
+          repo.getProjectCategoryByName(client, request.params.name,
             function(x) {
               _base.addToCache(cacheKey, x, function() {
                 deferred.resolve(x);

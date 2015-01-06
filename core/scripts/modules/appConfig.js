@@ -9,7 +9,7 @@
       var _dateFormat = 'dd/mm/yyyy';
       var _maximumEventsInMenu = 10;
       var _maximumLastEvents = 3;
-      var _type, _databaseUrl, _port;
+      var _type, _port, _databaseUrl, _fullDatabaseUrl;
 
       updateFromEnvFile();
 
@@ -50,6 +50,9 @@
       mod.getDatabaseUrl = function() {
         return _databaseUrl;
       }
+      mod.getFullDatabaseUrl = function() {
+        return _fullDatabaseUrl;
+      }
       mod.getCurrentPort = function() {
         return _port;
       }
@@ -70,8 +73,9 @@
 
       function updateFromEnvFile() {
         _type = process.env.TYPE || _productionType;
-        _databaseUrl = process.env.DATABASE_URL;
         _port = process.env.PORT;
+        _databaseUrl = process.env.DATABASE_URL;
+        _fullDatabaseUrl = _databaseUrl + "?ssl=true";
       }
 
       return mod;

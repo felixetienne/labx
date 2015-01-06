@@ -1,6 +1,8 @@
-(function(q, dateFormat, repositoriesFactory, config, cache, viewHelpers, Error) {
+(function(q, pg, dateFormat, repositoriesFactory, config, cache, viewHelpers,
+  Error) {
 
   module.exports = function(context) {
+    var _databaseUrl = config.getFullDatabaseUrl();
     var _dateFormat = config.getDateFormat();
     var _maximumLastEvents = config.getMaximumLastEvents();
     var _maximumEventsInMenu = config.getMaximumEventsInMenu();
@@ -98,6 +100,7 @@
       // });
     }
 
+    this.pg = pg;
     this.addToCache = addToCache;
     this.getFromCache = getFromCache;
     this.getCacheKeyPageSuffix = getCacheKeyPageSuffix;
@@ -115,6 +118,10 @@
     this.addErrors = addErrors;
     this.addError = addError;
 
+    this.getDatabaseUrl = function() {
+      return _databaseUrl;
+    }
+
     this.getErrors = function() {
       return _errors;
     }
@@ -127,7 +134,7 @@
       return _currentRequest;
     }
 
-    this.getWebsite = function() {
+    this.getWebsite = function(client) {
       var deferred = q.defer();
       var cacheKey = 'website';
 
@@ -139,7 +146,7 @@
 
         var repo = getWebsitesRepository();
 
-        repo.getWebsiteByName(context.getCurrentWebsite(),
+        repo.getWebsiteByName(client, context.getCurrentWebsite(),
           function(x) {
             addToCache(cacheKey, x, function() {
               deferred.resolve(x);
@@ -155,7 +162,7 @@
       return deferred.promise;
     }
 
-    this.getPage = function() {
+    this.getPage = function(client) {
       var deferred = q.defer();
       var cacheKey = 'page' + (_currentPage ? '_' + _currentPage : '') +
         getCacheKeyPageSuffix();
@@ -168,7 +175,7 @@
 
         var repo = getPagesRepository();
 
-        repo.getPageByName(_currentPage, function(x) {
+        repo.getPageByName(client, _currentPage, function(x) {
           addToCache(cacheKey, x, function() {
             deferred.resolve(x);
           });
@@ -182,7 +189,7 @@
       return deferred.promise;
     }
 
-    this.getPages = function() {
+    this.getPages = function(client) {
       var deferred = q.defer();
       var cacheKey = 'pages';
 
@@ -194,7 +201,7 @@
 
         var repo = getPagesRepository();
 
-        repo.getAllPages(function(x) {
+        repo.getAllPages(client, function(x) {
             addToCache(cacheKey, x, function() {
               deferred.resolve(x);
             });
@@ -209,7 +216,7 @@
       return deferred.promise;
     }
 
-    this.getMenuEvents = function() {
+    this.getMenuEvents = function(client) {
       var deferred = q.defer();
       var cacheKey = 'menuEvents';
 
@@ -223,7 +230,7 @@
         var maximum = _maximumEventsInMenu > _maximumLastEvents ?
           _maximumEventsInMenu : _maximumLastEvents;
 
-        repo.getMenuEvents(maximum, function(x) {
+        repo.getMenuEvents(client, maximum, function(x) {
           addToCache(cacheKey, x, function() {
             deferred.resolve(x);
           });
@@ -237,7 +244,7 @@
       return deferred.promise;
     }
 
-    this.getMenuProjectCategories = function() {
+    this.getMenuProjectCategories = function(client) {
       var deferred = q.defer();
       var cacheKey = 'menuProjectCategories';
 
@@ -249,7 +256,7 @@
 
         var repo = getProjectCategoriesRepository();
 
-        repo.getMenuProjectCategories(function(x) {
+        repo.getMenuProjectCategories(client, function(x) {
           addToCache(cacheKey, x, function() {
             deferred.resolve(x);
           });
@@ -263,7 +270,7 @@
       return deferred.promise;
     }
 
-    this.getFeaturedProjects = function() {
+    this.getFeaturedProjects = function(client) {
       var deferred = q.defer();
 
       if (viewHelpers.hasFeaturedProjects(_currentPage)) {
@@ -271,7 +278,7 @@
         var exludedProjectName = _currentPage === _projectPage ?
           _currentName : null;
 
-        repo.getFeaturedProjects(exludedProjectName, function(x) {
+        repo.getFeaturedProjects(client, exludedProjectName, function(x) {
           deferred.resolve(x);
         }, function() {
           addErrors(repo.getErrors());
@@ -283,13 +290,13 @@
       return deferred.promise;
     }
 
-    this.getImageBanners = function() {
+    this.getImageBanners = function(client) {
       var deferred = q.defer();
 
       if (viewHelpers.hasBanners(_currentPage)) {
         var repo = getImagesRepository();
 
-        repo.getBanners(function(x) {
+        repo.getBanners(client, function(x) {
           deferred.resolve(x);
         }, function() {
           addErrors(repo.getErrors());
@@ -707,6 +714,7 @@
 
 })(
   require('q'),
+  require('pg'),
   require('dateformat'),
   require('../../modules/factories/repositoriesFactory'),
   require('../../modules/appConfig'),

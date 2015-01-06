@@ -7,13 +7,13 @@
       return _base.getErrors();
     }
 
-    this.getBanners = function(action, emptyAction) {
+    this.getBanners = function(client, action, emptyAction) {
       if (_base.isInvalidAction(action)) return;
 
-      _base.open(function(client) {
-        var query = bricks
-          .select(
-            '\
+      //_base.open(function(client) {
+      var query = bricks
+        .select(
+          '\
           banner_images.sorting, \
           images.name, \
           images.sorting as image_sorting, \
@@ -34,32 +34,32 @@
           events.description_short as event_description_short, \
           events.date as event_date, \
           events.sorting as event_sorting'
-          )
-          .from('banner_images')
-          .innerJoin('images', {
-            'images.id': 'banner_images.image_id'
-          })
-          .leftJoin('project_images', {
-            'project_images.image_id': 'images.id'
-          })
-          .leftJoin('projects', {
-            'projects.id': 'project_images.project_id'
-          })
-          .leftJoin('project_categories', {
-            'project_categories.id': 'projects.category_id'
-          })
-          .leftJoin('event_images', {
-            'event_images.image_id': 'images.id'
-          })
-          .leftJoin('events', {
-            'events.id': 'event_images.event_id'
-          })
-          .where('banner_images.active', true)
-          .where('images.active', true)
-          .toString();
+        )
+        .from('banner_images')
+        .innerJoin('images', {
+          'images.id': 'banner_images.image_id'
+        })
+        .leftJoin('project_images', {
+          'project_images.image_id': 'images.id'
+        })
+        .leftJoin('projects', {
+          'projects.id': 'project_images.project_id'
+        })
+        .leftJoin('project_categories', {
+          'project_categories.id': 'projects.category_id'
+        })
+        .leftJoin('event_images', {
+          'event_images.image_id': 'images.id'
+        })
+        .leftJoin('events', {
+          'events.id': 'event_images.event_id'
+        })
+        .where('banner_images.active', true)
+        .where('images.active', true)
+        .toString();
 
-        query +=
-          '\
+      query +=
+        '\
         AND (\
           (projects.active = TRUE AND project_categories.active = TRUE)\
            OR \
@@ -77,124 +77,125 @@
         event_date DESC, \
         event_sorting ASC';
 
-        client
-          .query(query, function(err, res) {
+      client
+        .query(query, function(err, res) {
 
-            if (err) {
-              _base.close(client);
-              _base.addError(new Error(err, 500));
-              emptyAction();
-              return;
-            }
-
-            if (_base.hasResults(res)) {
-              var data = [];
-
-              res.rows.forEach(function(row) {
-                row.path = _base.buildImagePath(row);
-                data.push(row);
-              });
-
-              action(data);
-            } else if (typeof emptyAction === 'function') {
-              emptyAction();
-            }
-
+          if (err) {
             _base.close(client);
-          });
-      });
+            _base.addError(new Error(err, 500));
+            emptyAction();
+            return;
+          }
+
+          if (_base.hasResults(res)) {
+            var data = [];
+
+            res.rows.forEach(function(row) {
+              row.path = _base.buildImagePath(row);
+              data.push(row);
+            });
+
+            action(data);
+          } else if (typeof emptyAction === 'function') {
+            emptyAction();
+          }
+
+          //_base.close(client);
+        });
+      //});
     }
 
-    this.getAll = function(action, emptyAction) {
+    this.getAll = function(client, action, emptyAction) {
       if (_base.isInvalidAction(action)) return;
 
-      _base.open(function(client) {
-        var query = bricks
-          .select(
-            '\
+      //_base.open(function(client) {
+      var query = bricks
+        .select(
+          '\
           images.title, \
           images.name, \
           images.id, \
           images.force_deploy, \
           images.sorting'
-          )
-          .from('images')
-          .where('images.active', true)
-          .where(bricks.isNotNull('images.content'))
-          .orderBy('images.sorting ASC')
-          .toString();
+        )
+        .from('images')
+        .where('images.active', true)
+        .where(bricks.isNotNull('images.content'))
+        .orderBy('images.sorting ASC')
+        .toString();
 
-        client
-          .query(query, function(err, res) {
+      client
+        .query(query, function(err, res) {
 
-            if (err) {
-              _base.close(client);
-              _base.addError(new Error(err, 500));
-              emptyAction();
-              return;
-            }
-
-            if (_base.hasResults(res)) {
-              action(convertToData(res));
-            } else {
-              emptyAction();
-            }
-
+          if (err) {
             _base.close(client);
-          });
-      });
+            _base.addError(new Error(err, 500));
+            emptyAction();
+            return;
+          }
+
+          if (_base.hasResults(res)) {
+            action(convertToData(res));
+          } else {
+            emptyAction();
+          }
+
+          //_base.close(client);
+        });
+      //});
     }
 
-    this.getByIds = function(idsList, includeRawData, action, emptyAction) {
+    this.getByIds = function(client, idsList, includeRawData, action,
+      emptyAction) {
       if (_base.isInvalidAction(action)) return;
 
-      _base.open(function(client) {
-        var query = bricks
-          .select(
-            '\
+      //_base.open(function(client) {
+      var query = bricks
+        .select(
+          '\
           images.name, \
           images.sorting');
 
-        if (includeRawData) {
-          query = query.select('images.content');
-        }
+      if (includeRawData) {
+        query = query.select('images.content');
+      }
 
-        query = query
-          .from('images')
-          .where('images.active', true)
-          .where(bricks.isNotNull('images.content'))
-          .toString();
+      query = query
+        .from('images')
+        .where('images.active', true)
+        .where(bricks.isNotNull('images.content'))
+        .toString();
 
-        var last = idsList.count() - 1;
+      var last = idsList.count() - 1;
 
-        idsList.do(function(x, i) {
-          query += (
-            i === 0 ? ' AND (' : ' OR '
-          ) + 'images.id = ' + x;
-          if (i === last) query += ')';
-        });
-
-        query += 'ORDER BY images.sorting ASC'
-
-        client
-          .query(query, function(err, res) {
-
-            if (err) {
-              _base.close(client);
-              _base.addError(new Error(err, 500));
-              emptyAction();
-              return;
-            }
-
-            if (_base.hasResults(res)) {
-              action(convertToData(res));
-            } else if (typeof emptyAction === 'function') {
-              emptyAction();
-            }
-
-            _base.close(client);
-          });
+      idsList.do(function(x, i) {
+        query += (
+          i === 0 ? ' AND (' : ' OR '
+        ) + 'images.id = ' + x;
+        if (i === last) query += ')';
       });
+
+      query += 'ORDER BY images.sorting ASC'
+
+      client
+        .query(query, function(err, res) {
+
+          if (err) {
+            _base.close(client);
+            _base.addError(new Error(err, 500));
+            emptyAction();
+            return;
+          }
+
+          if (_base.hasResults(res)) {
+            action(convertToData(res));
+          } else if (typeof emptyAction === 'function') {
+            emptyAction();
+          }
+
+          //_base.close(client);
+        });
+      //});
     }
 
     function convertToData(res) {

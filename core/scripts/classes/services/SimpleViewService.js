@@ -5,20 +5,28 @@
 
     this.getData = function(successAction, errorAction) {
 
-      return q
-        .all([
-          _base.getWebsite(),
-          _base.getPages(),
-          _base.getMenuEvents(),
-          _base.getMenuProjectCategories(),
-          _base.getFeaturedProjects(),
-          _base.getImageBanners(),
-          _base.getPage()
-        ])
-        .spread(computeData)
-        .then(onSuccess)
-        .fail(onError)
-        .done();
+      _base.pg.connect(_base.getDatabaseUrl(), function(err, client) {
+        if (err || !client) console.error(
+          '[ERROR:pg:connect] Error: ' + err + ', client: ' +
+          client + '.');
+
+        return q
+          .all([
+            _base.getWebsite(client),
+            _base.getPages(client),
+            _base.getMenuEvents(client),
+            _base.getMenuProjectCategories(client),
+            _base.getFeaturedProjects(client),
+            _base.getImageBanners(client),
+            _base.getPage(client)
+          ])
+          .spread(computeData)
+          .then(onSuccess)
+          .fail(onError)
+          .done(function() {
+            client.end();
+          });
+      });
 
       function onSuccess(data) {
         successAction(data, context, _base.getErrors());
