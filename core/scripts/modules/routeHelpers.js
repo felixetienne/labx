@@ -14,7 +14,6 @@
           var pg = require('pg');
           var databaseUrl = config.getFullDatabaseUrl();
 
-          console.log(databaseUrl);
           pg.connect(databaseUrl, function(err,
             client) {
             if (err || !client) console.error(
