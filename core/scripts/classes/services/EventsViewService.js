@@ -3,30 +3,22 @@
   module.exports = function(context) {
     var _base = new BaseViewService(context);
 
-    this.getData = function(successAction, errorAction) {
+    this.getData = function(client, successAction, errorAction) {
 
-      _base.pg.connect(_base.getDatabaseUrl(), function(err, client) {
-        if (err || !client) console.error(
-          '[ERROR:pg:connect] Error: ' + err + ', client: ' +
-          client + '.');
-
-        q.all([
-            _base.getWebsite(client),
-            _base.getPages(client),
-            _base.getMenuEvents(client),
-            _base.getMenuProjectCategories(client),
-            _base.getFeaturedProjects(client),
-            _base.getImageBanners(client),
-            _base.getPage(client),
-            getEvents(client)
-          ])
-          .spread(computeData)
-          .then(onSuccess)
-          .fail(onError)
-          .done(function() {
-            client.end();
-          });
-      });
+      q.all([
+          _base.getWebsite(client),
+          _base.getPages(client),
+          _base.getMenuEvents(client),
+          _base.getMenuProjectCategories(client),
+          _base.getFeaturedProjects(client),
+          _base.getImageBanners(client),
+          _base.getPage(client),
+          getEvents(client)
+        ])
+        .spread(computeData)
+        .then(onSuccess)
+        .fail(onError)
+        .done();
 
       function getEvents(client) {
         var deferred = q.defer();

@@ -3,12 +3,7 @@
   module.exports = function(context) {
     var _base = new BaseViewService(context);
 
-    this.getData = function(successAction, errorAction) {
-
-      _base.pg.connect(_base.getDatabaseUrl(), function(err, client) {
-        if (err || !client) console.error(
-          '[ERROR:pg:connect] Error: ' + err + ', client: ' +
-          client + '.');
+    this.getData = function(client, successAction, errorAction) {
 
       return q
         .all([
@@ -23,10 +18,7 @@
         .spread(computeData)
         .then(onSuccess)
         .fail(onError)
-        .done(function() {
-          client.end();
-        });
-      });
+        .done();
 
       function getProject(client) {
         var deferred = q.defer();

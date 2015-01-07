@@ -1,8 +1,7 @@
-(function(q, pg, dateFormat, repositoriesFactory, config, cache, viewHelpers,
+(function(q, dateFormat, repositoriesFactory, config, cache, viewHelpers,
   Error) {
 
   module.exports = function(context) {
-    var _databaseUrl = config.getFullDatabaseUrl();
     var _dateFormat = config.getDateFormat();
     var _maximumLastEvents = config.getMaximumLastEvents();
     var _maximumEventsInMenu = config.getMaximumEventsInMenu();
@@ -100,7 +99,6 @@
       });
     }
 
-    this.pg = pg;
     this.addToCache = addToCache;
     this.getFromCache = getFromCache;
     this.getCacheKeyPageSuffix = getCacheKeyPageSuffix;
@@ -117,10 +115,6 @@
     this.formatDate = formatDate;
     this.addErrors = addErrors;
     this.addError = addError;
-
-    this.getDatabaseUrl = function() {
-      return _databaseUrl;
-    }
 
     this.getErrors = function() {
       return _errors;
@@ -714,7 +708,6 @@
 
 })(
   require('q'),
-  require('pg'),
   require('dateformat'),
   require('../../modules/factories/repositoriesFactory'),
   require('../../modules/appConfig'),

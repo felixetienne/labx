@@ -2,46 +2,62 @@
 
   if (!global.staticRouteHelpers) {
 
-    global.staticRouteHelpers = (function(mod, servicesFactory,
+    global.staticRouteHelpers = (function(mod, servicesFactory, config,
       websiteHelpers, viewHelpers, layoutHelpers,
       Context, ViewMetaData, Error) {
 
       mod.getRouteCallback = function(pageName, argsObj) {
         var argsObj = argsObj || {};
         var websiteName = websiteHelpers.getWebsiteName('main');
-        var callback = function(req, res) {
-          var context = new Context()
-            .setCurrentRequest(req)
-            .setCurrentPage(pageName)
-            .setCurrentWebsite(websiteName);
 
-          servicesFactory
-            .createPageService(context, argsObj)
-            .getData(
-              function(x, c, e) {
-                var view = getViewPath(c, argsObj);
-                var layout = getViewLayout(c);
-                x.meta = new ViewMetaData().setLayout(layout);
-                // DEBUG ///////////////////////////////////////
-                // console.log('\n\n===== DEBUG =====\n');
-                // console.log(
-                //   'View: ' + view + ' ("' + layout + '" layout).\n');
-                // console.log(x);
-                // console.log('\n=================\n\n');
-                ////////////////////////////////////////////////
-                logErrors(e);
-                res.render(view, x);
-              },
-              function(c, e) {
-                var view = viewHelpers.getErrorPage();
-                logErrors(e);
-                res.render(view, {
-                  meta: new ViewMetaData(e).asErrorPage()
+        return function(req, res) {
+          var pg = require('pg');
+          var databaseUrl = config.getFullDatabaseUrl();
+
+          console.log(databaseUrl);
+          pg.connect(databaseUrl, function(err,
+            client) {
+            if (err || !client) console.error(
+              '[ERROR:pg:connect] Error: ' + err + ', client: ' +
+              client + '.');
+
+            var context = new Context()
+              .setCurrentRequest(req)
+              .setCurrentPage(pageName)
+              .setCurrentWebsite(websiteName);
+
+            servicesFactory
+              .createPageService(context, argsObj)
+              .getData(client,
+                function(x, c, e) {
+                  var view = getViewPath(c, argsObj);
+                  var layout = getViewLayout(c);
+                  x.meta = new ViewMetaData().setLayout(layout);
+                  // DEBUG ///////////////////////////////////////
+                  // console.log('\n\n===== DEBUG =====\n');
+                  // console.log(
+                  //   'View: ' + view + ' ("' + layout + '" layout).\n');
+                  // console.log(x);
+                  // console.log('\n=================\n\n');
+                  ////////////////////////////////////////////////
+                  logErrors(e);
+                  onComplete(client);
+                  res.render(view, x);
+                },
+                function(c, e) {
+                  var view = viewHelpers.getErrorPage();
+                  logErrors(e);
+                  onComplete(client);
+                  res.render(view, {
+                    meta: new ViewMetaData(e).asErrorPage()
+                  });
                 });
-              });
+          });
         }
+      }
 
-        return callback;
+      function onComplete(client) {
+        client.end();
       }
 
       function logErrors(errors) {
@@ -72,6 +88,7 @@
 
     })({},
       require('./factories/servicesFactory'),
+      require('./appConfig'),
       require('./websiteHelpers'),
       require('./viewHelpers'),
       require('./layoutHelpers'),
