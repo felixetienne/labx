@@ -1,36 +1,36 @@
 (function(config, ImageManager) {
 
   module.exports = function() {
-    //var _fullDatabaseUrl = config.getDatabaseUrl() + "?ssl=true";
     var _imageFolder = config.getImageFolder();
     var _imageExtension = 'jpg';
     var _errors = [];
 
     this.imageManager = new ImageManager();
-
     this.buildImagePath = buildImagePath;
+    this.addError = addError;
 
-    this.isInvalidAction = function(action) {
-      if (!action) throw "[ERROR:Dal:getAll] 'action' parameter is null.";
-      if (typeof(action) !== "function") throw "[ERROR] The argument 'action' parameter is not a function.";
-      return false;
+    this.executeQuery = function(client, query, emptyAction, callback) {
+
+      testFunctions([callback, emptyAction], function(e) {
+        client.end();
+        throw e;
+      });
+
+      client.query(query, function(err, res) {
+
+        if (err) {
+          addError(new Error(error, 500));
+          emptyAction();
+          return;
+        }
+
+        if (hasResults(res)) {
+          callback(res);
+        } else {
+          emptyAction();
+        }
+      });
     }
-
-    this.hasResults = function(res) {
-      return res && res.rows && res.rowCount > 0;
-    }
-
-    // this.open = function(callback) {
-    //   pg.connect(_fullDatabaseUrl, function(err, client) {
-    //     if (err) throw "[ERROR:pg:connect] " + err;
-    //     if (!client) throw "[ERROR:dal:pages:getAll] the parameter 'client' is null";
-    //     callback(client);
-    //   });
-    // }
-
-    // this.close = function(client) {
-    //   client.end();
-    // }
 
     this.getConfig = function() {
       return config;
@@ -38,10 +38,6 @@
 
     this.getErrors = function() {
       return _errors;
-    }
-
-    this.addError = function(error) {
-      _errors.push(error);
     }
 
     this.extractMedias = function(mediaList, areImages) {
@@ -73,9 +69,8 @@
           }
         }
 
-        if (areImages) {
+        if (areImages)
           media.path = buildImagePath(media);
-        }
 
         medias.push(media);
       }
@@ -83,7 +78,40 @@
       return medias;
     }
 
+    function testFunctions(functions, errorFunction) {
+
+      functions.forEach(function(f) {
+        var error;
+
+        if (!f) {
+          error = '[ERROR] The function is null.';
+        } else if (typeof(f) !== 'function') {
+          error = '[ERROR] The object is not a function.';
+        }
+
+        if (!error) {
+          return;
+        }
+
+        if (errorFunction && typeof(errorFunction) === 'function') {
+          errorFunction(error);
+          return;
+        }
+
+        throw error;
+      });
+    }
+
+    function hasResults(res) {
+      return res && res.rows && res.rowCount > 0;
+    }
+
+    function addError(error) {
+      _errors.push(error);
+    }
+
     function mapImageProperty(image, index, property) {
+
       if (index === 0) {
         image.name = property;
       } else if (index === 1) {
@@ -92,6 +120,7 @@
     }
 
     function mapMediaProperty(media, index, property) {
+
       if (index === 0) {
         media.content = property;
       } else if (index === 1) {
@@ -104,6 +133,7 @@
     }
 
     function buildImagePath(image) {
+
       if (!image.name) return null;
 
       var path = _imageFolder + image.name + '.' + _imageExtension;

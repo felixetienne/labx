@@ -9,11 +9,8 @@
     }
 
     this.getProjectCategoryByName = function(client, projectCategoryName,
-      action,
-      emptyAction) {
-      if (_base.isInvalidAction(action)) return;
+      action, emptyAction) {
 
-      //_base.open(function(client) {
       var query = bricks
         .select(
           '\
@@ -47,42 +44,24 @@
         )
         .toString();
 
-      client
-        .query(query, function(err, res) {
+      _base.executeQuery(client, query, emptyAction, function(res) {
+        var data = [];
 
-          if (err) {
-            _base.close(client);
-            _base.addError(new Error(err, 500));
-            emptyAction();
-            return;
-          }
+        res.rows.forEach(function(row) {
 
-          if (_base.hasResults(res)) {
-            var data = [];
+          row.project_images = _base.extractMedias(
+            row.project_image_list, true);
 
-            res.rows.forEach(function(row) {
-
-              row.project_images = _base.extractMedias(
-                row.project_image_list, true);
-
-              data.push(row);
-            });
-
-            action(data);
-          } else if (typeof emptyAction === 'function') {
-            emptyAction();
-          }
-
-          //_base.close(client);
+          data.push(row);
         });
-      //});
+
+        action(data);
+      });
     }
 
     this.getAllProjectCategories = function(client, action,
       emptyAction) {
-      if (_base.isInvalidAction(action)) return;
 
-      //_base.open(function(client) {
       var query = bricks
         .select(
           '\
@@ -112,41 +91,23 @@
         )
         .toString();
 
-      client
-        .query(query, function(err, res) {
+      _base.executeQuery(client, query, emptyAction, function(res) {
+        var data = [];
 
-          if (err) {
-            _base.close(client);
-            _base.addError(new Error(err, 500));
-            emptyAction();
-            return;
-          }
+        res.rows.forEach(function(row) {
 
-          if (_base.hasResults(res)) {
-            var data = [];
+          row.project_images = _base.extractMedias(
+            row.project_image_list, true);
 
-            res.rows.forEach(function(row) {
-
-              row.project_images = _base.extractMedias(
-                row.project_image_list, true);
-
-              data.push(row);
-            });
-
-            action(data);
-          } else if (typeof emptyAction === 'function') {
-            emptyAction();
-          }
-
-          //_base.close(client);
+          data.push(row);
         });
-      //});
+
+        action(data);
+      });
     }
 
     this.getMenuProjectCategories = function(client, action, emptyAction) {
-      if (_base.isInvalidAction(action)) return;
 
-      //_base.open(function(client) {
       var query = bricks
         .select(
           '\
@@ -161,31 +122,15 @@
         .orderBy('project_categories.sorting ASC')
         .toString();
 
-      client
-        .query(query, function(err, res) {
+      _base.executeQuery(client, query, emptyAction, function(res) {
+        var data = [];
 
-          if (err) {
-            _base.close(client);
-            _base.addError(new Error(err, 500));
-            emptyAction();
-            return;
-          }
-
-          if (_base.hasResults(res)) {
-            var data = [];
-
-            res.rows.forEach(function(row) {
-              data.push(row);
-            });
-
-            action(data);
-          } else if (typeof emptyAction === 'function') {
-            emptyAction();
-          }
-
-          //_base.close(client);
+        res.rows.forEach(function(row) {
+          data.push(row);
         });
-      //});
+
+        action(data);
+      });
     }
   }
 

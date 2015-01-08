@@ -10,9 +10,6 @@
     this.getWebsiteByName = function(client, websiteName, action,
       emptyAction) {
 
-      if (_base.isInvalidAction(action)) return;
-
-      //_base.open(function(client) {
       var query = bricks
         .select(
           '\
@@ -34,27 +31,11 @@
         .limit(1)
         .toString();
 
-      client
-        .query(query, function(err, res) {
+      _base.executeQuery(client, query, emptyAction, function(res) {
+        var data = res.rows[0];
 
-          if (err) {
-            _base.close(client);
-            _base.addError(new Error(err, 500));
-            emptyAction();
-            return;
-          }
-
-          if (_base.hasResults(res)) {
-            var data = res.rows[0];
-
-            action(data);
-          } else if (typeof emptyAction === 'function') {
-            emptyAction();
-          }
-
-          //_base.close(client);
-        });
-      //});
+        action(data);
+      });
     }
   }
 

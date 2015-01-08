@@ -14,11 +14,9 @@
           var pg = require('pg');
           var databaseUrl = config.getFullDatabaseUrl();
 
-          pg.connect(databaseUrl, function(err,
-            client) {
+          pg.connect(databaseUrl, function(err, client, done) {
             if (err || !client) console.error(
-              '[ERROR:pg:connect] Error: ' + err + ', client: ' +
-              client + '.');
+              '[PG] ' + err + ', client: ' + client + '.');
 
             var context = new Context()
               .setCurrentRequest(req)
@@ -32,6 +30,7 @@
                   var view = getViewPath(c, argsObj);
                   var layout = getViewLayout(c);
                   x.meta = new ViewMetaData().setLayout(layout);
+                  res.render(view, x);
                   // DEBUG ///////////////////////////////////////
                   // console.log('\n\n===== DEBUG =====\n');
                   // console.log(
@@ -39,24 +38,19 @@
                   // console.log(x);
                   // console.log('\n=================\n\n');
                   ////////////////////////////////////////////////
+                  done();
                   logErrors(e);
-                  onComplete(client);
-                  res.render(view, x);
                 },
                 function(c, e) {
                   var view = viewHelpers.getErrorPage();
-                  logErrors(e);
-                  onComplete(client);
                   res.render(view, {
                     meta: new ViewMetaData(e).asErrorPage()
                   });
+                  done();
+                  logErrors(e);
                 });
           });
         }
-      }
-
-      function onComplete(client) {
-        client.end();
       }
 
       function logErrors(errors) {

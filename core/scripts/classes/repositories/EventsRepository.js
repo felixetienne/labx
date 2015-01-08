@@ -10,9 +10,7 @@
 
     this.getEventByName = function(client, eventName, action,
       emptyAction) {
-      if (_base.isInvalidAction(action)) return;
 
-      //_base.open(function(client) {
       var query = bricks
         .select(
           '\
@@ -37,36 +35,17 @@
         .limit(1)
         .toString();
 
-      client
-        .query(query, function(err, res) {
+      _base.executeQuery(client, query, emptyAction, function(res) {
+        var data = res.rows[0];
 
-          if (err) {
-            _base.close(client);
-            _base.addError(new Error(err, 500));
-            emptyAction();
-            return;
-          }
+        data.images = _base.extractMedias(data.image_list, true);
 
-          if (_base.hasResults(res)) {
-            var data = res.rows[0];
-
-            data.images = _base.extractMedias(data.image_list,
-              true);
-
-            action(data);
-          } else if (typeof emptyAction === 'function') {
-            emptyAction();
-          }
-
-          //_base.close(client);
-        });
-      //});
+        action(data);
+      });
     }
 
     this.getAllEvents = function(client, action, emptyAction) {
-      if (_base.isInvalidAction(action)) return;
 
-      //_base.open(function(client) {
       var query = bricks
         .select(
           '\
@@ -87,42 +66,24 @@
         )
         .toString();
 
-      client
-        .query(query, function(err, res) {
+      _base.executeQuery(client, query, emptyAction, function(res) {
+        var data = [];
 
-          if (err) {
-            _base.close(client);
-            _base.addError(new Error(err, 500));
-            emptyAction();
-            return;
-          }
+        res.rows.forEach(function(row) {
 
-          if (_base.hasResults(res)) {
-            var data = [];
+          row.images = _base.extractMedias(
+            row.image_list);
 
-            res.rows.forEach(function(row) {
-
-              row.images = _base.extractMedias(
-                row.image_list);
-
-              data.push(row);
-            });
-
-            action(data);
-          } else if (typeof emptyAction === 'function') {
-            emptyAction();
-          }
-
-          //_base.close(client);
+          data.push(row);
         });
-      //});
+
+        action(data);
+      });
     }
 
     this.getMenuEvents = function(client, maximumEvents, action,
       emptyAction) {
-      if (_base.isInvalidAction(action)) return;
 
-      //_base.open(function(client) {
       var query = bricks
         .select(
           '\
@@ -146,31 +107,15 @@
 
       query = query.toString();
 
-      client
-        .query(query, function(err, res) {
+      _base.executeQuery(client, query, emptyAction, function(res) {
+        var data = [];
 
-          if (err) {
-            _base.close(client);
-            _base.addError(new Error(err, 500));
-            emptyAction();
-            return;
-          }
-
-          if (_base.hasResults(res)) {
-            var data = [];
-
-            res.rows.forEach(function(row) {
-              data.push(row);
-            });
-
-            action(data);
-          } else if (typeof emptyAction === 'function') {
-            emptyAction();
-          }
-
-          //_base.close(client);
+        res.rows.forEach(function(row) {
+          data.push(row);
         });
-      //});
+
+        action(data);
+      });
     }
   }
 

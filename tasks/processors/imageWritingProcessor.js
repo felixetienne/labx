@@ -8,75 +8,74 @@
 
     mod.process = function() {
       var totalOfImageProcessed = 0;
+      var databaseUrl = config.getFullDatabaseUrl();
 
-      getAllImages()
-        .then(getWritesImages)
-        .done(doneAction);
+      pg.connect(databaseUrl, function(err, client, done) {
 
-      function doneAction() {
-        console.info(totalOfImageProcessed + ' images was processed.');
-      }
+        getAllImages()
+          .then(getWritesImages)
+          .then(onComplete)
+          .done();
 
-      function getAllImages() {
-        var deferred = q.defer();
+        function getAllImages() {
+          var deferred = q.defer();
 
-        pg.connect(config.getFullDatabaseUrl(), function(err, client) {
-            if (err || !client) {
-              console.error('[ERROR:pg:connect] Error: ' + err +
-                ', client: ' + client + '.');
-              onComplete(client);
-              deferred.reject();
-            } else {
-              _repo.getAll(client, function(data) {
-                var ids = new List();
+          _repo.getAll(client, function(images) {
+            var ids = new List();
 
-                data.forEach(function(x) {
-                  if (!x.force_deploy && _imageManager.exists(
-                      x.path))
-                    return;
-                  ids.add(x.id);
-                });
+            for (var i = 0; i < images.length; i++) {
+              var image = images[i];
 
-                onComplete(client);
-                deferred.resolve(ids);
-              });
+              if (mustBeDeployed(image)) {
+                ids.add(image.id);
+              }
             }
-          },
-          function() {
+
+            deferred.resolve(ids);
+          }, function() {
             deferred.reject();
           });
 
-        return deferred.promise
-      }
+          return deferred.promise;
+        }
 
-      function getWritesImages(ids) {
-        totalOfImageProcessed = ids.count();
+        function getWritesImages(ids) {
+          var deferred = q.defer();
 
-        if (totalOfImageProcessed === 0) return;
+          totalOfImageProcessed = ids.count();
 
-        pg.connect(config.getFullDatabaseUrl(), function(err, client) {
-          if (err || !client) {
-            console.error('[ERROR:pg:connect] ' + err +
-              ', client: ' + client + '.');
-            onComplete(client);
-            deferred.reject();
-          } else {
-
-            _repo.getByIds(client, ids, true, function(data) {
-
-              data.forEach(function(x) {
-                _imageManager.write(x.path, x.content);
-              });
-
-              onComplete(client);
-            }, null);
+          if (totalOfImageProcessed === 0) {
+            deferred.resolve();
+            return;
           }
-        });
-      }
 
-      function onComplete(client) {
-        if (client) client.end();
-      }
+          _repo.getByIds(client, ids, true, function(data) {
+
+            data.forEach(function(x) {
+              _imageManager.write(x.path, x.content);
+            });
+
+            deferred.resolve();
+          }, function() {
+            deferred.reject();
+          });
+
+          return deferred.promise;
+        }
+
+        function onComplete() {
+          done();
+          console.info(totalOfImageProcessed +
+            ' images was processed.');
+        }
+      });
+    }
+
+    function mustBeDeployed(image) {
+
+      if (image.force_deploy) return true;
+
+      return !_imageManager.exists(image.path);
     }
 
     return mod;

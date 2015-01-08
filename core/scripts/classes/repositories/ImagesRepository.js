@@ -8,9 +8,7 @@
     }
 
     this.getBanners = function(client, action, emptyAction) {
-      if (_base.isInvalidAction(action)) return;
 
-      //_base.open(function(client) {
       var query = bricks
         .select(
           '\
@@ -77,38 +75,20 @@
         event_date DESC, \
         event_sorting ASC';
 
-      client
-        .query(query, function(err, res) {
+      _base.executeQuery(client, query, emptyAction, function(res) {
+        var data = [];
 
-          if (err) {
-            _base.close(client);
-            _base.addError(new Error(err, 500));
-            emptyAction();
-            return;
-          }
-
-          if (_base.hasResults(res)) {
-            var data = [];
-
-            res.rows.forEach(function(row) {
-              row.path = _base.buildImagePath(row);
-              data.push(row);
-            });
-
-            action(data);
-          } else if (typeof emptyAction === 'function') {
-            emptyAction();
-          }
-
-          //_base.close(client);
+        res.rows.forEach(function(row) {
+          row.path = _base.buildImagePath(row);
+          data.push(row);
         });
-      //});
+
+        action(data);
+      });
     }
 
     this.getAll = function(client, action, emptyAction) {
-      if (_base.isInvalidAction(action)) return;
 
-      //_base.open(function(client) {
       var query = bricks
         .select(
           '\
@@ -124,32 +104,16 @@
         .orderBy('images.sorting ASC')
         .toString();
 
-      client
-        .query(query, function(err, res) {
+      _base.executeQuery(client, query, emptyAction, function(res) {
+        var data = convertToData(res);
 
-          if (err) {
-            _base.close(client);
-            _base.addError(new Error(err, 500));
-            emptyAction();
-            return;
-          }
-
-          if (_base.hasResults(res)) {
-            action(convertToData(res));
-          } else {
-            emptyAction();
-          }
-
-          //_base.close(client);
-        });
-      //});
+        action(data);
+      });
     }
 
     this.getByIds = function(client, idsList, includeRawData, action,
       emptyAction) {
-      if (_base.isInvalidAction(action)) return;
 
-      //_base.open(function(client) {
       var query = bricks
         .select(
           '\
@@ -177,25 +141,11 @@
 
       query += 'ORDER BY images.sorting ASC'
 
-      client
-        .query(query, function(err, res) {
+      _base.executeQuery(client, query, emptyAction, function(res) {
+        var data = convertToData(res);
 
-          if (err) {
-            _base.close(client);
-            _base.addError(new Error(err, 500));
-            emptyAction();
-            return;
-          }
-
-          if (_base.hasResults(res)) {
-            action(convertToData(res));
-          } else if (typeof emptyAction === 'function') {
-            emptyAction();
-          }
-
-          //_base.close(client);
-        });
-      //});
+        action(data);
+      });
     }
 
     function convertToData(res) {

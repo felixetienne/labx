@@ -9,9 +9,7 @@
 
     this.getProjectByName = function(client, projectName, action,
       emptyAction) {
-      if (_base.isInvalidAction(action)) return;
 
-      //_base.open(function(client) {
       var query = bricks
         .select(
           '\
@@ -49,39 +47,21 @@
         .limit(1)
         .toString();
 
-      client
-        .query(query, function(err, res) {
+      _base.executeQuery(client, query, emptyAction, function(res) {
+        var data = res.rows[0];
 
-          if (err) {
-            _base.close(client);
-            _base.addError(new Error(err, 500));
-            emptyAction();
-            return;
-          }
+        data.images = _base.extractMedias(
+          data.image_list, true);
+        data.medias = _base.extractMedias(
+          data.media_list, false);
 
-          if (_base.hasResults(res)) {
-            var data = res.rows[0];
-
-            data.images = _base.extractMedias(
-              data.image_list, true);
-            data.medias = _base.extractMedias(
-              data.media_list, false);
-
-            action(data);
-          } else if (typeof emptyAction === 'function') {
-            emptyAction();
-          }
-
-          //_base.close(client);
-        });
-      //});
+        action(data);
+      });
     }
 
     this.getFeaturedProjects = function(client, excludedProjectName, action,
       emptyAction) {
-      if (_base.isInvalidAction(action)) return;
 
-      //_base.open(function(client) {
       var query = bricks
         .select(
           '\
@@ -117,31 +97,15 @@
           project_sorting ASC, \
           project_category_sorting ASC';
 
-      client
-        .query(query, function(err, res) {
+      _base.executeQuery(client, query, emptyAction, function(res) {
+        var data = [];
 
-          if (err) {
-            _base.close(client);
-            _base.addError(new Error(err, 500));
-            emptyAction();
-            return;
-          }
-
-          if (_base.hasResults(res)) {
-            var data = [];
-
-            res.rows.forEach(function(row) {
-              data.push(row);
-            });
-
-            action(data);
-          } else if (typeof emptyAction === 'function') {
-            emptyAction();
-          }
-
-          //_base.close(client);
+        res.rows.forEach(function(row) {
+          data.push(row);
         });
-      //});
+
+        action(data);
+      });
     }
   }
 
