@@ -3,103 +3,109 @@
   module.exports = function(context) {
     var _base = new BaseViewService(context);
 
-    this.getData = function(client, successAction, errorAction) {
+    this.getData = function(successAction, errorAction) {
 
-      q.all([
-          _base.getWebsite(client),
-          _base.getPages(client),
-          _base.getMenuEvents(client),
-          _base.getMenuProjectCategories(client),
-          _base.getFeaturedProjects(client),
-          _base.getImageBanners(client),
-          _base.getPage(client),
-          getEvents(client)
-        ])
-        .spread(computeData)
-        .then(onSuccess)
-        .fail(onError)
-        .done();
+      _base.initializeClient(function() {
 
-      function getEvents(client) {
-        var deferred = q.defer();
-        var cacheKey = 'events';
+        q.all([
+            _base.getWebsite(),
+            _base.getPages(),
+            _base.getMenuEvents(),
+            _base.getMenuProjectCategories(),
+            _base.getFeaturedProjects(),
+            _base.getImageBanners(),
+            _base.getPage(),
+            getEvents()
+          ])
+          .spread(computeData)
+          .then(onSuccess)
+          .fail(onError)
+          .done(_base.onComplete);
 
-        _base.getFromCache(cacheKey, function(value) {
-          if (value !== null) {
-            deferred.resolve(value);
-            return;
+        function getEvents() {
+          var deferred = q.defer();
+          var cacheKey = 'events';
+
+          _base.getFromCache(cacheKey, function(value) {
+            if (value !== null) {
+              deferred.resolve(value);
+              return;
+            }
+
+            var repo = _base.getEventsRepository();
+
+            repo.getAllEvents(_base.getClient(),
+              function(x) {
+                _base.addToCache(cacheKey, x, function() {
+                  deferred.resolve(x);
+                });
+              },
+              function() {
+                _base.addErrors(repo.getErrors());
+                _base.addError(new Error('Events not found',
+                  404));
+                deferred.reject();
+              });
+          });
+
+          return deferred.promise;
+        }
+
+        function onSuccess(data) {
+          successAction(data, context, _base.getErrors());
+        }
+
+        function onError() {
+          errorAction(context, _base.getErrors());
+        }
+
+        function computeData(website, pages, menuEvents,
+          menuProjectCategories, featuredProjects, imageBanners,
+          page,
+          events) {
+          var data = _base.getBasicViewData({
+            website: website,
+            pages: pages,
+            menuEvents: menuEvents,
+            menuProjectCategories: menuProjectCategories,
+            featuredProjects: featuredProjects,
+            imageBanners: imageBanners
+          });
+
+          var viewData = getViewData(page, events, website);
+          data.page = viewData.page;
+          data.events = viewData.events;
+
+          return data;
+        }
+
+        function getViewData(page, events, website) {
+          var data = {
+            page: _base.getStandardPageData(page, website),
+            events: []
+          };
+          var _eventPage = viewHelpers.getEventPage();
+          var builUrl = function(eventName) {
+            var url = '/' + _eventPage + '/' + eventName;
+            return url;
           }
 
-          var repo = _base.getEventsRepository();
+          for (var i = 0; i < events.length; i++) {
+            var event = events[i];
+            var eventData = {
+              title: event.title_short || event.title || '',
+              description: event.description_short || '',
+              date: _base.formatDate(event.date),
+              url: builUrl(event.name),
+              images: event.images
+            };
 
-          repo.getAllEvents(client, function(x) {
-              _base.addToCache(cacheKey, x, function() {
-                deferred.resolve(x);
-              });
-            },
-            function() {
-              _base.addErrors(repo.getErrors());
-              _base.addError(new Error('Events not found', 404));
-              deferred.reject();
-            });
-        });
+            data.events.push(eventData);
+          }
 
-        return deferred.promise;
-      }
-
-      function onSuccess(data) {
-        successAction(data, context, _base.getErrors());
-      }
-
-      function onError() {
-        errorAction(context, _base.getErrors());
-      }
-
-      function computeData(website, pages, menuEvents,
-        menuProjectCategories, featuredProjects, imageBanners, page,
-        events) {
-        var data = _base.getBasicViewData({
-          website: website,
-          pages: pages,
-          menuEvents: menuEvents,
-          menuProjectCategories: menuProjectCategories,
-          featuredProjects: featuredProjects,
-          imageBanners: imageBanners
-        });
-
-        var viewData = getViewData(page, events, website);
-        data.page = viewData.page;
-        data.events = viewData.events;
-
-        return data;
-      }
-
-      function getViewData(page, events, website) {
-        var data = {
-          page: _base.getStandardPageData(page, website),
-          events: []
-        };
-        var _eventPage = viewHelpers.getEventPage();
-        var builUrl = function(eventName) {
-          var url = '/' + _eventPage + '/' + eventName;
-          return url;
+          return data;
         }
-
-        for (var i = 0; i < events.length; i++) {
-          var event = events[i];
-          var eventData = {
-            title: event.title_short || event.title || '',
-            description: event.description_short || '',
-            date: _base.formatDate(event.date),
-            url: builUrl(event.name),
-            images: event.images
-          };
-
-          data.events.push(eventData);
-        }
-
-        return data;
-      }
+      });
     }
   }
 

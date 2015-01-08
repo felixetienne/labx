@@ -3,97 +3,103 @@
   module.exports = function(context) {
     var _base = new BaseViewService(context);
 
-    this.getData = function(client, successAction, errorAction) {
+    this.getData = function(successAction, errorAction) {
 
-      q.all([
-          _base.getWebsite(client),
-          _base.getPages(client),
-          _base.getMenuEvents(client),
-          _base.getMenuProjectCategories(client),
-          _base.getFeaturedProjects(client),
-          _base.getImageBanners(client),
-          getEvent(client)
-        ])
-        .spread(computeData)
-        .then(onSuccess)
-        .fail(onError)
-        .done();
+      _base.initializeClient(function() {
 
-      function getEvent(client) {
-        var deferred = q.defer();
-        var cacheKey = 'event' + _base.getCacheKeyPageSuffix();
+        q.all([
+            _base.getWebsite(),
+            _base.getPages(),
+            _base.getMenuEvents(),
+            _base.getMenuProjectCategories(),
+            _base.getFeaturedProjects(),
+            _base.getImageBanners(),
+            getEvent()
+          ])
+          .spread(computeData)
+          .then(onSuccess)
+          .fail(onError)
+          .done(_base.onComplete);
 
-        _base.getFromCache(cacheKey, function(value) {
-          if (value !== null) {
-            deferred.resolve(value);
-            return;
-          }
+        function getEvent() {
+          var deferred = q.defer();
+          var cacheKey = 'event' + _base.getCacheKeyPageSuffix();
 
-          var request = _base.getCurrentRequest();
-          var repo = _base.getEventsRepository(client);
+          _base.getFromCache(cacheKey, function(value) {
+            if (value !== null) {
+              deferred.resolve(value);
+              return;
+            }
 
-          repo.getEventByName(client, request.params.name,
-            function(x) {
-              _base.addToCache(cacheKey, x, function() {
-                deferred.resolve(x);
+            var request = _base.getCurrentRequest();
+            var repo = _base.getEventsRepository();
+
+            repo.getEventByName(_base.getClient(),
+              request.params.name,
+              function(x) {
+                _base.addToCache(cacheKey, x, function() {
+                  deferred.resolve(x);
+                });
+              },
+              function() {
+                _base.addErrors(repo.getErrors());
+                _base.addError(new Error('Event not found',
+                  404));
+                deferred.reject();
               });
-            },
-            function() {
-              _base.addErrors(repo.getErrors());
-              _base.addError(new Error('Event not found', 404));
-              deferred.reject();
-            });
-        });
+          });
 
-        return deferred.promise;
-      }
+          return deferred.promise;
+        }
 
-      function onSuccess(data) {
-        successAction(data, context, _base.getErrors());
-      }
+        function onSuccess(data) {
+          successAction(data, context, _base.getErrors());
+        }
 
-      function onError() {
-        errorAction(context, _base.getErrors());
-      }
+        function onError() {
+          errorAction(context, _base.getErrors());
+        }
 
-      function computeData(website, pages, menuEvents,
-        menuProjectCategories, featuredProjects, imageBanners, event) {
-        var data = _base.getBasicViewData({
-          website: website,
-          pages: pages,
-          menuEvents: menuEvents,
-          menuProjectCategories: menuProjectCategories,
-          featuredProjects: featuredProjects,
-          imageBanners: imageBanners
-        });
+        function computeData(website, pages, menuEvents,
+          menuProjectCategories, featuredProjects, imageBanners,
+          event) {
+          var data = _base.getBasicViewData({
+            website: website,
+            pages: pages,
+            menuEvents: menuEvents,
+            menuProjectCategories: menuProjectCategories,
+            featuredProjects: featuredProjects,
+            imageBanners: imageBanners
+          });
 
-        var viewData = getViewData(event, website);
-        data.page = viewData.page;
-        data.event = viewData.event;
+          var viewData = getViewData(event, website);
+          data.page = viewData.page;
+          data.event = viewData.event;
 
-        return data;
-      }
+          return data;
+        }
 
-      function getViewData(event, website) {
-        var data = {};
+        function getViewData(event, website) {
+          var data = {};
 
-        data.page = {
-          title: event.title || '',
-          descriptionHtml: event.description_html || '',
-          keywords: event.keywords,
-          docTitle: _base.getDocTitle(event, website),
-          docDescription: event.doc_description || event.description_short ||
-            '',
-          docKeywords: _base.getDocKeywords(event, website)
-        };
+          data.page = {
+            title: event.title || '',
+            descriptionHtml: event.description_html || '',
+            keywords: event.keywords,
+            docTitle: _base.getDocTitle(event, website),
+            docDescription: event.doc_description || event.description_short ||
+              '',
+            docKeywords: _base.getDocKeywords(event, website)
+          };
 
-        data.event = {
-          date: _base.formatDate(event.date),
-          images: event.images
-        };
+          data.event = {
+            date: _base.formatDate(event.date),
+            images: event.images
+          };
 
-        return data;
-      }
+          return data;
+        }
+      });
     }
   }
 

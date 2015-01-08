@@ -1,4 +1,4 @@
-(function(q, dateFormat, repositoriesFactory, config, cache, viewHelpers,
+(function(q, pg, dateFormat, repositoriesFactory, config, cache, viewHelpers,
   Error) {
 
   module.exports = function(context) {
@@ -21,6 +21,7 @@
     var _eventPage = viewHelpers.getEventPage();
     var _homePage = viewHelpers.getIndexPage();
     var _errors = [];
+    var _client, _closeConnection;
 
     function getWebsitesRepository() {
       if (_websitesRepository === null) {
@@ -116,6 +117,38 @@
     this.addErrors = addErrors;
     this.addError = addError;
 
+    this.initializeClient = function(callback) {
+      var databaseUrl = config.getFullDatabaseUrl();
+
+      pg.connect(databaseUrl, function(err, client, done) {
+
+        if (err || !client || !done)
+          throw '[PG] ' + err +
+          '(client: ' + client +
+          ', done: ' + done + ').';
+
+        _client = client;
+        _closeConnection = done;
+
+        callback();
+      });
+    }
+
+    this.onComplete = function() {
+      if (!_client || !_closeConnection)
+        addError(new Error(
+          'Client or CloseConnection are already cleared ' +
+          '(client: ' + _client +
+          ', done: ' + _closeConnection + ')',
+          500));
+
+      _closeConnection();
+    }
+
+    this.getClient = function() {
+      return _client || null;
+    }
+
     this.getErrors = function() {
       return _errors;
     }
@@ -128,7 +161,7 @@
       return _currentRequest;
     }
 
-    this.getWebsite = function(client) {
+    this.getWebsite = function() {
       var deferred = q.defer();
       var cacheKey = 'website';
 
@@ -140,7 +173,7 @@
 
         var repo = getWebsitesRepository();
 
-        repo.getWebsiteByName(client, context.getCurrentWebsite(),
+        repo.getWebsiteByName(_client, context.getCurrentWebsite(),
           function(x) {
             addToCache(cacheKey, x, function() {
               deferred.resolve(x);
@@ -156,7 +189,7 @@
       return deferred.promise;
     }
 
-    this.getPage = function(client) {
+    this.getPage = function() {
       var deferred = q.defer();
       var cacheKey = 'page' + (_currentPage ? '_' + _currentPage : '') +
         getCacheKeyPageSuffix();
@@ -169,7 +202,7 @@
 
         var repo = getPagesRepository();
 
-        repo.getPageByName(client, _currentPage, function(x) {
+        repo.getPageByName(_client, _currentPage, function(x) {
           addToCache(cacheKey, x, function() {
             deferred.resolve(x);
           });
@@ -183,7 +216,7 @@
       return deferred.promise;
     }
 
-    this.getPages = function(client) {
+    this.getPages = function() {
       var deferred = q.defer();
       var cacheKey = 'pages';
 
@@ -195,7 +228,7 @@
 
         var repo = getPagesRepository();
 
-        repo.getAllPages(client, function(x) {
+        repo.getAllPages(_client, function(x) {
             addToCache(cacheKey, x, function() {
               deferred.resolve(x);
             });
@@ -210,7 +243,7 @@
       return deferred.promise;
     }
 
-    this.getMenuEvents = function(client) {
+    this.getMenuEvents = function() {
       var deferred = q.defer();
       var cacheKey = 'menuEvents';
 
@@ -224,7 +257,7 @@
         var maximum = _maximumEventsInMenu > _maximumLastEvents ?
           _maximumEventsInMenu : _maximumLastEvents;
 
-        repo.getMenuEvents(client, maximum, function(x) {
+        repo.getMenuEvents(_client, maximum, function(x) {
           addToCache(cacheKey, x, function() {
             deferred.resolve(x);
           });
@@ -238,7 +271,7 @@
       return deferred.promise;
     }
 
-    this.getMenuProjectCategories = function(client) {
+    this.getMenuProjectCategories = function() {
       var deferred = q.defer();
       var cacheKey = 'menuProjectCategories';
 
@@ -250,7 +283,7 @@
 
         var repo = getProjectCategoriesRepository();
 
-        repo.getMenuProjectCategories(client, function(x) {
+        repo.getMenuProjectCategories(_client, function(x) {
           addToCache(cacheKey, x, function() {
             deferred.resolve(x);
           });
@@ -264,7 +297,7 @@
       return deferred.promise;
     }
 
-    this.getFeaturedProjects = function(client) {
+    this.getFeaturedProjects = function() {
       var deferred = q.defer();
 
       if (viewHelpers.hasFeaturedProjects(_currentPage)) {
@@ -272,7 +305,7 @@
         var exludedProjectName = _currentPage === _projectPage ?
           _currentName : null;
 
-        repo.getFeaturedProjects(client, exludedProjectName, function(x) {
+        repo.getFeaturedProjects(_client, exludedProjectName, function(x) {
           deferred.resolve(x);
         }, function() {
           addErrors(repo.getErrors());
@@ -284,13 +317,13 @@
       return deferred.promise;
     }
 
-    this.getImageBanners = function(client) {
+    this.getImageBanners = function() {
       var deferred = q.defer();
 
       if (viewHelpers.hasBanners(_currentPage)) {
         var repo = getImagesRepository();
 
-        repo.getBanners(client, function(x) {
+        repo.getBanners(_client, function(x) {
           deferred.resolve(x);
         }, function() {
           addErrors(repo.getErrors());
@@ -708,6 +741,7 @@
 
 })(
   require('q'),
+  require('pg'),
   require('dateformat'),
   require('../../modules/factories/repositoriesFactory'),
   require('../../modules/appConfig'),

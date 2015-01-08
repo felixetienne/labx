@@ -11,7 +11,7 @@
       var project = 'projet';
       var services = 'services';
       var event = 'in-progress';
-      var events = 'in-progress-events';
+      var events = 'evenements-in-progress';
       var curriculumVitae = 'curriculum-vitae';
 
 
