@@ -4,7 +4,23 @@ body{
     background-repeat: repeat;
     background-size: 100%;
     background-attachment: fixed;
-    padding-top: 60px;
+    padding-top: 70px;
+}
+
+.mod-aside{
+  h1{
+    font-size: 1.5em;
+  }
+  ul{
+    padding-left: 15px;
+  }
+  li{
+    list-style: none;
+    padding-bottom: 15px;
+  }
+  .ma--more{
+    display: block;
+  }
 }
 
 .mod-page {
@@ -14,7 +30,7 @@ body{
       margin: 0 10%;
     }
   }
-  .mp--main-content, .mp--aside{
+  .mp--main-content, .mod-aside{
     background-color: rgba(255,255,255, 0.55);
     border: 1px black solid;
     padding: 0 20px 20px 20px;
@@ -68,14 +84,19 @@ body{
     height: 300px !important;
     h1, h2, h3, p{
       display: inline-block;
-      padding: 4px 8px;
+      padding: 4px 8px 6px 8px;
       color: white;
       background-color: rgba(0,0,0, 0.67);
       }
   }
+  .carousel-indicators{
+    bottom: 5px;
+  }
 }
 
 .mod-footer{
+  padding: 40px;
+
   .mf--links{
     padding-left: 0;
     padding-right: 0;
@@ -94,5 +115,60 @@ body{
     }
   }
   .mf--copyright{
+  }
+}
+
+.mod-articles{
+  .marts--article{
+    h1{
+      font-size: 1.75em;
+    }
+    .marts--more{
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+  }
+  .marts--list{}
+  .marts--medias{}
+  .marts--media{
+    text-align: left;
+    img{
+      max-width: 98%;
+    }
+  }
+
+  &.mod-articles--project-category{
+    h1{
+      font-size: 1.75em;
+      display: inline-block;
+      margin: 0 0 15px 0;
+    }
+    ul{
+      padding: 0;
+    }
+    li{
+      display: inline-block;
+      margin-bottom: 40px;
+      list-style: none;
+    }
+  }
+}
+
+.mod-article{
+  .mart--medias{
+    margin-top: 40px;
+  }
+  .mart--media{
+    text-align: center;
+    margin-bottom: 15px;
+    img{
+      max-width: 98%;
+    }
+  }
+}
+
+.mod-article-categories{
+  .macats--list{
+    margin-top: 40px;
   }
 }

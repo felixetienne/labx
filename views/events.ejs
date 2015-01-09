@@ -1,14 +1,21 @@
-<% include included/standardContent.ejs %>
-<%
-for(var i=0; i<events.length; i++){
-  var event = events[i]; %>
-  <article>
-    <h1><%- event.date %> - <%- event.title %></h1>
-    <%
-    for(var j=0; j<event.images.length; j++){
-      var image = event.images[j]; %>
-      <img src="<%- image.path %>" alt="<%- image.title %>" />
-    <%}%>
-    <a href="<%- event.url %>">Lire plus</a>
-  </article>
-<%}%>
+<div class="mod-articles mod-articles--events">
+  <% include included/standardContent.ejs %>
+  <%
+  for(var i=0; i<events.length; i++){
+    var event = events[i]; %>
+    <article class="marts--article">
+      <h1><%- event.title %></h1>
+      <p>
+        <%- event.date %><%- event.description ? ' - ' + event.description : '' %>
+        <a href="<%- event.url %>" class="marts--more">Lire plus...</a>
+      </p>
+      <%
+      for(var j=0; j<event.images.length; j++){
+        var image = event.images[j]; %>
+        <a href="<%- event.url %>" title="Lire plus">
+          <img src="<%- image.path %>" alt="<%- image.title %>" />
+        </a>
+      <%}%>
+    </article>
+  <%}%>
+</div>

@@ -1,16 +1,24 @@
-<% include included/standardContent.ejs %>
-<%
-var iTotal = projects.length;
-for(var i=0; i<iTotal; i++){
-  var project = projects[i]; %>
-  <article>
-    <h1><%- project.title %></h1>
-    <p><%- project.description %></p>
-    <a href="<%- project.url %>">Lire plus</a>
+<div class="mod-articles mod-articles--projects">
+  <% include included/standardContent.ejs %>
+  <div class="marts--list">
     <%
-    for(var j=0; j< project.images.length; j++){
-      var image = project.images[j]; %>
-      <img src="<%- image.path %>" alt="<%- image.title %>" />
+    var iTotal = projects.length;
+    for(var i=0; i<iTotal; i++){
+      var project = projects[i]; %>
+      <article class="marts--article">
+        <h1><%- project.title %></h1>
+        <p>
+          <%- project.description %>
+          <a class="marts--more" href="<%- project.url %>" title="Lire plus">Lire plus...</a>
+        </p>
+        <%
+        for(var j=0; j< project.images.length; j++){
+          var image = project.images[j]; %>
+          <a href="<%- project.url %>" title="Lire plus">
+            <img src="<%- image.path %>" alt="<%- image.title %>" />
+          </a>
+        <%}%>
+      </article>
     <%}%>
-  </article>
-<%}%>
+  </div>
+</div>

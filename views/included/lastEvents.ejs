@@ -1,12 +1,12 @@
 <% if(lastEvents.length){%>
-  <aside class="mp--aside mod-last-events">
+  <aside class="mod-aside mod-aside--last-events">
     <h1>Dernier événements</h1>
     <ul>
       <%
       for(var i = 0; i<lastEvents.length; i++){
         var event = lastEvents[i]; %>
         <li>
-          <a href="<%- event.url %>"><%- event.date %> - <%- event.title %></a>
+          <%- event.date %> - <%- event.title %> <a href="<%- event.url %>" class="ma--more">Lire plus...</a>
         </li>
       <%}%>
     </ul>

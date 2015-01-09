@@ -1,6 +1,14 @@
-<% include included/standardContent.ejs %>
-<%
-for(var i=0; i< event.images.length; i++){
-  var image = event.images[i]; %>
-  <img src="<%- image.path %>" alt="<%- image.title %>" />
-<%}%>
+<article class="mod-article">
+  <% include included/standardContent.ejs %>
+  <% if(event.images.length){%>
+    <div class="mart--medias">
+      <%
+      for(var i=0; i< event.images.length; i++){
+        var image = event.images[i]; %>
+        <div class="mart--media">
+          <img src="<%- image.path %>" alt="<%- image.title %>" />
+        </div>
+      <%}%>
+    </div>
+  <%}%>
+</article>
