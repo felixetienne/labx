@@ -62,8 +62,7 @@
 
         function computeData(website, pages, menuEvents,
           menuProjectCategories, featuredProjects, imageBanners,
-          page,
-          projectCategories) {
+          page, projectCategories) {
           var data = _base.getBasicViewData({
             website: website,
             pages: pages,
@@ -93,8 +92,8 @@
 
             if (category.id !== lastCategoryId) {
               var projectCategory = {
-                title: category.title_short || category.title ||
-                  '',
+                title: category.title_short ||
+                  category.title || '',
                 description: category.description_short || '',
                 url: _base.buildProjectCategoryUrl(category.name),
                 projects: []
