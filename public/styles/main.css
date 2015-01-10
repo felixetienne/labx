@@ -4739,6 +4739,10 @@ body {
     background-size: 100%;
     text-align: center;
     height: 300px !important; }
+    .mod-header-banners .item h1 {
+      font-size: 24px; }
+    .mod-header-banners .item h2 {
+      font-size: 40px; }
     .mod-header-banners .item h1, .mod-header-banners .item h2, .mod-header-banners .item h3, .mod-header-banners .item p {
       display: inline-block;
       padding: 4px 8px 6px 8px;

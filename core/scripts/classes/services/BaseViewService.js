@@ -419,9 +419,9 @@
 
         if (banner.event_name) {
 
-          data.title = banner.event_title_short ||
+          data.title = formatDate(banner.event_date);
+          data.subtitle = banner.event_title_short ||
             banner.event_title || '';
-          data.subtitle = formatDate(banner.event_date);
           data.description = banner.event_description_short || '';
           data.url = buildEventUrl(banner.event_name);
 
