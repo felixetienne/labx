@@ -7,11 +7,11 @@
       var error = 'error';
       var contact = 'joindre';
       var about = 'a-propos';
-      var projects = 'projets';
+      var projects = 'portfolio';
       var project = 'projet';
       var services = 'services';
-      var event = 'in-progress';
-      var events = 'evenements-in-progress';
+      var event = 'evenement';
+      var events = 'evenements';
       var curriculumVitae = 'curriculum-vitae';
 
 

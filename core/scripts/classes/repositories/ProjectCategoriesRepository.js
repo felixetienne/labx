@@ -37,12 +37,13 @@
         })
         .where('project_categories.name', projectCategoryName)
         .where('project_categories.active', true)
-        .where('projects.active', true)
-        .orderBy(
-          'project_categories.sorting ASC',
-          'project_sorting ASC'
-        )
         .toString();
+
+      query +=
+        ' AND (projects.active IS NULL OR projects.active = TRUE) \
+        ORDER BY \
+        project_categories.sorting ASC, \
+        project_sorting ASC';
 
       _base.executeQuery(client, query, emptyAction, function(res) {
         var data = [];
