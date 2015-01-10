@@ -1,5 +1,5 @@
-(function(q, pg, dateFormat, repositoriesFactory, config, cache, viewHelpers,
-  Error) {
+(function(q, pg, dateFormat, repositoriesFactory, config, cache,
+  viewHelpers, ressourceHelpers, Error) {
 
   module.exports = function(context) {
     var _dateFormat = config.getDateFormat();
@@ -20,6 +20,7 @@
     var _eventsPage = viewHelpers.getEventsPage();
     var _eventPage = viewHelpers.getEventPage();
     var _homePage = viewHelpers.getIndexPage();
+    var _menuRessources = ressourceHelpers.getMenuRessources();
     var _errors = [];
     var _client, _closeConnection;
 
@@ -340,6 +341,7 @@
     this.getBasicViewData = function(x) {
       var navigationData = getNavigationData(x);
       var data = {
+        ressources: ressourceHelpers.getRessources(context),
         menuPages: navigationData.menuPages,
         footerPages: navigationData.footerPages,
         breadcrumbPages: navigationData.breadcrumbPages,
@@ -654,7 +656,7 @@
 
     function getAllEventsMenuPage() {
       var menuPage = {
-        title: 'Tout les evenements',
+        title: _menuRessources.seeAllEvents,
         isCurrent: false,
         url: '/' + _eventsPage
       };
@@ -664,7 +666,7 @@
 
     function getAllProjectsMenuPage() {
       var menuPage = {
-        title: 'Tout les projets',
+        title: _menuRessources.seeAllProjects,
         isCurrent: false,
         url: '/' + _projectsPage
       };
@@ -747,4 +749,5 @@
   require('../../modules/appConfig'),
   require('../../modules/appCache'),
   require('../../modules/viewHelpers'),
+  require('../../modules/ressourceHelpers'),
   require('../Error'));

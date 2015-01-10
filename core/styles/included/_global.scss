@@ -12,7 +12,7 @@ body{
     font-size: 1.5em;
   }
   ul{
-    padding-left: 15px;
+    padding-left: 0;
   }
   li{
     list-style: none;
@@ -20,6 +20,10 @@ body{
   }
   .ma--more{
     display: block;
+  }
+  .ma--item-title{
+    display: block;
+    font-weight: bold
   }
 }
 
@@ -125,18 +129,34 @@ body{
 }
 
 .mod-articles{
-  .marts--article{
+  .marts--title-link{
+    h1{
+      color: $text-color;
+      &:hover{
+        text-decoration: underline;
+      }
+    }
+  }
+  .marts--items{}
+  .marts--item{
     h1{
       font-size: 1.75em;
     }
-    .marts--more{
-      display: inline-block;
-      margin-bottom: 15px;
-    }
   }
-  .marts--list{}
-  .marts--medias{}
-  .marts--media{
+  .marts--item-date{
+    font-size: 1.25em;
+    font-style: italic;
+  }
+  .marts--item-title{
+    display: block;
+    font-weight: bold;
+  }
+  .marts--item-more{
+    display: inline-block;
+    margin-bottom: 15px;
+  }
+  .marts--item-medias{}
+  .marts--item-media{
     text-align: left;
     img{
       max-width: 98%;
@@ -158,6 +178,16 @@ body{
       list-style: none;
     }
   }
+  &.mod-articles--events{
+    .marts--item{
+      h1{
+        margin-top: 0;
+      }
+      h2{
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 .mod-article{
@@ -174,7 +204,7 @@ body{
 }
 
 .mod-article-categories{
-  .macats--list{
+  .macats--items{
     margin-top: 40px;
   }
 }

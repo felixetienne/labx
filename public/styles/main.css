@@ -4700,12 +4700,15 @@ body {
 .mod-aside h1 {
   font-size: 1.5em; }
 .mod-aside ul {
-  padding-left: 15px; }
+  padding-left: 0; }
 .mod-aside li {
   list-style: none;
   padding-bottom: 15px; }
 .mod-aside .ma--more {
   display: block; }
+.mod-aside .ma--item-title {
+  display: block;
+  font-weight: bold; }
 
 .mod-page .mp--main-content hr {
   border-color: #777777;
@@ -4766,14 +4769,24 @@ body {
       .mod-footer .mf--links li:first-child:before {
         display: none; }
 
-.mod-articles .marts--article h1 {
+.mod-articles .marts--title-link h1 {
+  color: #333333; }
+  .mod-articles .marts--title-link h1:hover {
+    text-decoration: underline; }
+.mod-articles .marts--item h1 {
   font-size: 1.75em; }
-.mod-articles .marts--article .marts--more {
+.mod-articles .marts--item-date {
+  font-size: 1.25em;
+  font-style: italic; }
+.mod-articles .marts--item-title {
+  display: block;
+  font-weight: bold; }
+.mod-articles .marts--item-more {
   display: inline-block;
   margin-bottom: 15px; }
-.mod-articles .marts--media {
+.mod-articles .marts--item-media {
   text-align: left; }
-  .mod-articles .marts--media img {
+  .mod-articles .marts--item-media img {
     max-width: 98%; }
 .mod-articles.mod-articles--project-category h1 {
   font-size: 1.75em;
@@ -4785,6 +4798,10 @@ body {
   display: inline-block;
   margin-bottom: 40px;
   list-style: none; }
+.mod-articles.mod-articles--events .marts--item h1 {
+  margin-top: 0; }
+.mod-articles.mod-articles--events .marts--item h2 {
+  margin-bottom: 0; }
 
 .mod-article .mart--medias {
   margin-top: 40px; }
@@ -4794,5 +4811,5 @@ body {
   .mod-article .mart--media img {
     max-width: 98%; }
 
-.mod-article-categories .macats--list {
+.mod-article-categories .macats--items {
   margin-top: 40px; }

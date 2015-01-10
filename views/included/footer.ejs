@@ -5,7 +5,7 @@ var isErrorPage = meta.isErrorPage();
   <div class="container">
     <% if(!isErrorPage){%>
       <nav class="mf--navigation" role="navigation">
-        <h1 class="sr-only">Navigation secondaire</h1>
+        <h1 class="sr-only"><%- ressources.footer.navigationTitle %></h1>
         <ul class="mf--links">
           <% for(var i=0; i<footerPages.length; i++) {
             var p = footerPages[i];

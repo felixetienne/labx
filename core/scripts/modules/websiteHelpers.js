@@ -3,13 +3,19 @@
   if (!global.staticWebsiteHelpers) {
 
     global.staticWebsiteHelpers = (function(mod) {
-      var _websiteNames = {
-        main: 'labx'
-      };
+      var _defaultKey = 'main';
+      var _websiteNames = {};
+
+      _websiteNames[_defaultKey] = 'labx';
 
       mod.getWebsiteName = function(key) {
-        var websiteName = _websiteNames.hasOwnProperty(key) ?
-          _websiteNames[key] : null;
+        var websiteName = null;
+
+        if (!key) {
+          websiteName = _websiteNames[_defaultKey];
+        } else if (_websiteNames.hasOwnProperty(key)) {
+          websiteName = _websiteNames[key];
+        }
 
         return websiteName;
       }

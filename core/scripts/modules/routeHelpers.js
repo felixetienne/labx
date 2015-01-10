@@ -10,35 +10,41 @@
         var argsObj = argsObj || {};
 
         return function(req, res) {
-          var websiteName = websiteHelpers.getWebsiteName('main');
-          var context = new Context()
+          var websiteName = websiteHelpers.getWebsiteName();
+          var currentContext = new Context()
             .setCurrentRequest(req)
             .setCurrentPage(pageName)
             .setCurrentWebsite(websiteName);
 
           servicesFactory
-            .createPageService(context, argsObj)
+            .createPageService(currentContext, argsObj)
             .getData(
-              function(x, c, e) {
-                var view = getViewPath(c, argsObj);
-                var layout = getViewLayout(c);
-                x.meta = new ViewMetaData().setLayout(layout);
-                res.render(view, x);
-                // DEBUG ///////////////////////////////////////
+              function(data, context, errors) {
+                var view = getViewPath(context, argsObj);
+                var layout = getViewLayout(context);
+
+                data.meta = new ViewMetaData().setLayout(layout);
+
+                // DEBUG \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
                 // console.log('\n\n===== DEBUG =====\n');
                 // console.log(
-                //   'View: ' + view + ' ("' + layout + '" layout).\n');
-                // console.log(x);
+                //   'View: ' + view + ' ("' + layout + '" layout).\n'
+                // );
+                // console.log(data);
                 // console.log('\n=================\n\n');
-                ////////////////////////////////////////////////
-                logErrors(e);
+                ///////////////////////////////////////////////////
+
+                res.render(view, data);
+                logErrors(errors);
               },
-              function(c, e) {
+              function(context, errors) {
                 var view = viewHelpers.getErrorPage();
-                res.render(view, {
-                  meta: new ViewMetaData(e).asErrorPage()
-                });
-                logErrors(e);
+                var data = {
+                  meta: new ViewMetaData(errors).asErrorPage()
+                };
+
+                res.render(view, data);
+                logErrors(errors);
               });
         }
       }

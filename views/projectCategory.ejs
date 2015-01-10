@@ -1,20 +1,20 @@
 <div class="mod-articles mod-articles--projects">
   <% include included/standardContent.ejs %>
-  <div class="marts--list">
+  <div class="marts--items">
     <%
     var iTotal = projects.length;
     for(var i=0; i<iTotal; i++){
       var project = projects[i]; %>
-      <article class="marts--article">
-        <h1><%- project.title %></h1>
+      <article class="marts--item">
+        <h1 class="marts--item-title"><%- project.title %></h1>
         <p>
           <%- project.description %>
-          <a class="marts--more" href="<%- project.url %>" title="Lire plus">Lire plus...</a>
+          <a class="marts--item-more" href="<%- project.url %>" title="<%- ressources.current.readMore %>"><%- ressources.current.readMore %></a>
         </p>
         <%
         for(var j=0; j< project.images.length; j++){
           var image = project.images[j]; %>
-          <a href="<%- project.url %>" title="Lire plus">
+          <a href="<%- project.url %>" title="<%- ressources.current.readMore %>">
             <img src="<%- image.path %>" alt="<%- image.title %>" />
           </a>
         <%}%>

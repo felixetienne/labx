@@ -1,12 +1,12 @@
 <% if(featuredProjects.length){%>
   <aside class="mod-aside mod-aside--featured-projects">
-    <h1>Projets vedettes</h1>
+    <h1><%- ressources.featuredProjects.title %></h1>
     <ul>
       <%
       for(var i = 0; i<featuredProjects.length; i++){
         var project = featuredProjects[i]; %>
         <li>
-          <%- project.title %> - <%- project.description %> <a href="<%- project.url %>" class="ma--more">Lire plus...</a>
+          <span class="ma--item-title"><%- project.title %></span><%- project.description %> <a href="<%- project.url %>" class="ma--more"><%- ressources.featuredProjects.readMore %></a>
         </li>
       <%}%>
     </ul>
