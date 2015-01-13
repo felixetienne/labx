@@ -4808,8 +4808,8 @@ body {
 .mod-article .mart--media {
   text-align: center;
   margin-bottom: 15px; }
-  .mod-article .mart--media img {
-    max-width: 98%; }
+  .mod-article .mart--media img, .mod-article .mart--media iframe {
+    max-width: 100%; }
 
 .mod-article-categories .macats--items {
   margin-top: 40px; }

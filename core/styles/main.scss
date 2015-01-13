@@ -1,8 +1,10 @@
-// Core variables and mixins
+// Core variables
 //@import "theme/variables";
-@import "variables";
+@import "included/variables";
+
+// Core mixins
 @import "frameworks/bootstrap/mixins";
-@import "mixins";
+@import "included/mixins";
 
 // Reset and dependencies
 @import "frameworks/bootstrap/normalize";

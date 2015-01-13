@@ -197,9 +197,10 @@ body{
   .mart--media{
     text-align: center;
     margin-bottom: 15px;
-    img{
-      max-width: 98%;
+    img, iframe{
+      max-width: 100%;
     }
+
   }
 }
 
