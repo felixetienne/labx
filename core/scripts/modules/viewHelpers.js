@@ -6,13 +6,12 @@
       var index = '';
       var error = 'error';
       var contact = 'joindre';
-      var about = 'a-propos';
       var projects = 'portfolio';
       var project = 'projet';
       var services = 'services';
       var event = 'evenement';
       var events = 'evenements';
-      var curriculumVitae = 'curriculum-vitae';
+      var about = 'curriculum-vitae';
 
 
       mod.getLayout = function(pageName) {
@@ -27,7 +26,6 @@
           // case services:
           // case event:
           // case events:
-          // case curriculumVitae:
           case error:
             return layouts.fullContent;
           default:
@@ -37,7 +35,6 @@
 
       mod.hasFeaturedProjects = function(pageName) {
         switch (pageName) {
-          // case curriculumVitae:
           // case services:
           // case projects:
           // case project:
@@ -64,7 +61,6 @@
           case contact:
           case about:
           case services:
-          case curriculumVitae:
             return true;
           default:
             return false;
@@ -91,9 +87,6 @@
 
           case services:
             return 'services';
-
-          case curriculumVitae:
-            return 'curriculumVitae';
 
           case project:
             return 'project';
@@ -136,9 +129,6 @@
       mod.getEventsPage = function() {
         return events;
       };
-      mod.getCurriculumVitaePage = function() {
-        return curriculumVitae;
-      };
 
       mod.getStandardPages = function() {
         var names = [];
@@ -146,7 +136,6 @@
         names.push(index);
         names.push(contact);
         names.push(about);
-        names.push(curriculumVitae);
         names.push(projects);
         names.push(services);
         names.push(events);

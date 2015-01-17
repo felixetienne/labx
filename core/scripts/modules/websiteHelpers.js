@@ -6,7 +6,7 @@
       var _defaultKey = 'main';
       var _websiteNames = {};
 
-      _websiteNames[_defaultKey] = 'labx';
+      _websiteNames[_defaultKey] = 'akt';
 
       mod.getWebsiteName = function(key) {
         var websiteName = null;
