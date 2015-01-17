@@ -1,5 +1,5 @@
 body{
-    background-color: #e7e7e7;
+    background-color: $akt-bg;
     background-image: url(/medias/images/bg.jpg);
     background-repeat: repeat;
     background-size: 100%;
@@ -35,13 +35,12 @@ body{
     }
   }
   .mp--main-content, .mod-aside{
-    background-color: rgba(255,255,255, 0.55);
+    background-color: $akt-bgTrans;
     border: 1px black solid;
     padding: 0 20px 20px 20px;
     margin-bottom: 20px;
   }
   .mp--asides{
-
   }
 }
 
@@ -80,7 +79,7 @@ body{
 
 .mod-header-banners{
   margin-bottom: 20px;
-  border: 1px solid black;
+  border: 1px solid $akt-borderTrans;
   .item{
     background: #333;
     background-size: 100%;
@@ -113,7 +112,7 @@ body{
     li{
       display: inline-block;
       a{
-        color: $hot;
+        color: $akt-hot;
       }
       &:before{
         display: inline-block;
@@ -142,6 +141,10 @@ body{
     h1{
       font-size: 1.75em;
     }
+    img{
+      @extend %medias-border;
+      max-width: 100%;
+    }
   }
   .marts--item-date{
     font-size: 1.25em;
@@ -159,7 +162,8 @@ body{
   .marts--item-media{
     text-align: left;
     img{
-      max-width: 98%;
+      @extend %medias-border;
+      max-width: 100%;
     }
   }
 
@@ -198,9 +202,9 @@ body{
     text-align: center;
     margin-bottom: 15px;
     img, iframe{
+      @extend %medias-border;
       max-width: 100%;
     }
-
   }
 }
 

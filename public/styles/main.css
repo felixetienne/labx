@@ -4689,6 +4689,10 @@ button.close {
   .hidden-print {
     display: none !important; } }
 
+.mod-articles .marts--item img, .mod-articles .marts--item-media img, .mod-article .mart--media img, .mod-article .mart--media iframe {
+  border: 1px solid rgba(0, 0, 0, 0.67);
+  box-shadow: 0 0 2px #404040; }
+
 body {
   background-color: #e7e7e7;
   background-image: url(/medias/images/bg.jpg);
@@ -4736,7 +4740,7 @@ body {
 
 .mod-header-banners {
   margin-bottom: 20px;
-  border: 1px solid black; }
+  border: 1px solid rgba(0, 0, 0, 0.67); }
   .mod-header-banners .item {
     background: #333;
     background-size: 100%;
@@ -4775,6 +4779,8 @@ body {
     text-decoration: underline; }
 .mod-articles .marts--item h1 {
   font-size: 1.75em; }
+.mod-articles .marts--item img {
+  max-width: 100%; }
 .mod-articles .marts--item-date {
   font-size: 1.25em;
   font-style: italic; }
@@ -4787,7 +4793,7 @@ body {
 .mod-articles .marts--item-media {
   text-align: left; }
   .mod-articles .marts--item-media img {
-    max-width: 98%; }
+    max-width: 100%; }
 .mod-articles.mod-articles--project-category h1 {
   font-size: 1.75em;
   display: inline-block;
