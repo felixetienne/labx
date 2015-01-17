@@ -1,17 +1,18 @@
-LabX website
+LabX Framework
 ============
 
-Felix-Etienne Tetrault.
-2014
+By Felix-Etienne Tetrault
 
 
 Informations
 ============
 
 3-tier starter application.
-- MVC
-- Services
-- Repositories
+
+Include:
+- Views (Front-End)
+- Services (Back-End)
+- Repositories (DAL)
 
 
 Command line

@@ -1,8 +1,7 @@
 /**
- * LabX
- * Version 0.1.5
+ * LabX Framework
  * Felix-Etienne Tetrault
- * Copyright 2014
+ * Copyright 2014-2015
  */
 
 (function(express, ejs, expressLayouts, dateFormat,
@@ -11,7 +10,7 @@
   var port = config.getCurrentPort();
   var root = __dirname;
 
-  console.log('Initialized application "LabX" at ' +
+  console.log('"LabX Framework" app is initialized at ' +
     dateFormat(Date.now()) + '.');
 
   app.use(expressLayouts);
@@ -42,7 +41,7 @@
   }));
 
   app.listen(port, function() {
-    console.log("Node app is running at localhost: " + port);
+    console.info('NodeJs application is accessible at port ' + port + '.');
   });
 
   app.locals.root = root;
