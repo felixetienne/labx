@@ -464,7 +464,9 @@
     function getDocTitle(page, website) {
       var pageTitle = page.doc_title || page.title || '';
 
-      if (!pageTitle.length) return website.title;
+      if (!pageTitle.length) return website.title || '';
+
+      if (isHomePage(_currentPage)) return pageTitle;
 
       var titleFormat = website.doc_titleFormat || '';
 
