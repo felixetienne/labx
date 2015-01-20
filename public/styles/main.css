@@ -4723,8 +4723,10 @@ body {
   padding: 0 20px 20px 20px;
   margin-bottom: 20px; }
 
-.mod-main-navigation .mn--logo img {
-  height: 100%; }
+.mod-main-navigation .mn--logo {
+  padding: 6px 15px; }
+  .mod-main-navigation .mn--logo img {
+    height: 100%; }
 .mod-main-navigation .mn--navbar > li > a.active {
   color: white; }
 .mod-main-navigation .mn--navbar .dropdown-menu .active {

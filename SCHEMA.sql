@@ -26,44 +26,46 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 SET search_path = public, pg_catalog;
 
 --
--- Name: get_event_image_list(integer, boolean); Type: FUNCTION; Schema: public; Owner: ameeyfrxjtmhno
+-- Name: get_event_image_list(integer, text); Type: FUNCTION; Schema: public; Owner: ameeyfrxjtmhno
 --
 
-CREATE FUNCTION get_event_image_list(integer, boolean) RETURNS text
+CREATE FUNCTION get_event_image_list(integer, text) RETURNS text
     LANGUAGE sql
     AS $_$
 SELECT string_agg(concat_ws('^', images.name, images.title), '|' ORDER BY images.sorting) AS event_image_list
 FROM event_images
 RIGHT JOIN images ON images.id = event_images.image_id
+INNER JOIN image_types ON images.type_id = image_types.id
 WHERE event_images.event_id = $1
-AND images.thumbnail = $2
+AND image_types.name = $2
 AND images.active IS TRUE
 AND images.content IS NOT NULL
 GROUP BY event_images.event_id;
 $_$;
 
 
-ALTER FUNCTION public.get_event_image_list(integer, boolean) OWNER TO ameeyfrxjtmhno;
+ALTER FUNCTION public.get_event_image_list(integer, text) OWNER TO ameeyfrxjtmhno;
 
 --
--- Name: get_project_image_list(integer, boolean); Type: FUNCTION; Schema: public; Owner: ameeyfrxjtmhno
+-- Name: get_project_image_list(integer, text); Type: FUNCTION; Schema: public; Owner: ameeyfrxjtmhno
 --
 
-CREATE FUNCTION get_project_image_list(integer, boolean) RETURNS text
+CREATE FUNCTION get_project_image_list(integer, text) RETURNS text
     LANGUAGE sql
     AS $_$
 SELECT string_agg(concat_ws('^', images.name, images.title), '|' ORDER BY images.sorting) AS project_image_list
 FROM project_images
 RIGHT JOIN images ON images.id = project_images.image_id
+INNER JOIN image_types ON images.type_id = image_types.id
 WHERE project_images.project_id = $1
-AND images.thumbnail = $2
+AND image_types.name = $2
 AND images.active IS TRUE
 AND images.content IS NOT NULL
 GROUP BY project_images.project_id;
 $_$;
 
 
-ALTER FUNCTION public.get_project_image_list(integer, boolean) OWNER TO ameeyfrxjtmhno;
+ALTER FUNCTION public.get_project_image_list(integer, text) OWNER TO ameeyfrxjtmhno;
 
 --
 -- Name: get_project_media_list(integer); Type: FUNCTION; Schema: public; Owner: ameeyfrxjtmhno
@@ -172,6 +174,40 @@ CREATE TABLE featured_projects (
 ALTER TABLE public.featured_projects OWNER TO ameeyfrxjtmhno;
 
 --
+-- Name: image_types; Type: TABLE; Schema: public; Owner: ameeyfrxjtmhno; Tablespace: 
+--
+
+CREATE TABLE image_types (
+    title text,
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+ALTER TABLE public.image_types OWNER TO ameeyfrxjtmhno;
+
+--
+-- Name: image_types_id_seq; Type: SEQUENCE; Schema: public; Owner: ameeyfrxjtmhno
+--
+
+CREATE SEQUENCE image_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.image_types_id_seq OWNER TO ameeyfrxjtmhno;
+
+--
+-- Name: image_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: ameeyfrxjtmhno
+--
+
+ALTER SEQUENCE image_types_id_seq OWNED BY image_types.id;
+
+
+--
 -- Name: images; Type: TABLE; Schema: public; Owner: ameeyfrxjtmhno; Tablespace: 
 --
 
@@ -182,9 +218,9 @@ CREATE TABLE images (
     name text NOT NULL,
     active boolean DEFAULT true NOT NULL,
     description text,
-    thumbnail boolean DEFAULT false NOT NULL,
     sorting integer DEFAULT 1 NOT NULL,
-    force_deploy boolean DEFAULT false NOT NULL
+    force_deploy boolean DEFAULT false NOT NULL,
+    type_id integer DEFAULT 1 NOT NULL
 );
 
 
@@ -516,6 +552,13 @@ ALTER TABLE ONLY events ALTER COLUMN id SET DEFAULT nextval('events_id_seq'::reg
 -- Name: id; Type: DEFAULT; Schema: public; Owner: ameeyfrxjtmhno
 --
 
+ALTER TABLE ONLY image_types ALTER COLUMN id SET DEFAULT nextval('image_types_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: ameeyfrxjtmhno
+--
+
 ALTER TABLE ONLY images ALTER COLUMN id SET DEFAULT nextval('images_id_seq'::regclass);
 
 
@@ -591,6 +634,30 @@ ALTER TABLE ONLY events
 
 ALTER TABLE ONLY featured_projects
     ADD CONSTRAINT featured_projects_project_id_key UNIQUE (project_id);
+
+
+--
+-- Name: image_types_id_key; Type: CONSTRAINT; Schema: public; Owner: ameeyfrxjtmhno; Tablespace: 
+--
+
+ALTER TABLE ONLY image_types
+    ADD CONSTRAINT image_types_id_key UNIQUE (id);
+
+
+--
+-- Name: image_types_name_key; Type: CONSTRAINT; Schema: public; Owner: ameeyfrxjtmhno; Tablespace: 
+--
+
+ALTER TABLE ONLY image_types
+    ADD CONSTRAINT image_types_name_key UNIQUE (name);
+
+
+--
+-- Name: image_types_pkey; Type: CONSTRAINT; Schema: public; Owner: ameeyfrxjtmhno; Tablespace: 
+--
+
+ALTER TABLE ONLY image_types
+    ADD CONSTRAINT image_types_pkey PRIMARY KEY (id);
 
 
 --
@@ -789,6 +856,13 @@ CREATE INDEX index_id1 ON medias USING btree (id);
 
 
 --
+-- Name: index_id2; Type: INDEX; Schema: public; Owner: ameeyfrxjtmhno; Tablespace: 
+--
+
+CREATE INDEX index_id2 ON image_types USING btree (id);
+
+
+--
 -- Name: index_image_id; Type: INDEX; Schema: public; Owner: ameeyfrxjtmhno; Tablespace: 
 --
 
@@ -807,6 +881,13 @@ CREATE INDEX index_name ON media_types USING btree (name);
 --
 
 CREATE INDEX index_name1 ON medias USING btree (name);
+
+
+--
+-- Name: index_name2; Type: INDEX; Schema: public; Owner: ameeyfrxjtmhno; Tablespace: 
+--
+
+CREATE INDEX index_name2 ON image_types USING btree (name);
 
 
 --

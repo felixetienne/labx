@@ -23,7 +23,7 @@
             events.doc_keywords, \
             events.keywords, \
             events.id, \
-            get_event_image_list(events.id, FALSE) as image_list'
+            get_event_image_list(events.id, \'standard\') as image_list'
         )
         .from('events')
         .where('events.active', true)
@@ -56,7 +56,7 @@
             events.description_short, \
             events.sorting, \
             events.id, \
-            get_event_image_list(events.id, TRUE) as image_list'
+            get_event_image_list(events.id, \'thumbnail\') as image_list'
         )
         .from('events')
         .where('events.active', true)

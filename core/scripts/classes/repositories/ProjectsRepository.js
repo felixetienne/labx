@@ -30,7 +30,7 @@
             project_categories.title_short as category_title_short, \
             project_categories.keywords as category_keywords, \
             project_categories.sorting as category_sorting, \
-            get_project_image_list(projects.id, FALSE) as image_list, \
+            get_project_image_list(projects.id, \'standard\') as image_list, \
             get_project_media_list(projects.id) as media_list'
         )
         .from('projects')

@@ -29,7 +29,7 @@
             projects.name as project_name, \
             projects.date as project_date, \
             projects.sorting as project_sorting, \
-            get_project_image_list(projects.id, TRUE) as project_image_list'
+            get_project_image_list(projects.id, \'thumbnail\') as project_image_list'
         )
         .from('project_categories')
         .leftJoin('projects', {
@@ -78,7 +78,7 @@
             projects.name as project_name, \
             projects.date as project_date, \
             projects.sorting as project_sorting, \
-            get_project_image_list(projects.id, TRUE) as project_image_list'
+            get_project_image_list(projects.id, \'thumbnail\') as project_image_list'
         )
         .from('project_categories')
         .leftJoin('projects', {
