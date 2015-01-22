@@ -214,3 +214,36 @@ body{
     margin-top: 40px;
   }
 }
+
+.mp-content{
+  h2{
+    font-size: 20px;
+  }
+  h3{
+    font-size: 14px;
+  }
+  section{
+    h1{
+      font-size: 18px;
+    }
+  }
+
+  &.mp-content--home-page{
+    h3{
+      display: inline-block;
+      margin-top: 5px;
+      margin-bottom: 25px;
+
+      &:before{
+        content: "/";
+        display: inline-block;
+        width: 25px;
+        text-align: center;
+      }
+
+      &.first:before{
+        display: none;
+      }
+    }
+  }
+}
