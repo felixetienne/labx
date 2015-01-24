@@ -246,4 +246,19 @@ body{
       }
     }
   }
+
+  @media screen and (max-width: $screen-sm) {
+
+    &.mp-content--home-page{
+      h3{
+        display: block;
+        margin-top: 5px;
+        margin-bottom: 5px;
+
+        &:before{
+          display: none;
+        }
+      }
+    }
+  }
 }

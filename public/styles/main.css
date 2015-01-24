@@ -4839,3 +4839,10 @@ body {
     text-align: center; }
   .mp-content.mp-content--home-page h3.first:before {
     display: none; }
+@media screen and (max-width: 768px) {
+  .mp-content.mp-content--home-page h3 {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px; }
+    .mp-content.mp-content--home-page h3:before {
+      display: none; } }
