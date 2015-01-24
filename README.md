@@ -7,7 +7,7 @@ By Felix-Etienne Tetrault
 Informations
 ============
 
-3-tier starter application.
+3-tier application framework.
 
 Include:
 - Views (Front-End)
@@ -19,7 +19,7 @@ Command line
 ============
 
 Go to application folder:
-$ cd webapps/labx
+$ cd [your app folder]
 
 Install application:
 $ npm install
@@ -27,10 +27,10 @@ $ npm install
 Start application:
 $ node app.js
 OR
-$ forman start
+$ foreman start
 
 Start grunt sass watch:
-$ gunt
+$ grunt
 
 Deploy to Heroku:
-$ git push heroku master
+$ git push [heroku] [branch]
