@@ -36,7 +36,7 @@ var isErrorPage = meta.isErrorPage();
       <% if(isErrorPage) {%>
         <p>Tout droits réservé. &copy; 2015</p>
       <%} else {%>
-        <p><%- website.author %> | <%- website.copyright %></p>
+        <p><%- website.author %><span class="hidden"> </span><span class="iblock"><%- website.copyright %><span class="hidden"> </span></span><span class="iblock">Version <%- website.version %></span></p>
       <%}%>
     </div>
   </div>

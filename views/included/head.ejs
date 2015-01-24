@@ -1,8 +1,9 @@
 <% if(meta.isErrorPage()) {%>
-  <title>LabX | Error</title>
+  <title>Akt | Oups...</title>
 <%} else {%>
   <title><%- page.docTitle %></title>
   <meta name="description" content="<%- page.docDescription %>" />
   <meta name="keywords" content="<%- page.docKeywords %>" />
   <meta name="author" content="<%- website.docAuthor %>" />
+  <meta name="version" content="<%- website.version %>">
 <%}%>
