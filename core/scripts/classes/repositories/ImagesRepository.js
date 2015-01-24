@@ -7,7 +7,7 @@
       return _base.getErrors();
     }
 
-    this.getBanners = function(client, action, emptyAction) {
+    this.getBanners = function(client, options, action, emptyAction) {
 
       var query = bricks
         .select(
@@ -51,7 +51,15 @@
         })
         .leftJoin('events', {
           'events.id': 'event_images.event_id'
-        })
+        });
+
+      if (options.publishedOnly) {
+        query = query
+          .where('banner_images.published', true)
+          .where('images.published', true);
+      }
+
+      query = query
         .where('banner_images.active', true)
         .where('images.active', true)
         .toString();
@@ -87,7 +95,7 @@
       });
     }
 
-    this.getAll = function(client, action, emptyAction) {
+    this.getAll = function(client, options, action, emptyAction) {
 
       var query = bricks
         .select(
@@ -98,7 +106,14 @@
           images.force_deploy, \
           images.sorting'
         )
-        .from('images')
+        .from('images');
+
+      if (options.publishedOnly) {
+        query = query
+          .where('images.published', true);
+      }
+
+      query = query
         .where('images.active', true)
         .where(bricks.isNotNull('images.content'))
         .orderBy('images.sorting ASC')
@@ -111,8 +126,7 @@
       });
     }
 
-    this.getByIds = function(client, idsList, includeRawData, action,
-      emptyAction) {
+    this.getByIds = function(client, options, action, emptyAction) {
 
       var query = bricks
         .select(
@@ -120,24 +134,33 @@
           images.name, \
           images.sorting');
 
-      if (includeRawData) {
+      if (options.includeRawData) {
         query = query.select('images.content');
       }
 
       query = query
-        .from('images')
+        .from('images');
+
+      if (options.publishedOnly) {
+        query = query
+          .where('images.published', true);
+      }
+
+      query = query
         .where('images.active', true)
         .where(bricks.isNotNull('images.content'))
         .toString();
 
-      var last = idsList.count() - 1;
+      if (options.idsList) {
+        var last = options.idsList.count() - 1;
 
-      idsList.do(function(x, i) {
-        query += (
-          i === 0 ? ' AND (' : ' OR '
-        ) + 'images.id = ' + x;
-        if (i === last) query += ')';
-      });
+        options.idsList.do(function(x, i) {
+          query += (
+            i === 0 ? ' AND (' : ' OR '
+          ) + 'images.id = ' + x;
+          if (i === last) query += ')';
+        });
+      }
 
       query += 'ORDER BY images.sorting ASC'
 

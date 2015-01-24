@@ -15,10 +15,10 @@
 
       var _cacheSettings = currentTypeIsProduction() ? {
         stdTTL: 120, // seconds (ex.: 90)
-        checkperiod: 300 // seconds (ex.: 120)
+        checkperiod: 180 // seconds (ex.: 120)
       } : {
-        stdTTL: 12, // seconds (ex.: 90)
-        checkperiod: 30 // seconds (ex.: 120)
+        stdTTL: 2, // seconds (ex.: 90)
+        checkperiod: 3 // seconds (ex.: 120)
       };
 
       mod.setEnvFile = function(filePath) {

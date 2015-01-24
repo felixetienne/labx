@@ -9,7 +9,7 @@
     "async": "^0.9.0",
     "dateformat": "^1.0.11",
     "ejs": "^1.0.0",
-    "express": "^4.11.0",
+    "express": "^4.11.1",
     "express-ejs-layouts": "^1.1.0",
     "include-all": "^0.1.6",
     "jshint-stylish": "^1.0.0",

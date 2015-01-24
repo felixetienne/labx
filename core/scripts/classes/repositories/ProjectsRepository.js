@@ -7,8 +7,7 @@
       return _base.getErrors();
     }
 
-    this.getProjectByName = function(client, projectName, action,
-      emptyAction) {
+    this.getProjectByName = function(client, options, action, emptyAction) {
 
       var query = bricks
         .select(
@@ -36,10 +35,18 @@
         .from('projects')
         .join('project_categories', {
           'projects.category_id': 'project_categories.id'
-        })
+        });
+
+      if (options.publishedOnly) {
+        query = query
+          .where('projects.published', true)
+          .where('project_categories.published', true);
+      }
+
+      query = query
         .where('projects.active', true)
         .where('project_categories.active', true)
-        .where('projects.name', projectName)
+        .where('projects.name', options.projectName)
         .orderBy(
           'projects.sorting ASC',
           'category_sorting ASC'
@@ -59,7 +66,7 @@
       });
     }
 
-    this.getFeaturedProjects = function(client, excludedProjectName, action,
+    this.getFeaturedProjects = function(client, options, action,
       emptyAction) {
 
       var query = bricks
@@ -79,15 +86,24 @@
         })
         .leftJoin('project_categories', {
           'projects.category_id': 'project_categories.id'
-        })
+        });
+
+      if (options.publishedOnly) {
+        query = query
+          .where('featured_projects.published', true)
+          .where('projects.published', true)
+          .where('project_categories.published', true);
+      }
+
+      query = query
         .where('featured_projects.active', true)
         .where('projects.active', true)
         .where('project_categories.active', true)
         .toString();
 
-      if (excludedProjectName) {
+      if (options.excludedProjectName) {
         query +=
-          " AND projects.name <> '" + excludedProjectName + "'";
+          " AND projects.name <> '" + options.excludedProjectName + "'";
       }
 
       query +=

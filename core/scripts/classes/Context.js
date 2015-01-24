@@ -6,6 +6,18 @@
     var _currentPage = null;
     var _currentView = null;
     var _errorView = null;
+    var _includesDraft = false;
+
+    this.includesDraft = function(value) {
+      if (value === true || value === false) {
+
+        _includesDraft = value;
+
+        return this;
+      };
+
+      return _includesDraft;
+    }
 
     this.getCurrentWebsite = function() {
       return _currentWebsite;

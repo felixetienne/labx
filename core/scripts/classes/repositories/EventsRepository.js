@@ -8,8 +8,7 @@
       return _base.getErrors();
     }
 
-    this.getEventByName = function(client, eventName, action,
-      emptyAction) {
+    this.getEventByName = function(client, options, action, emptyAction) {
 
       var query = bricks
         .select(
@@ -25,9 +24,16 @@
             events.id, \
             get_event_image_list(events.id, \'standard\') as image_list'
         )
-        .from('events')
+        .from('events');
+
+      if (options.publishedOnly) {
+        query = query
+          .where('events.published', true);
+      }
+
+      query = query
         .where('events.active', true)
-        .where('events.name', eventName)
+        .where('events.name', options.eventName)
         .orderBy(
           'events.date DESC',
           'events.sorting ASC'
@@ -44,7 +50,7 @@
       });
     }
 
-    this.getAllEvents = function(client, action, emptyAction) {
+    this.getAllEvents = function(client, options, action, emptyAction) {
 
       var query = bricks
         .select(
@@ -58,7 +64,14 @@
             events.id, \
             get_event_image_list(events.id, \'thumbnail\') as image_list'
         )
-        .from('events')
+        .from('events');
+
+      if (options.publishedOnly) {
+        query = query
+          .where('events.published', true);
+      }
+
+      query = query
         .where('events.active', true)
         .orderBy(
           'events.date DESC',
@@ -81,8 +94,7 @@
       });
     }
 
-    this.getMenuEvents = function(client, maximumEvents, action,
-      emptyAction) {
+    this.getMenuEvents = function(client, options, action, emptyAction) {
 
       var query = bricks
         .select(
@@ -94,15 +106,23 @@
             events.sorting, \
             events.id'
         )
-        .from('events')
+        .from('events');
+
+      if (options.publishedOnly) {
+        query = query
+          .where('events.published', true);
+      }
+
+      query = query
         .where('events.active', true)
         .orderBy(
           'events.date DESC',
           'events.sorting ASC'
         );
 
-      if (maximumEvents) {
-        query = query.limit(maximumEvents);
+      if (options.maximumEvents) {
+        query = query
+          .limit(options.maximumEvents);
       }
 
       query = query.toString();

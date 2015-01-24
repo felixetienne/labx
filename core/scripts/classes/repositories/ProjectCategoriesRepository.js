@@ -1,19 +1,19 @@
 (function(bricks, BaseRepository, Error) {
 
-  module.exports = function() {
-    var _base = new BaseRepository();
-    var _imageFolder = _base.getConfig().getImageFolder();
+	module.exports = function() {
+		var _base = new BaseRepository();
+		var _imageFolder = _base.getConfig().getImageFolder();
 
-    this.getErrors = function() {
-      return _base.getErrors();
-    }
+		this.getErrors = function() {
+			return _base.getErrors();
+		}
 
-    this.getProjectCategoryByName = function(client, projectCategoryName,
-      action, emptyAction) {
+		this.getProjectCategoryByName = function(client, options, action,
+			emptyAction) {
 
-      var query = bricks
-        .select(
-          '\
+			var query = bricks
+				.select(
+					'\
             project_categories.id, \
             project_categories.title, \
             project_categories.description_html, \
@@ -30,42 +30,50 @@
             projects.date as project_date, \
             projects.sorting as project_sorting, \
             get_project_image_list(projects.id, \'thumbnail\') as project_image_list'
-        )
-        .from('project_categories')
-        .leftJoin('projects', {
-          'project_categories.id': 'projects.category_id'
-        })
-        .where('project_categories.name', projectCategoryName)
-        .where('project_categories.active', true)
-        .toString();
+				)
+				.from('project_categories')
+				.leftJoin('projects', {
+					'project_categories.id': 'projects.category_id'
+				});
 
-      query +=
-        ' AND (projects.active IS NULL OR projects.active = TRUE) \
+			if (options.publishedOnly) {
+				query = query
+					.where('project_categories.published', true)
+					.where('projects.published', true);
+			}
+
+			query = query
+				.where('project_categories.active', true)
+				.where('project_categories.name', options.projectCategoryName)
+				.toString();
+
+			query +=
+				' AND (projects.active IS NULL OR projects.active = TRUE) \
         ORDER BY \
         project_categories.sorting ASC, \
         project_sorting ASC';
 
-      _base.executeQuery(client, query, emptyAction, function(res) {
-        var data = [];
+			_base.executeQuery(client, query, emptyAction, function(res) {
+				var data = [];
 
-        res.rows.forEach(function(row) {
+				res.rows.forEach(function(row) {
 
-          row.project_images = _base.extractMedias(
-            row.project_image_list, true);
+					row.project_images = _base.extractMedias(
+						row.project_image_list, true);
 
-          data.push(row);
-        });
+					data.push(row);
+				});
 
-        action(data);
-      });
-    }
+				action(data);
+			});
+		}
 
-    this.getAllProjectCategories = function(client, action,
-      emptyAction) {
+		this.getAllProjectCategories = function(client, options, action,
+			emptyAction) {
 
-      var query = bricks
-        .select(
-          '\
+			var query = bricks
+				.select(
+					'\
             project_categories.id, \
             project_categories.name, \
             project_categories.title, \
@@ -79,63 +87,79 @@
             projects.date as project_date, \
             projects.sorting as project_sorting, \
             get_project_image_list(projects.id, \'thumbnail\') as project_image_list'
-        )
-        .from('project_categories')
-        .leftJoin('projects', {
-          'project_categories.id': 'projects.category_id'
-        })
-        .where('project_categories.active', true)
-        .where('projects.active', true)
-        .orderBy(
-          'project_categories.sorting ASC',
-          'project_sorting ASC'
-        )
-        .toString();
+				)
+				.from('project_categories')
+				.leftJoin('projects', {
+					'project_categories.id': 'projects.category_id'
+				});
 
-      _base.executeQuery(client, query, emptyAction, function(res) {
-        var data = [];
+			if (options.publishedOnly) {
+				query = query
+					.where('project_categories.published', true)
+					.where('projects.published', true);
+			}
 
-        res.rows.forEach(function(row) {
+			query = query
+				.where('project_categories.active', true)
+				.where('projects.active', true)
+				.orderBy(
+					'project_categories.sorting ASC',
+					'project_sorting ASC'
+				)
+				.toString();
 
-          row.project_images = _base.extractMedias(
-            row.project_image_list, true);
+			_base.executeQuery(client, query, emptyAction, function(res) {
+				var data = [];
 
-          data.push(row);
-        });
+				res.rows.forEach(function(row) {
 
-        action(data);
-      });
-    }
+					row.project_images = _base.extractMedias(
+						row.project_image_list, true);
 
-    this.getMenuProjectCategories = function(client, action, emptyAction) {
+					data.push(row);
+				});
 
-      var query = bricks
-        .select(
-          '\
+				action(data);
+			});
+		}
+
+		this.getMenuProjectCategories = function(client, options, action,
+			emptyAction) {
+
+			var query = bricks
+				.select(
+					'\
             project_categories.id, \
             project_categories.name, \
             project_categories.title, \
             project_categories.title_short, \
             project_categories.sorting'
-        )
-        .from('project_categories')
-        .where('project_categories.active', true)
-        .orderBy('project_categories.sorting ASC')
-        .toString();
+				)
+				.from('project_categories');
 
-      _base.executeQuery(client, query, emptyAction, function(res) {
-        var data = [];
+			if (options.publishedOnly) {
+				query = query
+					.where('project_categories.published', true);
+			}
 
-        res.rows.forEach(function(row) {
-          data.push(row);
-        });
+			query = query
+				.where('project_categories.active', true)
+				.orderBy('project_categories.sorting ASC')
+				.toString();
 
-        action(data);
-      });
-    }
-  }
+			_base.executeQuery(client, query, emptyAction, function(res) {
+				var data = [];
+
+				res.rows.forEach(function(row) {
+					data.push(row);
+				});
+
+				action(data);
+			});
+		}
+	}
 
 })(
-  require('sql-bricks-postgres'),
-  require('./BaseRepository'),
-  require('../Error'));
+	require('sql-bricks-postgres'),
+	require('./BaseRepository'),
+	require('../Error'));

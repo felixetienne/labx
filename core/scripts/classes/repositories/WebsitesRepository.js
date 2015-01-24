@@ -7,8 +7,7 @@
       return _base.getErrors();
     }
 
-    this.getWebsiteByName = function(client, websiteName, action,
-      emptyAction) {
+    this.getWebsiteByName = function(client, options, action, emptyAction) {
 
       var query = bricks
         .select(
@@ -24,9 +23,16 @@
             websites.doc_language, \
 						websites.sorting'
         )
-        .from('websites')
-        .where('websites.name', websiteName)
+        .from('websites');
+
+      if (options.publishedOnly) {
+        query = query
+          .where('websites.published', true);
+      }
+
+      query = query
         .where('websites.active', true)
+        .where('websites.name', options.websiteName)
         .orderBy('websites.sorting ASC')
         .limit(1)
         .toString();

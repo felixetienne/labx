@@ -7,7 +7,7 @@
       return _base.getErrors();
     }
 
-    this.getPageByName = function(client, pageName, action, emptyAction) {
+    this.getPageByName = function(client, options, action, emptyAction) {
 
       var query =
         bricks
@@ -23,9 +23,16 @@
 						pages.sorting, \
             pages.name'
         )
-        .from('pages')
-        .where('pages.name', pageName)
+        .from('pages');
+
+      if (options.publishedOnly) {
+        query = query
+          .where('pages.published', true);
+      }
+
+      query = query
         .where('pages.active', true)
+        .where('pages.name', options.pageName)
         .orderBy('pages.sorting ASC')
         .limit(1)
         .toString();
@@ -37,7 +44,7 @@
       });
     }
 
-    this.getAllPages = function(client, action, emptyAction) {
+    this.getAllPages = function(client, options, action, emptyAction) {
 
       var query = bricks
         .select(
@@ -49,7 +56,14 @@
             pages.footer, \
 						pages.sorting'
         )
-        .from('pages')
+        .from('pages');
+
+      if (options.publishedOnly) {
+        query = query
+          .where('pages.published', true);
+      }
+
+      query = query
         .where('pages.active', true)
         .orderBy('pages.sorting ASC')
         .toString();
