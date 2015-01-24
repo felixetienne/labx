@@ -1,94 +1,109 @@
 (function(q, pg, config, repositoriesFactory, ImageManager, List) {
 
-	require('../../core/scripts/extensions/ObjectExtensions');
+  require('../../core/scripts/extensions/ObjectExtensions');
 
-	module.exports = (function(mod) {
-		var _imageManager = new ImageManager();
-		var _repo = repositoriesFactory.createImagesRepository();
+  module.exports = (function(mod) {
+    var _imageManager = new ImageManager();
+    var _repo = repositoriesFactory.createImagesRepository();
 
-		mod.process = function() {
-			var totalOfImageProcessed = 0;
-			var databaseUrl = config.getFullDatabaseUrl();
+    mod.process = function() {
+      var totalOfImageProcessed = 0;
+      var databaseUrl = config.getFullDatabaseUrl();
 
-			pg.connect(databaseUrl, function(err, client, done) {
+      pg.connect(databaseUrl, function(err, client, done) {
 
-				getAllImages()
-					.then(getWritesImages)
-					.then(onComplete)
-					.done();
+        getAllImages()
+          .then(getWritesImages)
+          .then(onComplete)
+          .done();
 
-				function getAllImages() {
-					var deferred = q.defer();
-					var options = {
-						publishedOnly: config.currentTypeIsProduction()
-					}
+        function getAllImages() {
+          var deferred = q.defer();
+          var options = getBasicOptions();
 
-					_repo.getAll(client, options, function(images) {
-						var ids = new List();
+          _repo.getAll(client, options,
+            function(images) {
+              var ids = new List();
 
-						for (var i = 0; i < images.length; i++) {
-							var image = images[i];
+              for (var i = 0; i < images.length; i++) {
+                var image = images[i];
 
-							if (mustBeDeployed(image)) {
-								ids.add(image.id);
-							}
-						}
+                if (mustBeDeployed(image)) {
+                  ids.add(image.id);
+                }
+              }
 
-						deferred.resolve(ids);
-					}, function() {
-						deferred.reject();
-					});
+              deferred.resolve(ids);
+            },
+            function() {
+              deferred.reject();
+            });
 
-					return deferred.promise;
-				}
+          return deferred.promise;
+        }
 
-				function getWritesImages(ids) {
-					var deferred = q.defer();
+        function getWritesImages(ids) {
+          var deferred = q.defer();
 
-					totalOfImageProcessed = ids.count();
+          totalOfImageProcessed = ids.count();
 
-					if (totalOfImageProcessed === 0) {
-						deferred.resolve();
-						return;
-					}
+          if (totalOfImageProcessed === 0) {
+            deferred.resolve();
+            return;
+          }
 
-					_repo.getByIds(client, ids, true, function(data) {
+          var options = getBasicOptions();
 
-						data.forEach(function(x) {
-							_imageManager.write(x.path, x.content);
-						});
+          options.includeRawData = true;
+          options.idsList = ids;
 
-						deferred.resolve();
-					}, function() {
-						deferred.reject();
-					});
+          _repo.getByIds(client, options,
+            function(data) {
 
-					return deferred.promise;
-				}
+              data.forEach(function(x) {
+                _imageManager.write(x.path, x.content);
+              });
 
-				function onComplete() {
-					done();
-					console.info(totalOfImageProcessed +
-						' images was processed.');
-				}
-			});
-		}
+              deferred.resolve();
+            },
+            function() {
+              deferred.reject();
+            });
 
-		function mustBeDeployed(image) {
+          return deferred.promise;
+        }
 
-			if (image.force_deploy) return true;
+        function onComplete() {
+          done();
+          console.info(totalOfImageProcessed +
+            ' images was processed.');
+        }
+      });
+    }
 
-			return !_imageManager.exists(image.path);
-		}
+    function getBasicOptions() {
+      var options = {
+        publishedOnly: config.currentTypeIsProduction()
+      };
 
-		return mod;
+      return options;
+    }
 
-	})({});
+    function mustBeDeployed(image) {
+
+      if (image.force_deploy) return true;
+
+      return !_imageManager.exists(image.path);
+    }
+
+    return mod;
+
+  })({});
 
 })(
-	require('q'),
-	require('pg'),
-	require('../../core/scripts/modules/appConfig'),
-	require('../../core/scripts/modules/factories/repositoriesFactory'),
-	require('../../core/scripts/classes/ImageManager'),
-	require('../../core/scripts/classes/List'));
+  require('q'),
+  require('pg'),
+  require('../../core/scripts/modules/appConfig'),
+  require('../../core/scripts/modules/factories/repositoriesFactory'),
+  require('../../core/scripts/classes/ImageManager'),
+  require('../../core/scripts/classes/List'));
