@@ -13,7 +13,11 @@
       for(var i=0; i<imageBanners.length; i++){
         var banner = imageBanners[i];
         var cssClass = i===0 ? ' active' : ''; %>
-        <div class="item<%- cssClass %>" style="background-image: url(<%- banner.imagePath %>);">
+        <div class="item<%- cssClass %>">
+          <div class="mhb-image">
+            <div style="background-image: url(<%- banner.imagePath %>);">
+            </div>
+          </div>
           <% if(banner.title){%>
             <h1><%- banner.title %></h1>
           <%}%>
