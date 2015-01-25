@@ -89,7 +89,7 @@ body{
     }
   }
 
-  @media (max-width: $screen-sm) {
+  @media screen and (max-width: $screen-sm) {
 
     .nav{
       > li{
@@ -175,7 +175,7 @@ body{
     }
   }
 
-  @media (max-width: $screen-sm) {
+  @media screen and (max-width: $screen-sm) {
 
     .mf--copyright{
       transform: rotate(-4deg);
@@ -310,7 +310,7 @@ body{
     }
   }
 
-  @media (max-width: $screen-sm) {
+  @media screen and (max-width: $screen-sm) {
 
     &.mp-content--home-page{
       h3{

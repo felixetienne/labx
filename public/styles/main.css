@@ -4744,7 +4744,7 @@ body {
   transform: rotate(-1.25deg); }
 .mod-main-navigation .mn--navbar .nav > li:nth-child(6) {
   transform: rotate(0.75deg); }
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .mod-main-navigation .nav > li {
     width: 99%; } }
 
@@ -4800,7 +4800,7 @@ body {
     display: inline-block;
     width: 25px;
     text-align: center; }
-  @media (max-width: 768px) {
+  @media screen and (max-width: 768px) {
     .mod-footer .mf--copyright {
       transform: rotate(-4deg);
       margin-top: 20px; }
@@ -4873,7 +4873,7 @@ body {
     text-align: center; }
   .mp-content.mp-content--home-page h3.first:before {
     display: none; }
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .mp-content.mp-content--home-page h3 {
     display: block;
     margin-top: 5px;
