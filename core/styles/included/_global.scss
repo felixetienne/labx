@@ -332,10 +332,17 @@ body{
     height: 100%;
     overflow: hidden;
     text-align: center;
+    background-position-x: center;
+  }
 
-    div{
-        width: 938px;
-        height: 300px;
+
+  @media screen and (max-width: $screen-sm) {
+
+    .carousel-caption{
+      h2{
+        font-size: 1.5em;
+      }
     }
+
   }
 }

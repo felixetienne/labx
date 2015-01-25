@@ -4885,7 +4885,8 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  text-align: center; }
-  .mod-header-banners .mhb-image div {
-    width: 938px;
-    height: 300px; }
+  text-align: center;
+  background-position-x: center; }
+@media screen and (max-width: 768px) {
+  .mod-header-banners .carousel-caption h2 {
+    font-size: 1.5em; } }
