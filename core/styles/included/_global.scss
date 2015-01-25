@@ -332,7 +332,13 @@ body{
     height: 100%;
     overflow: hidden;
     text-align: center;
-    background-position-x: center;
+
+    > div{
+      width: 1138px;
+      height: 300px;
+      background-size: 100%;
+      background-position-x: center;
+    }
   }
 
 
@@ -340,7 +346,7 @@ body{
 
     .carousel-caption{
       h2{
-        font-size: 1.5em;
+        font-size: 1.75em;
       }
     }
 
