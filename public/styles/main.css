@@ -196,7 +196,7 @@ td, th {
   src: url('/medias/frameworks/bootstrap/fonts/glyphicons-halflings-regular.eot');
   src: url('/medias/frameworks/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('/medias/frameworks/bootstrap/fonts/glyphicons-halflings-regular.woff') format('woff'), url('/medias/frameworks/bootstrap/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('/medias/frameworks/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg'); }
 
-.glyphicon {
+.glyphicon, .mod-page .mp-content ol > li:before, .mod-page .mp-content ul > li:before, .mod-page .mp-content ol ol > li:before, .mod-page .mp-content ol ul > li:before, .mod-page .mp-content ul ol > li:before, .mod-page .mp-content ul ul > li:before, .mod-page .mp-content.mp-content--contact > ul > li:before {
   position: relative;
   top: 1px;
   display: inline-block;
@@ -225,7 +225,7 @@ td, th {
 .glyphicon-envelope:before {
   content: "\2709"; }
 
-.glyphicon-pencil:before {
+.glyphicon-pencil:before, .mod-page .mp-content.mp-content--contact > ul > li:last-child:before {
   content: "\270f"; }
 
 .glyphicon-glass:before {
@@ -603,7 +603,7 @@ td, th {
 .glyphicon-hand-down:before {
   content: "\e130"; }
 
-.glyphicon-circle-arrow-right:before {
+.glyphicon-circle-arrow-right:before, .mod-page .mp-content ol ol > li:before, .mod-page .mp-content ol ul > li:before, .mod-page .mp-content ul ol > li:before, .mod-page .mp-content ul ul > li:before {
   content: "\e131"; }
 
 .glyphicon-circle-arrow-left:before {
@@ -648,7 +648,7 @@ td, th {
 .glyphicon-phone:before {
   content: "\e145"; }
 
-.glyphicon-pushpin:before {
+.glyphicon-pushpin:before, .mod-page .mp-content ol > li:before, .mod-page .mp-content ul > li:before {
   content: "\e146"; }
 
 .glyphicon-usd:before {
@@ -756,7 +756,7 @@ td, th {
 .glyphicon-earphone:before {
   content: "\e182"; }
 
-.glyphicon-phone-alt:before {
+.glyphicon-phone-alt:before, .mod-page .mp-content.mp-content--contact > ul > li:first-child:before {
   content: "\e183"; }
 
 .glyphicon-tower:before {
@@ -4740,12 +4740,10 @@ body {
     .mod-page .mp-content ol > li:before, .mod-page .mp-content ol > li ol > li:before, .mod-page .mp-content ol > li ul > li:before, .mod-page .mp-content ul > li:before, .mod-page .mp-content ul > li ol > li:before, .mod-page .mp-content ul > li ul > li:before {
       display: inline-block;
       padding: 0 5px; }
-  .mod-page .mp-content ol > li:before, .mod-page .mp-content ul > li:before {
-    content: "\e330"; }
   .mod-page .mp-content ol ol, .mod-page .mp-content ol ul, .mod-page .mp-content ul ol, .mod-page .mp-content ul ul {
     margin: 10px 0 0 20px; }
     .mod-page .mp-content ol ol > li:before, .mod-page .mp-content ol ul > li:before, .mod-page .mp-content ul ol > li:before, .mod-page .mp-content ul ul > li:before {
-      content: "\e238"; }
+      font-size: 12px; }
 .mod-page .mp-content h2 {
   font-size: 20px; }
 .mod-page .mp-content h3 {
@@ -4782,14 +4780,12 @@ body {
         display: inline-block; }
       .mod-page .mp-content.mp-content--contact > ul > li > span span {
         width: 80px; }
+    .mod-page .mp-content.mp-content--contact > ul > li:last-child {
+      margin-top: 25px; }
     .mod-page .mp-content.mp-content--contact > ul > li:before {
       text-align: center;
-      font-size: 30px;
+      font-size: 24px;
       width: 60px; }
-    .mod-page .mp-content.mp-content--contact > ul > li:first-child:before {
-      content: "\e407"; }
-    .mod-page .mp-content.mp-content--contact > ul > li:nth-child(2):before {
-      content: "\e409"; }
 .mod-page .mp-content.mp-content--about article h1, .mod-page .mp-content.mp-content--about article h2, .mod-page .mp-content.mp-content--about article h3, .mod-page .mp-content.mp-content--about article p, .mod-page .mp-content.mp-content--about article ul, .mod-page .mp-content.mp-content--about article ol, .mod-page .mp-content.mp-content--about article li, .mod-page .mp-content.mp-content--about article a {
   padding: 0;
   margin: 0; }
@@ -4828,7 +4824,7 @@ body {
     margin-bottom: 5px; }
     .mod-page .mp-content.mp-content--home h3:before {
       display: none; } }
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 480px) {
   .mod-page .mp-content.mp-content--about article header figure {
     position: static;
     margin-top: 12px; }
@@ -4924,14 +4920,14 @@ body {
   @media screen and (max-width: 1200px) {
     .mod-header-banners .mhb-image > div {
       width: 938px; } }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 480px) {
     .mod-header-banners .carousel-caption h1 {
       font-size: 1.5em; }
     .mod-header-banners .carousel-caption h2 {
       font-size: 2em; }
     .mod-header-banners .carousel-caption p {
       font-size: 1em; } }
-  @media screen and (max-width: 425px) {
+  @media screen and (max-width: 480px) {
     .mod-header-banners .carousel-caption h1 {
       font-size: 1.25em; }
     .mod-header-banners .carousel-caption h2 {

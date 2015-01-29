@@ -50,6 +50,10 @@ body{
       margin: 20px 0 0 0;
 
       > li{
+        &:before{
+          @extend .glyphicon;
+          @extend .glyphicon-pushpin;
+        }
 
         &, ol > li, ul > li{
           display: block;
@@ -61,17 +65,17 @@ body{
             padding: 0 5px;
           }
         }
-
-        &:before{
-          content: "\e330";
-        }
       }
 
       ol, ul{
         margin: 10px 0 0 20px;
 
-        > li:before{
-          content: "\e238";
+        > li{
+          &:before{
+            @extend .glyphicon;
+            @extend .glyphicon-circle-arrow-right;
+            font-size: 12px;
+          }
         }
       }
     }
@@ -136,20 +140,22 @@ body{
               width: 80px;
             }
           }
-          &:before{
-            text-align: center;
-            font-size: 30px;
-            width: 60px;
-          }
           &:first-child{
             &:before{
-              content: "\e407";
+              @extend .glyphicon-phone-alt;
             }
           }
-          &:nth-child(2){
+          &:last-child{
+            margin-top: 25px;
             &:before{
-              content: "\e409";
+              @extend .glyphicon-pencil;
             }
+          }
+          &:before{
+            @extend .glyphicon;
+            text-align: center;
+            font-size: 24px;
+            width: 60px;
           }
         }
       }
@@ -209,7 +215,7 @@ body{
       }
     }
 
-    @media screen and (max-width: $screen-sm) {
+    @media screen and (max-width: $screen-tablet) {
 
       &.mp-content--home{
         h3{
@@ -224,7 +230,7 @@ body{
       }
     }
 
-    @media screen and (max-width: 425px) {
+    @media screen and (max-width: $screen-phone) {
 
       &.mp-content--about{
         article{
@@ -288,7 +294,7 @@ body{
     }
   }
 
-  @media screen and (max-width: $screen-sm) {
+  @media screen and (max-width: $screen-tablet) {
 
     .nav{
       > li{
@@ -390,7 +396,7 @@ body{
     }
   }
 
-  @media screen and (max-width: $screen-sm) {
+  @media screen and (max-width: $screen-phone) {
 
     .carousel-caption{
       h1{
@@ -405,7 +411,7 @@ body{
     }
   }
 
-  @media screen and (max-width: 425px) {
+  @media screen and (max-width: $screen-phone) {
 
     .carousel-caption{
       h1{
@@ -452,7 +458,7 @@ body{
     }
   }
 
-  @media screen and (max-width: $screen-sm) {
+  @media screen and (max-width: $screen-tablet) {
 
     .mf--copyright{
       transform: rotate(-4deg);
@@ -551,7 +557,7 @@ body{
     }
   }
 
-  @media screen and (max-width: $screen-sm){
+  @media screen and (max-width: $screen-tablet){
 
     .marts--item{
       min-height: 0;
