@@ -18,21 +18,37 @@
             <div style="background-image: url(<%- banner.imagePath %>);">
             </div>
           </div>
-          <% if(banner.title){%>
-            <h1><%- banner.title %></h1>
-          <%}%>
-          <% if(banner.subtitle || banner.description || banner.url){%>
+          <%
+          var hasTitle = banner.title;
+          var hasSubTitle = banner.subtitle;
+          var hasDescription = banner.description;
+          var hasTitles = hasTitle || hasSubTitle;
+          var hasContent = hasTitles || hasContent;
+
+          if(hasContent || banner.url){%>
             <div class="carousel-caption">
-              <%if(banner.subtitle){%>
-                <h2><%- banner.subtitle %></h2>
-              <%}%>
-              <%if(banner.description){%>
-                <span class="block"></span>
-                <p><%- banner.description %></p>
+              <% if(hasContent){%>
+                <div class="mhb-content">
+                  <% if(hasTitles){%>
+                    <div class="mhb-titles">
+                    <% if(hasTitle){%>
+                      <h1><%- banner.title %></h1>
+                      <span class="block"></span>
+                    <%}%>
+                    <%if(hasSubTitle){%>
+                      <h2><%- banner.subtitle %></h2>
+                    <%}%>
+                    </div>
+                  <%}%>
+                  <%if(banner.description){%>
+                    <p><%- banner.description %></p>
+                  <%}%>
+                </div>
               <%}%>
               <%if(banner.url){%>
-                <span class="block"></span>
-                <a href="<%- banner.url %>" class="btn btn-primary"><%- ressources.banners.readMore %></a>
+                <div class="mhb-btn-wrapper">
+                  <a href="<%- banner.url %>" class="btn btn-primary"><%- ressources.banners.readMore %></a>
+                </div>
               <%}%>
             </div>
           <%}%>

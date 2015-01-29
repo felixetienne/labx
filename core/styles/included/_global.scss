@@ -126,21 +126,99 @@ body{
     background-size: 100%;
     text-align: center;
     height: 300px !important;
-    h1{
-      font-size: 24px;
-    }
-    h2{
-      font-size: 40px;
-    }
-    h1, h2, h3, p{
-      display: inline-block;
-      padding: 4px 8px 6px 8px;
-      color: white;
-      background-color: rgba(0,0,0, 0.67);
-      }
   }
   .carousel-indicators{
     bottom: 5px;
+  }
+  .carousel-caption{
+    display: relative;
+    height: 100%;
+    bottom: 0;
+
+    .mhb-btn-wrapper{
+      position: absolute;
+      z-index: 99;
+      bottom: 50px;
+      width: 100%;
+    }
+  }
+  .mhb-image{
+    position:absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    text-align: center;
+
+    > div{
+      width: 1138px;
+      height: 300px;
+      background-size: 100%;
+      background-position-x: center;
+    }
+  }
+  .mhb-content{
+    position: relative;
+    h1{
+      font-size: 24px;
+      padding: 5px 5px 5px 5px;
+    }
+    h2{
+      font-size: 36px;
+      padding: 0 12px 5px 12px;
+    }
+    p{
+      font-size: 16px;
+      padding: 5px 12px;
+    }
+    h1, h2, p{
+      display: inline-block;
+      margin: 0;
+      color: white;
+      background-color: rgba(0,0,0, 0.67);
+    }
+  }
+  .mhb-titles{
+    margin-bottom: 5px;
+  }
+
+  @media screen and (max-width: $screen-lg-desktop) {
+
+    .mhb-image{
+
+      > div{
+        width: 938px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $screen-sm) {
+
+    .carousel-caption{
+      h1{
+        font-size: 1.5em;
+      }
+      h2{
+        font-size: 2em;
+      }
+      p{
+        font-size: 1em;
+      }
+    }
+  }
+
+  @media screen and (max-width: 375px) {
+
+    .carousel-caption{
+      h1{
+        font-size: 1.25em;
+      }
+      h2{
+        font-size: 1.5em;
+      }
+      p{
+        font-size: 1em;
+      }
+    }
   }
 }
 
@@ -323,43 +401,5 @@ body{
         }
       }
     }
-  }
-}
-
-.mod-header-banners{
-  .mhb-image{
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    text-align: center;
-
-    > div{
-      width: 1138px;
-      height: 300px;
-      background-size: 100%;
-      background-position-x: center;
-    }
-  }
-
-
-  @media screen and (max-width: $screen-lg-desktop) {
-
-    .mhb-image{
-
-      > div{
-        width: 938px;
-      }
-    }
-
-  }
-
-  @media screen and (max-width: $screen-sm) {
-
-    .carousel-caption{
-      h2{
-        font-size: 1.75em;
-      }
-    }
-
   }
 }
