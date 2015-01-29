@@ -4809,7 +4809,8 @@ body {
 .mod-page .mp-content.mp-content--about article section {
   margin-top: 25px; }
   .mod-page .mp-content.mp-content--about article section h1 {
-    font-size: 18px; }
+    font-size: 18px;
+    font-weight: bold; }
   .mod-page .mp-content.mp-content--about article section p {
     font-size: 16px;
     padding: 12px 25px 0 25px; }
