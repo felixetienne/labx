@@ -29,6 +29,7 @@ body{
 
 .mod-page {
   .mp--main-content{
+    font-size: 14px;
     hr{
       border-color: $gray-light;
       margin: 0 10%;
@@ -37,10 +38,208 @@ body{
   .mp--main-content, .mod-aside{
     background-color: $akt-bgTrans;
     border: 1px black solid;
-    padding: 0 20px 20px 20px;
+    padding: 5px 25px 40px 25px;
     margin-bottom: 20px;
   }
   .mp--asides{
+  }
+
+  .mp-content{
+    ol, ul{
+      padding: 0;
+      margin: 20px 0 0 0;
+
+      > li{
+
+        &, ol > li, ul > li{
+          display: block;
+          padding: 0;
+          margin: 0 0 10px 0;
+          list-style: none;
+          &:before{
+            display: inline-block;
+            padding: 0 5px;
+          }
+        }
+
+        &:before{
+          content: "\e330";
+        }
+      }
+
+      ol, ul{
+        margin: 10px 0 0 20px;
+
+        > li:before{
+          content: "\e238";
+        }
+      }
+    }
+    h2{
+      font-size: 20px;
+    }
+    h3{
+      font-size: 14px;
+    }
+    section{
+      h1{
+        font-size: 18px;
+      }
+    }
+    p{
+      text-align: justify;
+    }
+
+    &.mp-content--home{
+      h3{
+        display: inline-block;
+        margin-top: 5px;
+        margin-bottom: 25px;
+
+        &:before{
+          content: "/";
+          display: inline-block;
+          width: 25px;
+          text-align: center;
+        }
+
+        &.first:before{
+          display: none;
+        }
+      }
+    }
+
+    &.mp-content--services{
+        > ul{
+          margin-top: 40px;
+          margin-left: 25px;
+          > li{
+            font-size: 16px;
+          }
+        }
+    }
+
+
+    &.mp-content--contact{
+      > ul{
+        margin-top: 40px;
+        margin-left: 25px;
+        > li{
+          font-size: 16px;
+          > span{
+            position: relative;
+            bottom: 5px;
+            &, & span{
+              display: inline-block;
+            }
+            span{
+              width: 80px;
+            }
+          }
+          &:before{
+            text-align: center;
+            font-size: 30px;
+            width: 60px;
+          }
+          &:first-child{
+            &:before{
+              content: "\e407";
+            }
+          }
+          &:nth-child(2){
+            &:before{
+              content: "\e409";
+            }
+          }
+        }
+      }
+    }
+
+    &.mp-content--about{
+      > h1 {
+        @extend %hidden;
+      }
+
+      article{
+        h1, h2, h3, p, ul, ol, li, a{
+          padding: 0;
+          margin: 0;
+        }
+        header{
+          position: relative;
+          min-height: 175px;
+          h1, h2, p{
+            padding-left: 175px;
+          }
+          h1{
+            font-size: 24px;
+          }
+          h2{
+            font-size: 18px;
+            margin-top: 3px;
+          }
+          figure{
+            position: absolute;
+            top: 0;
+            img{
+              box-shadow: 0 0 12px black;
+              width: 150px;
+              max-width: 100%;
+            }
+            figcaption{
+              @extend %hidden;
+            }
+          }
+        }
+        section{
+          margin-top: 25px;
+          h1{
+            font-size: 18px;
+          }
+          p{
+            font-size: 16px;
+            padding: 12px 25px 0 25px;
+          }
+        }
+        footer{
+          margin-top: 50px;
+          font-size: 14px;
+          font-style: italic;
+        }
+      }
+    }
+
+    @media screen and (max-width: $screen-sm) {
+
+      &.mp-content--home{
+        h3{
+          display: block;
+          margin-top: 5px;
+          margin-bottom: 5px;
+
+          &:before{
+            display: none;
+          }
+        }
+      }
+    }
+
+    @media screen and (max-width: 425px) {
+
+      &.mp-content--about{
+        article{
+          header{
+            figure{
+              position: static;
+              margin-top: 12px;
+            }
+            h1, h2, p{
+              padding-left: 0;
+            }
+          }
+        }
+      }
+    }
   }
 }
 
@@ -206,7 +405,7 @@ body{
     }
   }
 
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 425px) {
 
     .carousel-caption{
       h1{
@@ -353,53 +552,5 @@ body{
 .mod-article-categories{
   .macats--items{
     margin-top: 40px;
-  }
-}
-
-.mp-content{
-  h2{
-    font-size: 20px;
-  }
-  h3{
-    font-size: 14px;
-  }
-  section{
-    h1{
-      font-size: 18px;
-    }
-  }
-
-  &.mp-content--home-page{
-    h3{
-      display: inline-block;
-      margin-top: 5px;
-      margin-bottom: 25px;
-
-      &:before{
-        content: "/";
-        display: inline-block;
-        width: 25px;
-        text-align: center;
-      }
-
-      &.first:before{
-        display: none;
-      }
-    }
-  }
-
-  @media screen and (max-width: $screen-sm) {
-
-    &.mp-content--home-page{
-      h3{
-        display: block;
-        margin-top: 5px;
-        margin-bottom: 5px;
-
-        &:before{
-          display: none;
-        }
-      }
-    }
   }
 }

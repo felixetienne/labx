@@ -4693,6 +4693,11 @@ button.close {
   border: 1px solid rgba(0, 0, 0, 0.67);
   box-shadow: 0 0 2px #404040; }
 
+.mod-page .mp-content.mp-content--about > h1, .mod-page .mp-content.mp-content--about article header figure figcaption {
+  visibility: hidden;
+  display: block;
+  height: 0; }
+
 body {
   background-color: #e7e7e7;
   background-image: url(/medias/images/bg.jpg);
@@ -4714,14 +4719,121 @@ body {
   display: block;
   font-weight: bold; }
 
-.mod-page .mp--main-content hr {
-  border-color: #777777;
-  margin: 0 10%; }
+.mod-page .mp--main-content {
+  font-size: 14px; }
+  .mod-page .mp--main-content hr {
+    border-color: #777777;
+    margin: 0 10%; }
 .mod-page .mp--main-content, .mod-page .mod-aside {
   background-color: rgba(255, 255, 255, 0.55);
   border: 1px black solid;
-  padding: 0 20px 20px 20px;
+  padding: 5px 25px 40px 25px;
   margin-bottom: 20px; }
+.mod-page .mp-content ol, .mod-page .mp-content ul {
+  padding: 0;
+  margin: 20px 0 0 0; }
+  .mod-page .mp-content ol > li, .mod-page .mp-content ol > li ol > li, .mod-page .mp-content ol > li ul > li, .mod-page .mp-content ul > li, .mod-page .mp-content ul > li ol > li, .mod-page .mp-content ul > li ul > li {
+    display: block;
+    padding: 0;
+    margin: 0 0 10px 0;
+    list-style: none; }
+    .mod-page .mp-content ol > li:before, .mod-page .mp-content ol > li ol > li:before, .mod-page .mp-content ol > li ul > li:before, .mod-page .mp-content ul > li:before, .mod-page .mp-content ul > li ol > li:before, .mod-page .mp-content ul > li ul > li:before {
+      display: inline-block;
+      padding: 0 5px; }
+  .mod-page .mp-content ol > li:before, .mod-page .mp-content ul > li:before {
+    content: "\e330"; }
+  .mod-page .mp-content ol ol, .mod-page .mp-content ol ul, .mod-page .mp-content ul ol, .mod-page .mp-content ul ul {
+    margin: 10px 0 0 20px; }
+    .mod-page .mp-content ol ol > li:before, .mod-page .mp-content ol ul > li:before, .mod-page .mp-content ul ol > li:before, .mod-page .mp-content ul ul > li:before {
+      content: "\e238"; }
+.mod-page .mp-content h2 {
+  font-size: 20px; }
+.mod-page .mp-content h3 {
+  font-size: 14px; }
+.mod-page .mp-content section h1 {
+  font-size: 18px; }
+.mod-page .mp-content p {
+  text-align: justify; }
+.mod-page .mp-content.mp-content--home h3 {
+  display: inline-block;
+  margin-top: 5px;
+  margin-bottom: 25px; }
+  .mod-page .mp-content.mp-content--home h3:before {
+    content: "/";
+    display: inline-block;
+    width: 25px;
+    text-align: center; }
+  .mod-page .mp-content.mp-content--home h3.first:before {
+    display: none; }
+.mod-page .mp-content.mp-content--services > ul {
+  margin-top: 40px;
+  margin-left: 25px; }
+  .mod-page .mp-content.mp-content--services > ul > li {
+    font-size: 16px; }
+.mod-page .mp-content.mp-content--contact > ul {
+  margin-top: 40px;
+  margin-left: 25px; }
+  .mod-page .mp-content.mp-content--contact > ul > li {
+    font-size: 16px; }
+    .mod-page .mp-content.mp-content--contact > ul > li > span {
+      position: relative;
+      bottom: 5px; }
+      .mod-page .mp-content.mp-content--contact > ul > li > span, .mod-page .mp-content.mp-content--contact > ul > li > span span {
+        display: inline-block; }
+      .mod-page .mp-content.mp-content--contact > ul > li > span span {
+        width: 80px; }
+    .mod-page .mp-content.mp-content--contact > ul > li:before {
+      text-align: center;
+      font-size: 30px;
+      width: 60px; }
+    .mod-page .mp-content.mp-content--contact > ul > li:first-child:before {
+      content: "\e407"; }
+    .mod-page .mp-content.mp-content--contact > ul > li:nth-child(2):before {
+      content: "\e409"; }
+.mod-page .mp-content.mp-content--about article h1, .mod-page .mp-content.mp-content--about article h2, .mod-page .mp-content.mp-content--about article h3, .mod-page .mp-content.mp-content--about article p, .mod-page .mp-content.mp-content--about article ul, .mod-page .mp-content.mp-content--about article ol, .mod-page .mp-content.mp-content--about article li, .mod-page .mp-content.mp-content--about article a {
+  padding: 0;
+  margin: 0; }
+.mod-page .mp-content.mp-content--about article header {
+  position: relative;
+  min-height: 175px; }
+  .mod-page .mp-content.mp-content--about article header h1, .mod-page .mp-content.mp-content--about article header h2, .mod-page .mp-content.mp-content--about article header p {
+    padding-left: 175px; }
+  .mod-page .mp-content.mp-content--about article header h1 {
+    font-size: 24px; }
+  .mod-page .mp-content.mp-content--about article header h2 {
+    font-size: 18px;
+    margin-top: 3px; }
+  .mod-page .mp-content.mp-content--about article header figure {
+    position: absolute;
+    top: 0; }
+    .mod-page .mp-content.mp-content--about article header figure img {
+      box-shadow: 0 0 12px black;
+      width: 150px;
+      max-width: 100%; }
+.mod-page .mp-content.mp-content--about article section {
+  margin-top: 25px; }
+  .mod-page .mp-content.mp-content--about article section h1 {
+    font-size: 18px; }
+  .mod-page .mp-content.mp-content--about article section p {
+    font-size: 16px;
+    padding: 12px 25px 0 25px; }
+.mod-page .mp-content.mp-content--about article footer {
+  margin-top: 50px;
+  font-size: 14px;
+  font-style: italic; }
+@media screen and (max-width: 768px) {
+  .mod-page .mp-content.mp-content--home h3 {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px; }
+    .mod-page .mp-content.mp-content--home h3:before {
+      display: none; } }
+@media screen and (max-width: 425px) {
+  .mod-page .mp-content.mp-content--about article header figure {
+    position: static;
+    margin-top: 12px; }
+  .mod-page .mp-content.mp-content--about article header h1, .mod-page .mp-content.mp-content--about article header h2, .mod-page .mp-content.mp-content--about article header p {
+    padding-left: 0; } }
 
 .mod-main-navigation .mn--logo {
   padding: 6px 15px; }
@@ -4819,7 +4931,7 @@ body {
       font-size: 2em; }
     .mod-header-banners .carousel-caption p {
       font-size: 1em; } }
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 425px) {
     .mod-header-banners .carousel-caption h1 {
       font-size: 1.25em; }
     .mod-header-banners .carousel-caption h2 {
@@ -4901,28 +5013,3 @@ body {
 
 .mod-article-categories .macats--items {
   margin-top: 40px; }
-
-.mp-content h2 {
-  font-size: 20px; }
-.mp-content h3 {
-  font-size: 14px; }
-.mp-content section h1 {
-  font-size: 18px; }
-.mp-content.mp-content--home-page h3 {
-  display: inline-block;
-  margin-top: 5px;
-  margin-bottom: 25px; }
-  .mp-content.mp-content--home-page h3:before {
-    content: "/";
-    display: inline-block;
-    width: 25px;
-    text-align: center; }
-  .mp-content.mp-content--home-page h3.first:before {
-    display: none; }
-@media screen and (max-width: 768px) {
-  .mp-content.mp-content--home-page h3 {
-    display: block;
-    margin-top: 5px;
-    margin-bottom: 5px; }
-    .mp-content.mp-content--home-page h3:before {
-      display: none; } }

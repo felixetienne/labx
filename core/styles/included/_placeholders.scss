@@ -2,3 +2,9 @@
   border: 1px solid $akt-borderTrans;
   box-shadow: 0 0 2px lighten($akt-border, 25%);
 }
+
+%hidden{
+  visibility: hidden;
+  display: block;
+  height: 0;
+}
