@@ -6,19 +6,28 @@
     <%
     var iTotal = projects.length;
     for(var i=0; i<iTotal; i++){
-      var project = projects[i]; %>
+      var project = projects[i];
+      var wrapperClass = project.images.length ? ' marts--push' : '' ; %>
       <article class="marts--item">
-        <h1 class="marts--item-title"><%- project.title %></h1>
-        <p>
-          <%- project.description %>
-          <a class="marts--item-more" href="<%- project.url %>" title="<%- ressources.current.readMore %>"><%- ressources.current.readMore %></a>
-        </p>
-        <%
-        for(var j=0; j< project.images.length; j++){
-          var image = project.images[j]; %>
-          <a href="<%- project.url %>" title="<%- ressources.current.readMore %>">
-            <img src="<%- image.path %>" alt="<%- image.title %>" />
-          </a>
+        <div class="marts--item-wrapper<%- wrapperClass %>">
+          <h1 class="marts--item-title"><%- project.title %></h1>
+          <p>
+            <%- project.description %>
+            <a class="marts--item-more" href="<%- project.url %>" title="<%- ressources.current.readMore %>"><%- ressources.current.readMore %></a>
+          </p>
+        </div>
+        <% if(project.images.length){%>
+          <div class="marts--item-medias">
+            <%
+            for(var j=0; j< project.images.length; j++){
+              var image = project.images[j]; %>
+              <div class="marts--item-media">
+                <a href="<%- project.url %>" title="<%- ressources.current.readMore %>">
+                  <img src="<%- image.path %>" alt="<%- image.title %>" />
+                </a>
+              </div>
+            <%}%>
+          </div>
         <%}%>
       </article>
     <%}%>

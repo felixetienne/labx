@@ -4,20 +4,27 @@
   </div>
   <%
   for(var i=0; i<events.length; i++){
-    var event = events[i]; %>
+    var event = events[i];
+    var wrapperClass = event.images.length ? ' marts--push' : '' ; %>
     <article class="marts--item">
-      <h2 class="marts--item-date"><%- event.date %></h2>
-      <h1><%- event.title %></h1>
-      <p>
-        <%- event.description %>
-        <a href="<%- event.url %>" class="marts--item-more"><%- ressources.current.readMore %></a>
-      </p>
-      <%
-      for(var j=0; j<event.images.length; j++){
-        var image = event.images[j]; %>
-        <a href="<%- event.url %>" title="<%- ressources.current.readMoreTooltips %>">
-          <img src="<%- image.path %>" alt="<%- image.title %>" />
-        </a>
+      <div class="marts--item-wrapper<%- wrapperClass %>">
+        <h2 class="marts--item-date"><%- event.date %></h2>
+        <h1><%- event.title %></h1>
+        <p>
+          <%- event.description %>
+          <a href="<%- event.url %>" class="marts--item-more"><%- ressources.current.readMore %></a>
+        </p>
+      </div>
+      <% if(event.images.length){%>
+        <div class="marts--item-medias">
+          <%
+          for(var j=0; j<event.images.length; j++){
+            var image = event.images[j]; %>
+            <a href="<%- event.url %>" title="<%- ressources.current.readMoreTooltips %>">
+              <img src="<%- image.path %>" alt="<%- image.title %>" />
+            </a>
+          <%}%>
+        </div>
       <%}%>
     </article>
   <%}%>

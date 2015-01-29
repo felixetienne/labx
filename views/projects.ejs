@@ -16,14 +16,17 @@
         <%
         var jTotal = projectCategory.projects.length;
         for(var j=0; j<jTotal; j++){
-          var project = projectCategory.projects[j]; %>
+          var project = projectCategory.projects[j];
+          var wrapperClass = project.images.length ? ' marts--push' : '' ; %>
           <% if(j===0){%>
             <ul>
           <%}%>
             <li class="marts--item">
-              <span class="marts--item-title"><%- project.title %></span>
-              <%- project.description %>
-              <a href="<%- project.url %>" class="marts--item-more"><%- ressources.current.readMore %></a>
+              <div class="marts--item-wrapper<%- wrapperClass %>">
+                <span class="marts--item-title"><%- project.title %></span>
+                <%- project.description %>
+                <a href="<%- project.url %>" class="marts--item-more"><%- ressources.current.readMore %></a>
+              </div>
               <% if(project.images.length){%>
                 <div class="marts--item-medias">
                   <%
