@@ -4803,6 +4803,9 @@ body {
     position: absolute;
     top: 0; }
     .mod-page .mp-content.mp-content--about article header figure img {
+      transform: rotate(-2.5deg);
+      backface-visibility: hidden;
+      border: 1px solid black;
       box-shadow: 0 0 12px black;
       width: 150px;
       max-width: 100%; }

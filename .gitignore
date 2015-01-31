@@ -6,3 +6,4 @@
 /public/medias/images/excluded/
 npm-debug.log
 .env
+**/*~
