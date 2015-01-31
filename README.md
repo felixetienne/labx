@@ -24,13 +24,8 @@ $ cd [your app folder]
 Install application:
 $ npm install
 
-Start application:
-$ node app.js
-OR
+Start application using Foreman:
 $ foreman start
 
 Start grunt sass watch:
 $ grunt
-
-Deploy to Heroku:
-$ git push [heroku] [branch]
