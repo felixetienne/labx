@@ -10,7 +10,9 @@
       var wrapperClass = project.images.length ? ' marts--push' : '' ; %>
       <article class="marts--item">
         <div class="marts--item-wrapper<%- wrapperClass %>">
-          <h1 class="marts--item-title"><%- project.title %></h1>
+          <a class="marts--title-link" href="<%- project.url %>">
+            <h1 class="marts--item-title"><%- project.title %></h1>
+          </a>
           <p>
             <%- project.description %>
             <a class="marts--item-more" href="<%- project.url %>" title="<%- ressources.current.readMore %>"><%- ressources.current.readMore %></a>

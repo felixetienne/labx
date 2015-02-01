@@ -25,6 +25,11 @@ body{
     display: block;
     font-weight: bold
   }
+
+  @media screen and (max-width: $screen-tablet){
+
+    font-size: 1.2em;
+  }
 }
 
 .mod-page {
@@ -79,19 +84,22 @@ body{
         }
       }
     }
-    h2{
-      font-size: 20px;
+    h1{
+      font-size: 2em;
     }
-    h3{
-      font-size: 14px;
+    h2{
+      font-size: 1.2em;
+    }
+    h3, p{
+      font-size: 1em;
+    }
+    p{
+      text-align: justify;
     }
     section{
       h1{
         font-size: 18px;
       }
-    }
-    p{
-      text-align: justify;
     }
 
     &.mp-content--home{
@@ -221,6 +229,24 @@ body{
 
     @media screen and (max-width: $screen-tablet) {
 
+      h1{
+        font-size: 2em;
+      }
+      h2{
+        font-size: 1.5em;
+      }
+      h3, p{
+        font-size: 1.2em;
+      }
+      article, header, footer, section{
+        h1{
+          font-size: 1.5em;
+        }
+        p{
+         font-size: 1.2em;
+        }
+      }
+
       &.mp-content--home{
         h3{
           display: block;
@@ -230,6 +256,15 @@ body{
           &:before{
             display: none;
           }
+        }
+      }
+
+      &.mp-content--contact{
+        ul, ol{
+          margin-left: 0;
+        }
+        li, li > *{
+          font-size: 1.2em;
         }
       }
     }
@@ -303,6 +338,12 @@ body{
     .nav{
       > li{
         width: 99%;
+        &, > li{
+          margin-top: 10px;
+        }
+        a{
+          font-size: 1.1em;
+        }
       }
     }
   }
@@ -312,6 +353,16 @@ body{
   a{
       color: $breadcrumb-active-color;
       font-weight: bold;
+    }
+
+    @media screen and (max-width: $screen-tablet){
+
+      li{
+
+        &, > *{
+          font-size: 16px;
+        }
+      }
     }
 }
 
@@ -400,7 +451,7 @@ body{
     }
   }
 
-  @media screen and (max-width: $screen-phone) {
+  @media screen and (max-width: $screen-tablet) {
 
     .carousel-caption{
       h1{
@@ -464,6 +515,13 @@ body{
 
   @media screen and (max-width: $screen-tablet) {
 
+    font-size: 1.2em;
+
+    .container{
+      padding-left: 0;
+      padding-right: 0;
+    }
+
     .mf--copyright{
       transform: rotate(-4deg);
       margin-top: 20px;
@@ -480,7 +538,8 @@ body{
 
 .mod-articles{
   .marts--title-link{
-    h1{
+    display: inline-block;
+    h1, span{
       color: $text-color;
       &:hover{
         text-decoration: underline;
@@ -555,7 +614,6 @@ body{
       padding: 0;
     }
     li{
-      //display: inline-block;
       margin-bottom: 40px;
       list-style: none;
     }
@@ -563,8 +621,18 @@ body{
 
   @media screen and (max-width: $screen-tablet){
 
+
+      .marts--item-title,
+      .marts--title-link,
+      .marts--title-link > *{
+        font-size: 1.2em;
+      }
+
     .marts--item{
       min-height: 0;
+      p{
+        font-size: 1.2em;
+      }
     }
     .marts--item-wrapper{
       &.marts--push{
@@ -575,6 +643,12 @@ body{
     .marts--item-medias{
       position: static;
       top: 0;
+    }
+
+    &.mod-articles--project-category{
+      .marts--item, p{
+        font-size: 1.2em;
+      }
     }
   }
 }
