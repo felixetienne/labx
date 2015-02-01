@@ -4821,7 +4821,8 @@ body {
     font-weight: bold; }
   .mod-page .mp-content.mp-content--about article section p {
     font-size: 16px;
-    padding: 12px 25px 0 25px; }
+    padding: 12px 25px 0 25px;
+    text-align: left; }
 .mod-page .mp-content.mp-content--about article footer {
   margin-top: 50px;
   font-size: 14px;
@@ -4852,7 +4853,19 @@ body {
     position: static;
     margin-top: 12px; }
   .mod-page .mp-content.mp-content--about article header h1, .mod-page .mp-content.mp-content--about article header h2, .mod-page .mp-content.mp-content--about article header p {
-    padding-left: 0; } }
+    padding-left: 0; }
+  .mod-page .mp-content.mp-content--about article .phone, .mod-page .mp-content.mp-content--about article .email, .mod-page .mp-content.mp-content--about article .portfolio, .mod-page .mp-content.mp-content--about article .git {
+    display: inline-block;
+    margin-left: 10px; }
+    .mod-page .mp-content.mp-content--about article .phone span, .mod-page .mp-content.mp-content--about article .email span, .mod-page .mp-content.mp-content--about article .portfolio span, .mod-page .mp-content.mp-content--about article .git span {
+      margin-left: -10px;
+      display: block; }
+  .mod-page .mp-content.mp-content--about article .email span, .mod-page .mp-content.mp-content--about article .portfolio span, .mod-page .mp-content.mp-content--about article .git span {
+    margin-top: 12px; }
+  .mod-page .mp-content.mp-content--about article .email {
+    font-size: 0.9em; }
+    .mod-page .mp-content.mp-content--about article .email span {
+      font-size: 1.125em; } }
 
 .mod-main-navigation .mn--logo {
   padding: 6px 15px; }

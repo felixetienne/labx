@@ -33,6 +33,7 @@ body{
 }
 
 .mod-page {
+
   .mp--main-content{
     font-size: 14px;
     hr{
@@ -217,6 +218,7 @@ body{
           p{
             font-size: 16px;
             padding: 12px 25px 0 25px;
+            text-align: left;
           }
         }
         footer{
@@ -280,6 +282,30 @@ body{
             }
             h1, h2, p{
               padding-left: 0;
+            }
+          }
+          .phone,
+          .email,
+          .portfolio,
+          .git{
+            display: inline-block;
+            margin-left: 10px;
+            span{
+              margin-left: -10px;
+              display: block;
+            }
+          }
+          .email,
+          .portfolio,
+          .git{
+            span{
+              margin-top: 12px;
+            }
+          }
+          .email{
+            font-size: 0.9em;
+            span{
+              font-size: 1.125em;
             }
           }
         }
