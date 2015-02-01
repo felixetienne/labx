@@ -461,24 +461,25 @@ body{
         font-size: 2em;
       }
       p{
-        font-size: 1em;
+        font-size: 1.2em;
       }
     }
   }
 
   @media screen and (max-width: $screen-phone) {
 
-    .carousel-caption{
-      h1{
-        font-size: 1.25em;
-      }
-      h2{
-        font-size: 1.5em;
-      }
-      p{
-        font-size: 1em;
-      }
-    }
+.carousel-caption{
+  h1{
+    font-size: 1.5em;
+  }
+  h2{
+    font-size: 2.5em;
+  }
+  p{
+    //font-size: 1em;
+    display: none !important;
+  }
+}
   }
 }
 

@@ -4956,14 +4956,14 @@ body {
     .mod-header-banners .carousel-caption h2 {
       font-size: 2em; }
     .mod-header-banners .carousel-caption p {
-      font-size: 1em; } }
+      font-size: 1.2em; } }
   @media screen and (max-width: 481px) {
     .mod-header-banners .carousel-caption h1 {
-      font-size: 1.25em; }
-    .mod-header-banners .carousel-caption h2 {
       font-size: 1.5em; }
+    .mod-header-banners .carousel-caption h2 {
+      font-size: 2.5em; }
     .mod-header-banners .carousel-caption p {
-      font-size: 1em; } }
+      display: none !important; } }
 
 .mod-footer {
   padding: 40px; }
