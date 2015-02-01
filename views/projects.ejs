@@ -23,7 +23,11 @@
           <%}%>
             <li class="marts--item">
               <div class="marts--item-wrapper<%- wrapperClass %>">
-                <span class="marts--item-title"><%- project.title %></span>
+                <div>
+                  <a class="marts--title-link" href="<%- project.url %>">
+                    <span class="marts--item-title"><%- project.title %></span>
+                  </a>
+                </div>
                 <%- project.description %>
                 <a href="<%- project.url %>" class="marts--item-more"><%- ressources.current.readMore %></a>
               </div>
