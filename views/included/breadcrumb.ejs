@@ -12,7 +12,9 @@
           <a href="<%- breadcrumbPage.url %>"><%- breadcrumbPage.title %></a>
         </li>
       <%}else{%>
-        <li class="active"><%- breadcrumbPage.title %></li>
+        <li class="active">
+          <span><%- breadcrumbPage.title %></span>
+        </li>
       <%}%>
       <%if(i===breadcrumbPages.length-1){%>
         </ul>

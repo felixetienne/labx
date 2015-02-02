@@ -376,19 +376,37 @@ body{
 }
 
 .mod-breadcrumb{
-  a{
+
+    a{
       color: $breadcrumb-active-color;
       font-weight: bold;
+    }
+
+    li{
+      &:before{
+        content: "/" !important;
+      }
+      &:first-child{
+        &:before{
+          display: none;
+        }
+      }
     }
 
     @media screen and (max-width: $screen-tablet){
 
       li{
-
         &, > *{
           font-size: 16px;
         }
       }
+    }
+
+    @media screen and (max-width: $screen-phone){
+
+      visibility: hidden;
+      display: block;
+      height: 0;
     }
 }
 

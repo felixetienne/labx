@@ -4899,9 +4899,18 @@ body {
 .mod-breadcrumb a {
   color: #772222;
   font-weight: bold; }
+.mod-breadcrumb li:before {
+  content: "/" !important; }
+.mod-breadcrumb li:first-child:before {
+  display: none; }
 @media screen and (max-width: 769px) {
   .mod-breadcrumb li, .mod-breadcrumb li > * {
     font-size: 16px; } }
+@media screen and (max-width: 481px) {
+  .mod-breadcrumb {
+    visibility: hidden;
+    display: block;
+    height: 0; } }
 
 .block {
   display: block; }
