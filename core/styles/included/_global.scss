@@ -140,13 +140,12 @@ body{
         > li{
           font-size: 16px;
           > span{
-            position: relative;
-            bottom: 5px;
+            vertical-align: middle;
+            span{
+              padding-right: 10px;
+            }
             &, & span{
               display: inline-block;
-            }
-            span{
-              width: 80px;
             }
           }
           &:first-child{
@@ -162,6 +161,7 @@ body{
           }
           &:before{
             @extend .glyphicon;
+            vertical-align: middle;
             text-align: center;
             font-size: 24px;
             width: 60px;
@@ -265,13 +265,46 @@ body{
         ul, ol{
           margin-left: 0;
         }
-        li, li > *{
-          font-size: 1.2em;
+        li{
+          text-align: center;
+          &, > *{
+            font-size: 1.2em;
+          }
+          span{
+            span{
+              visibility: hidden;
+              display: block !important;
+              height: 0;
+            }
+          }
+          &:before{
+              font-size: 30px !important;
+              display: block !important;
+              margin: 10px auto;
+          }
         }
       }
     }
 
     @media screen and (max-width: $screen-phone) {
+
+      &.mp-content--contact{
+        li{
+          text-align: center;
+          &, > *{
+            font-size: 1em;
+          }
+          // &:before{
+          //   display: block !important;
+          //   margin: 10px auto;
+          // }
+          // span{
+          //   span{
+          //     display: none !important;
+          //   }
+          // }
+        }
+      }
 
       &.mp-content--about{
         article{
