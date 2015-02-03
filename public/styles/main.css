@@ -4779,15 +4779,15 @@ body {
   .mod-page .mp-content.mp-content--contact > ul > li {
     font-size: 16px; }
     .mod-page .mp-content.mp-content--contact > ul > li > span {
-      position: relative;
-      bottom: 5px; }
+      vertical-align: middle; }
+      .mod-page .mp-content.mp-content--contact > ul > li > span span {
+        padding-right: 10px; }
       .mod-page .mp-content.mp-content--contact > ul > li > span, .mod-page .mp-content.mp-content--contact > ul > li > span span {
         display: inline-block; }
-      .mod-page .mp-content.mp-content--contact > ul > li > span span {
-        width: 80px; }
     .mod-page .mp-content.mp-content--contact > ul > li:last-child {
       margin-top: 25px; }
     .mod-page .mp-content.mp-content--contact > ul > li:before {
+      vertical-align: middle;
       text-align: center;
       font-size: 24px;
       width: 60px; }
@@ -4846,9 +4846,23 @@ body {
       display: none; }
   .mod-page .mp-content.mp-content--contact ul, .mod-page .mp-content.mp-content--contact ol {
     margin-left: 0; }
-  .mod-page .mp-content.mp-content--contact li, .mod-page .mp-content.mp-content--contact li > * {
-    font-size: 1.2em; } }
+  .mod-page .mp-content.mp-content--contact li {
+    text-align: center; }
+    .mod-page .mp-content.mp-content--contact li, .mod-page .mp-content.mp-content--contact li > * {
+      font-size: 1.2em; }
+    .mod-page .mp-content.mp-content--contact li span span {
+      visibility: hidden;
+      display: block !important;
+      height: 0; }
+    .mod-page .mp-content.mp-content--contact li:before {
+      font-size: 30px !important;
+      display: block !important;
+      margin: 10px auto; } }
 @media screen and (max-width: 481px) {
+  .mod-page .mp-content.mp-content--contact li {
+    text-align: center; }
+    .mod-page .mp-content.mp-content--contact li, .mod-page .mp-content.mp-content--contact li > * {
+      font-size: 1em; }
   .mod-page .mp-content.mp-content--about article header figure {
     position: static;
     margin-top: 12px; }
